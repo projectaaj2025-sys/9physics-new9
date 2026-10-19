@@ -1866,10 +1866,7 @@ html, body {
 .achievement .ico { font-size: 22px; }
 .achievement b { display: block; font-size: 13px; color: var(--text-bright); }
 .achievement span { font-size: 11px; color: var(--text-dim); }
-.shop-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(160px,1fr)); gap: 12px; }
-.shop-item { background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 12px; text-align: center; display: flex; flex-direction: column; gap: 8px; }
-.shop-item.locked { opacity: .6; }
-.shop-item .price { font-weight: 800; color: #6d4c00; font-size: 13px; }
+
 .pulse-btn { position: absolute; right: 20px; bottom: 90px; z-index: 6; background: radial-gradient(circle at 30% 30%, #00e5ff, #0066a6); color: #fff; border: 2px solid #00e5ff; border-radius: 50%; width: 72px; height: 72px; font-weight: 900; font-size: 13px; display: none; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 0 20px rgba(0,229,255,0.6); }
 .pulse-btn.active { display: flex; }
 .pulse-btn.cooldown { opacity: .5; pointer-events: none; }
@@ -2033,7 +2030,50 @@ html, body {
 /* Выбор сложности перед уровнем — как в 8 классе */
 .diff-choose-btn { justify-content:center; padding:12px 14px; font-size:15px; font-weight:800; border-radius:12px; }
 .diff-choose-btn.active { border-width:2px; }
-#level-difficulty-modal .modal-content { animation: modalIn .2s ease; }
+
+
+/* Брифинг миссии — как в 8 классе */
+#level-difficulty-modal { z-index: 150; }
+#level-difficulty-modal .rpg-mission-content {
+    max-width: 920px;
+    width: calc(100% - 28px);
+    max-height: 92vh;
+    padding: 26px 26px 20px;
+    border-radius: 20px;
+    border: 2px solid rgba(0, 184, 212, 0.42);
+    background:
+        radial-gradient(circle at 8% 5%, rgba(0, 184, 212, 0.12), transparent 36%),
+        radial-gradient(circle at 95% 100%, rgba(216, 27, 96, 0.10), transparent 40%),
+        #ffffff;
+    overflow-y: auto;
+    position: relative;
+}
+.rpg-modal-x { position: absolute; top: 12px; right: 12px; width: 34px; height: 34px; border-radius: 50%; border: 1.5px solid rgba(0,0,0,.12); background: #fff; color: #5a6b85; font-size: 15px; font-weight: 900; cursor: pointer; z-index: 3; }
+.rpg-modal-x:hover { color: #d81b60; border-color: rgba(216,27,96,.45); }
+.rpg-kicker { font-size: 11px; font-weight: 900; letter-spacing: 2px; text-transform: uppercase; color: #008ba3; text-align: center; }
+.rpg-mission-content h2 { text-align: center; font-size: clamp(22px, 3.6vw, 30px); color: #0a1530; margin: 6px 0 6px; line-height: 1.15; }
+.rpg-mission-sub { text-align: center; color: #5a6b85; font-size: 13px; line-height: 1.55; max-width: 760px; margin: 0 auto 12px; }
+.rpg-mission-meta { display: flex; flex-wrap: wrap; justify-content: center; gap: 7px; margin: 0 auto 18px; }
+.rpg-mission-meta .rpg-chip { font-size: 11px; display:inline-flex; align-items:center; gap:4px; padding:6px 10px; border-radius:999px; background:rgba(0,184,212,.12); border:1px solid rgba(0,184,212,.3); font-weight:700; }
+.rpg-mission-meta .rpg-chip.gold { background: rgba(255,215,0,.18); border-color: rgba(255,215,0,.5); }
+.rpg-mission-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin-bottom: 18px; }
+.rpg-mission-card { --mc: #00b8d4; --mc2: #1976d2; --mc-soft: rgba(0, 184, 212, 0.12); position: relative; border-radius: 16px; padding: 14px 12px 12px; background: radial-gradient(circle at 82% 0%, var(--mc-soft), transparent 55%), linear-gradient(160deg, #ffffff 0%, #f8fcff 100%); border: 2px solid color-mix(in srgb, var(--mc) 34%, white); cursor: pointer; outline: none; transition: transform .18s, box-shadow .18s, border-color .18s; display: flex; flex-direction: column; min-height: 220px; overflow: hidden; }
+.rpg-mission-card:hover, .rpg-mission-card:focus-visible { transform: translateY(-4px); border-color: var(--mc); box-shadow: 0 12px 26px rgba(15, 35, 70, 0.16), 0 0 0 3px var(--mc-soft); }
+.rpg-mission-card.selected { border-color: var(--mc); box-shadow: 0 0 0 3px var(--mc-soft), 0 14px 30px rgba(15, 35, 70, 0.18), 0 0 22px var(--mc-soft); background: radial-gradient(circle at 82% 0%, var(--mc-soft), transparent 60%), linear-gradient(160deg, #ffffff 0%, #f2fbff 100%); }
+.rpg-mission-card.selected::after { content: "✓"; position: absolute; top: 8px; right: 8px; width: 24px; height: 24px; border-radius: 50%; background: var(--mc); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 13px; box-shadow: 0 3px 10px var(--mc-soft); }
+.rpg-mission-card .rpg-rec { position: absolute; top: -1px; left: -1px; font-size: 8px; font-weight: 900; letter-spacing: .6px; color: #fff; background: linear-gradient(135deg, var(--mc), var(--mc2)); padding: 3px 8px; border-radius: 14px 0 12px 0; text-transform: uppercase; z-index: 2; }
+.rpg-mc-icon { width: 46px; height: 46px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 25px; background: linear-gradient(145deg, var(--mc), var(--mc2)); color: #fff; box-shadow: 0 6px 16px var(--mc-soft); margin-bottom: 9px; }
+.rpg-mc-name { font-size: 14px; font-weight: 900; color: #0a1530; line-height: 1.2; margin-bottom: 2px; }
+.rpg-mc-tag { font-size: 10px; font-weight: 800; color: var(--mc); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 8px; }
+.rpg-mc-desc { font-size: 11px; line-height: 1.4; color: #5a6b85; margin-bottom: 8px; flex: 1; }
+.rpg-mc-obj { font-size: 10.5px; font-weight: 800; color: #23344f; background: var(--mc-soft); border-left: 3px solid var(--mc); border-radius: 7px; padding: 6px 7px; line-height: 1.35; margin-bottom: 8px; }
+.rpg-mc-rewards { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 7px; }
+.rpg-mc-rewards span { font-size: 9.5px; font-weight: 900; background: #fff; color: #23344f; border: 1px solid rgba(0,0,0,.08); border-radius: 999px; padding: 2px 7px; white-space: nowrap; }
+.rpg-mission-foot { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; }
+.rpg-mission-foot .rpg-foot-actions { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.rpg-mission-foot .rpg-start-hint { font-size: 11px; color: #8190a5; font-weight: 700; }
+@media (max-width: 900px) { .rpg-mission-grid { grid-template-columns: repeat(2, minmax(0,1fr)); } }
+@media (max-width: 520px) { .rpg-mission-grid { grid-template-columns: 1fr; } }
 
 .episode-banner { grid-column: 1 / -1; width: 100%; margin: 20px 0 2px; padding: 8px 14px; border-left: 4px solid var(--ep-color, #00b8d4); background: rgba(255,255,255,0.05); border-radius: 8px; font-weight: 700; letter-spacing: .07em; color: var(--ep-color, #00b8d4); text-transform: uppercase; font-size: 13px; }
 .episode-brief { margin: 0 0 14px; padding: 10px 12px; border-left: 3px solid #00b8d4; background: rgba(0,184,212,0.08); border-radius: 8px; font-size: 13px; line-height: 1.55; }
@@ -2152,8 +2192,7 @@ html, body {
                 <div class="xp-text" id="profile-xp-text">0 / 100 XP</div>
                 <div style="display:flex; gap:8px; flex-wrap:wrap">
                     <button type="button" class="btn btn-secondary" id="btn-open-diary">📖 Дневник</button>
-                    <button type="button" class="btn btn-secondary" id="btn-open-shop">🛒 <span data-i18n="openShop">Магазин</span></button>
-                    <button type="button" class="btn btn-secondary" id="btn-open-skills">⚡ <span data-i18n="openSkills">Улучшения</span></button>
+<button type="button" class="btn btn-secondary" id="btn-open-skills">⚡ <span data-i18n="openSkills">Улучшения</span></button>
                 </div>
                 <div id="profile-achievements" class="achievements-grid"></div>
             <div class="profile-rpg" style="margin-top:12px">
@@ -2318,21 +2357,29 @@ html, body {
         </div>
     </div>
 
-        <!-- Выбор сложности перед стартом уровня (как в 8 классе) -->
+        <!-- Выбор типа уровня — как в 8 классе (брифинг миссии) -->
     <div id="level-difficulty-modal" class="modal">
-        <div class="modal-content" style="max-width:480px; text-align:center">
-            <h3 id="level-difficulty-title" style="margin:0 0 8px">🚀 Выбери сложность</h3>
-            <p id="level-difficulty-desc" class="profile-sub" style="margin:0 0 14px">Сложность влияет на вопросы — лёгкие дают больше подсказок, сложные — больше очков.</p>
-            <div id="level-difficulty-options" style="display:grid; gap:10px; margin:12px 0">
-                <button type="button" class="btn btn-secondary diff-choose-btn" data-diff="1">⭐ <span data-i18n="difficultyEasy">Лёгкий</span> — больше подсказок</button>
-                <button type="button" class="btn btn-secondary diff-choose-btn" data-diff="2">⭐⭐ <span data-i18n="difficultyMedium">Средний</span> — баланс</button>
-                <button type="button" class="btn btn-primary diff-choose-btn" data-diff="3">⭐⭐⭐ <span data-i18n="difficultyHard">Сложный</span> — максимум очков</button>
-                <button type="button" class="btn btn-secondary" id="btn-difficulty-all" data-diff="0" style="background:#eef2ff; border-color:#aab4ff">🌟 <span data-i18n="difficultyAll">Все вопросы</span> — микс</button>
+        <div class="modal-content rpg-mission-content">
+            <button class="rpg-modal-x" type="button" aria-label="Закрыть" onclick="hideLevelDifficultyChooser()">✕</button>
+            <div class="rpg-kicker" id="level-difficulty-kicker">ВЫБОР МИССИИ</div>
+            <h2 id="level-difficulty-title">🚀 Выбери тип уровня</h2>
+            <p class="rpg-mission-sub" id="level-difficulty-sub">Сложность влияет на вопросы — лёгкие дают больше подсказок, сложные — больше очков.</p>
+            <div class="rpg-mission-meta" id="level-difficulty-meta">
+                <span class="rpg-chip">📚 Уровень <span id="ld-level-num">1</span></span>
+                <span class="rpg-chip">❓ <span id="ld-tasks-num">15</span> вопросов</span>
+                <span class="rpg-chip gold">⭐ <span id="ld-stars">☆☆☆</span></span>
             </div>
-            <div style="display:flex; gap:8px; justify-content:center; margin-top:8px">
-                <button type="button" class="btn btn-back" id="btn-difficulty-cancel"><span data-i18n="cancel">Отмена</span></button>
+            <div class="rpg-mission-grid" id="level-difficulty-grid"></div>
+            <div class="rpg-mission-foot">
+                <div class="rpg-foot-actions">
+                    <button class="btn btn-secondary" id="btn-difficulty-cancel" type="button">← Назад</button>
+                    <button class="btn btn-secondary" id="btn-difficulty-theory" type="button">📖 Теория</button>
+                </div>
+                <div class="rpg-foot-actions">
+                    <span class="rpg-start-hint" id="level-difficulty-selected">⭐ Лёгкий</span>
+                    <button class="btn btn-primary" id="btn-difficulty-start" type="button">🚀 Начать миссию</button>
+                </div>
             </div>
-            <p id="level-difficulty-hint" class="profile-sub" style="margin-top:10px; font-size:12px">💡 <span data-i18n="difficultyHint">Подсказка: лёгкий — для изучения, сложный — для рекорда</span></p>
         </div>
     </div>
 
@@ -2813,18 +2860,6 @@ html, body {
         <div style="font-size:12px; color:#90a4ae">Нажми чтобы начать • Пробел</div>
     </div>
 
-    <div id="shop-modal" class="modal">
-        <div class="modal-content" style="max-width:820px">
-            <h2 data-i18n="shopTitle">🛒 Магазин пилота</h2>
-            <p class="profile-sub" style="text-align:left" data-i18n="shopNote">Трать кристаллы на новые дизайны и улучшения. Кристаллы зарабатываются за прохождение уровней.</p>
-            <div style="display:flex; gap:10px; align-items:center; margin-bottom:14px">
-                <div class="rpg-coins" id="shop-coins">💎 0</div>
-                <div class="rpg-level-badge" id="shop-level">⭐ 1</div>
-            </div>
-            <div class="shop-grid" id="shop-grid"></div>
-            <button class="btn btn-back" id="btn-shop-close" type="button"><span data-i18n="close">Закрыть</span></button>
-        </div>
-    </div>
     <div id="skills-modal" class="modal">
         <div class="modal-content" style="max-width:720px">
             <h2 data-i18n="skillsTitle">⚡ Улучшения корабля</h2>
@@ -38370,9 +38405,6 @@ function initApp() {
     setupMainMenu();
     setupModals();
     // shop / skills modals
-    document.getElementById("btn-open-shop")?.addEventListener("click", ()=>{ RPG.renderShop(); document.getElementById("shop-modal")?.classList.add("active"); });
-    document.getElementById("btn-shop-close")?.addEventListener("click", ()=> document.getElementById("shop-modal")?.classList.remove("active"));
-    document.getElementById("shop-modal")?.addEventListener("click", (e)=>{ if(e.target.id==="shop-modal") e.currentTarget.classList.remove("active"); });
     document.getElementById("skills-modal")?.addEventListener("click", (e)=>{ if(e.target.id==="skills-modal") e.currentTarget.classList.remove("active"); });
     document.getElementById("btn-open-skills")?.addEventListener("click", ()=>{ RPG.renderSkills(); document.getElementById("skills-modal")?.classList.add("active"); });
     document.getElementById("btn-skills-close")?.addEventListener("click", ()=> document.getElementById("skills-modal")?.classList.remove("active"));
@@ -38724,19 +38756,68 @@ function showLevelSelect() {
 
 // === Выбор сложности перед уровнем — как в 8 классе ===
 let _pendingLevelForDifficulty = null;
+let _pendingDifficulty = 0;
+const DIFFICULTY_MISSIONS = [
+    {diff:1, icon:"🌱", name:{ru:"Лёгкий",en:"Easy",kk:"Оңай"}, tag:{ru:"Учеба",en:"Training",kk:"Оқу"}, desc:{ru:"Больше подсказок и времени. Идеально для изучения параграфа.",en:"More hints and time. Perfect for learning.",kk:"Көбірек кеңес пен уақыт."}, obj:{ru:"Изучи тему спокойно",en:"Learn calmly",kk:"Сабақты жай үйрен"}, color:"#4caf50", color2:"#2e7d32", rewards:{xp:"×1.0 XP", crystal:"+4 💎", stars:"★☆☆"}, rec:true},
+    {diff:2, icon:"⚡", name:{ru:"Средний",en:"Medium",kk:"Орташа"}, tag:{ru:"Баланс",en:"Balanced",kk:"Теңгерім"}, desc:{ru:"Классический режим. Баланс сложности и награды.",en:"Classic mode. Balanced difficulty.",kk:"Классикалық режим."}, obj:{ru:"Пройди на результат",en:"Play for result",kk:"Нәтижеге ойна"}, color:"#00b8d4", color2:"#1976d2", rewards:{xp:"×1.2 XP", crystal:"+6 💎", stars:"★★☆"}, rec:true},
+    {diff:3, icon:"🔥", name:{ru:"Сложный",en:"Hard",kk:"Күрделі"}, tag:{ru:"Испытание",en:"Challenge",kk:"Сынақ"}, desc:{ru:"Минимум подсказок. Максимум очков и кристаллов.",en:"Minimum hints. Maximum score.",kk:"Аз кеңес, көп ұпай."}, obj:{ru:"Докажи мастерство",en:"Prove mastery",kk:"Шеберлікті дәлелде"}, color:"#ff6f00", color2:"#d84315", rewards:{xp:"×1.5 XP", crystal:"+10 💎", stars:"★★★"}, rec:false},
+    {diff:0, icon:"🌟", name:{ru:"Все вопросы",en:"Mixed",kk:"Аралас"}, tag:{ru:"Микс",en:"Mixed",kk:"Микс"}, desc:{ru:"Случайные вопросы всех сложностей. Непредсказуемо!",en:"Random questions of all difficulties.",kk:"Барлық күрделіліктегі сұрақтар."}, obj:{ru:"Проверь себя по-взрослому",en:"Test yourself fully",kk:"Өзіңді толық сына"}, color:"#7c4dff", color2:"#4527a0", rewards:{xp:"×1.1 XP", crystal:"+5 💎", stars:"★★☆"}, rec:false}
+];
+function locMission(m, field){
+    const L = I18n.currentLang || "ru";
+    const v = m[field];
+    if(!v) return "";
+    if(typeof v==="string") return v;
+    return v[L] || v.ru || v.en || "";
+}
+function renderDifficultyGrid(selectedDiff){
+    const grid = document.getElementById("level-difficulty-grid");
+    if(!grid) return;
+    grid.innerHTML = DIFFICULTY_MISSIONS.map(m=>{
+        const sel = (m.diff===selectedDiff);
+        const rec = m.rec ? `<div class="rpg-rec">${I18n.t("recommended")||"Рекомендуем"}</div>` : "";
+        const diffStars = m.diff===0 ? "★★☆" : "★".repeat(m.diff) + "☆".repeat(3-m.diff);
+        return `<div class="rpg-mission-card ${sel?"selected":""}" data-diff="${m.diff}" tabindex="0" style="--mc:${m.color};--mc2:${m.color2};--mc-soft:${m.color}22">
+            ${rec}
+            <div class="rpg-mc-icon">${m.icon}</div>
+            <div class="rpg-mc-name">${locMission(m,"name")}</div>
+            <div class="rpg-mc-tag">${locMission(m,"tag")}</div>
+            <div class="rpg-mc-desc">${locMission(m,"desc")}</div>
+            <div class="rpg-mc-obj">🎯 ${locMission(m,"obj")}</div>
+            <div class="rpg-mc-rewards"><span>${m.rewards.xp}</span><span>${m.rewards.crystal}</span><span>${diffStars}</span></div>
+        </div>`;
+    }).join("");
+    grid.querySelectorAll(".rpg-mission-card").forEach(card=>{
+        card.addEventListener("click", ()=>{
+            _pendingDifficulty = parseInt(card.dataset.diff,10);
+            grid.querySelectorAll(".rpg-mission-card").forEach(c=>c.classList.toggle("selected", c===card));
+            const sel = DIFFICULTY_MISSIONS.find(m=>m.diff===_pendingDifficulty);
+            const hint = document.getElementById("level-difficulty-selected");
+            if(hint && sel) hint.textContent = sel.icon+" "+locMission(sel,"name");
+        });
+        card.addEventListener("keydown", (e)=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); card.click(); }});
+    });
+}
 function showLevelDifficultyChooser(levelId){
     _pendingLevelForDifficulty = levelId;
+    _pendingDifficulty = (typeof Game!=="undefined" && Game.selectedDifficulty!==undefined) ? Game.selectedDifficulty : 1;
     const cfg = getLevelConfig(levelId);
     const titleEl = document.getElementById("level-difficulty-title");
-    const descEl = document.getElementById("level-difficulty-desc");
+    const subEl = document.getElementById("level-difficulty-sub");
+    const numEl = document.getElementById("ld-level-num");
+    const tasksEl = document.getElementById("ld-tasks-num");
+    const starsEl = document.getElementById("ld-stars");
     if(titleEl) titleEl.textContent = "🚀 " + levelTitleText(levelId);
-    if(descEl) descEl.textContent = cfg ? (I18n.t("level")+" "+levelId+": "+levelTitleText(levelId)) : "";
-    // highlight current difficulty
-    const cur = (typeof Game!=="undefined" && Game.selectedDifficulty) ? Game.selectedDifficulty : 0;
-    document.querySelectorAll("#level-difficulty-modal .diff-choose-btn").forEach(b=>{
-        const d = parseInt(b.dataset.diff,10);
-        b.classList.toggle("active", d===cur);
-    });
+    if(subEl) subEl.textContent = cfg ? (levelDescText(cfg) || I18n.t("briefingSub")||"") : "";
+    if(numEl) numEl.textContent = String(levelId).replace("custom:","");
+    if(tasksEl) tasksEl.textContent = String(cfg?.tasksTotal||15);
+    const prog = Storage.getProgress();
+    const rec = prog.completedLevels[levelId];
+    if(starsEl) starsEl.textContent = rec ? "⭐".repeat(rec.stars||0)+"☆".repeat(3-(rec.stars||0)) : "☆☆☆";
+    renderDifficultyGrid(_pendingDifficulty);
+    const sel = DIFFICULTY_MISSIONS.find(m=>m.diff===_pendingDifficulty);
+    const hint = document.getElementById("level-difficulty-selected");
+    if(hint && sel) hint.textContent = sel.icon+" "+locMission(sel,"name");
     document.getElementById("level-difficulty-modal")?.classList.add("active");
 }
 function hideLevelDifficultyChooser(){
@@ -38744,24 +38825,27 @@ function hideLevelDifficultyChooser(){
     _pendingLevelForDifficulty = null;
 }
 (function bindDifficultyChooser(){
-    document.addEventListener("click", (e)=>{
-        const btn = e.target.closest("#level-difficulty-modal .diff-choose-btn");
-        if(btn){
-            const diff = parseInt(btn.dataset.diff,10);
-            if(typeof Game!=="undefined") Game.selectedDifficulty = diff;
-            const keys = {0:"difficultyAll",1:"difficultyEasy",2:"difficultyMedium",3:"difficultyHard"};
-            const label = I18n.t(keys[diff]||"difficultyAll");
-            showNotification(I18n.t("selectedDifficultyInfo", label), "info");
-            const lvlId = _pendingLevelForDifficulty;
-            hideLevelDifficultyChooser();
-            if(lvlId!==null && lvlId!==undefined){
-                setTimeout(()=> Game.startLevel(lvlId), 150);
-            }
+    document.getElementById("btn-difficulty-cancel")?.addEventListener("click", hideLevelDifficultyChooser);
+    document.getElementById("btn-difficulty-theory")?.addEventListener("click", ()=>{
+        const id = _pendingLevelForDifficulty;
+        hideLevelDifficultyChooser();
+        if(id!==null && id!==undefined) openTheory(id);
+    });
+    document.getElementById("btn-difficulty-start")?.addEventListener("click", ()=>{
+        const diff = _pendingDifficulty;
+        if(typeof Game!=="undefined") Game.selectedDifficulty = diff;
+        const keys = {0:"difficultyAll",1:"difficultyEasy",2:"difficultyMedium",3:"difficultyHard"};
+        const label = I18n.t(keys[diff]||"difficultyAll");
+        showNotification(I18n.t("selectedDifficultyInfo", label), "info");
+        const lvlId = _pendingLevelForDifficulty;
+        hideLevelDifficultyChooser();
+        if(lvlId!==null && lvlId!==undefined){
+            setTimeout(()=> Game.startLevel(lvlId), 150);
         }
     });
-    document.getElementById("btn-difficulty-cancel")?.addEventListener("click", hideLevelDifficultyChooser);
     document.getElementById("level-difficulty-modal")?.addEventListener("click", (e)=>{
         if(e.target.id==="level-difficulty-modal") hideLevelDifficultyChooser();
+        if(e.target.closest(".rpg-modal-x")) hideLevelDifficultyChooser();
     });
 })();
 
