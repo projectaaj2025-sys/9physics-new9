@@ -1,6 +1,8 @@
 /* Орбита-9 Service Worker — офлайн-кэш и push-уведомления */
-const CACHE_NAME = 'orbita9-v8';
+const CACHE_NAME = 'orbita9-v9';
 const CORE_ASSETS = [
+  './',
+  './index.html',
   './physics-quest-9-grade.html',
   './manifest.json',
   './icon-192.png',
@@ -8,9 +10,14 @@ const CORE_ASSETS = [
   './icon-512.png'
 ];
 
+/* Навигация (HTML-страницы) — network-first: обновления видны сразу, кэш только для офлайна */
+const NAVIGATION_FIRST = true;
+
 self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => cache.addAll(CORE_ASSETS)).then(() => self.skipWaiting())
+    caches.open(CACHE_NAME)
+      .then((cache) => Promise.all(CORE_ASSETS.map((asset) => cache.add(asset).catch(() => null))))
+      .then(() => self.skipWaiting())
   );
 });
 
@@ -26,6 +33,24 @@ self.addEventListener('fetch', (event) => {
   const url = new URL(req.url);
   // Only handle same-origin
   if (url.origin !== self.location.origin) return;
+
+  // Навигационные запросы (страницы): сначала сеть, при ошибке — кэш
+  if (NAVIGATION_FIRST && (req.mode === 'navigate' || (req.mode === 'same-origin' && req.destination === 'document'))) {
+    event.respondWith(
+      fetch(req)
+        .then((res) => {
+          if (res && res.status === 200) {
+            const clone = res.clone();
+            caches.open(CACHE_NAME).then((c) => c.put(req, clone)).catch(() => {});
+          }
+          return res;
+        })
+        .catch(() => caches.match(req).then((cached) => cached || caches.match('./physics-quest-9-grade.html')))
+    );
+    return;
+  }
+
+  // Остальные ресурсы: stale-while-revalidate
   event.respondWith(
     caches.match(req).then((cached) => {
       if (cached) {
