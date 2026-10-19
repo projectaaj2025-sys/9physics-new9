@@ -32093,6 +32093,17 @@ const LOCALES = {
         mechanicFusion: "Синтез",
         mechanicLab: "Лаборатория",
         mechanicBoss: "Босс",
+        diaryBtn: "Дневник экспедиции",
+        diaryTitle: "Дневник экспедиции",
+        diaryClose: "Закрыть",
+        diaryPrev: "← Назад",
+        diaryNext: "Вперёд →",
+        diaryLocked: "Запись зашифрована",
+        diaryLockedNote: "Пройди предыдущий эпизод, чтобы открыть.",
+        labNoExperiment: "На этом уровне нет лабораторного эксперимента",
+        labBonus: "Лабораторный бонус +120 очков и +20 щита!",
+        labNeedSliders: "Пока не в цели — подстрой слайдеры!",
+        labExcellent: "Отлично! Эксперимент засчитан ⭐",
         pulseReady: "Импульс готов — нажми ПРОБЕЛ или кнопку",
         pulseCooldown: "Перезарядка",
         bossTitle: "БОСС УРОВНЯ",
@@ -32701,6 +32712,17 @@ const LOCALES = {
         mechanicFusion: "Fusion",
         mechanicLab: "Lab",
         mechanicBoss: "Boss",
+        diaryBtn: "Expedition Diary",
+        diaryTitle: "Expedition Diary",
+        diaryClose: "Close",
+        diaryPrev: "← Back",
+        diaryNext: "Next →",
+        diaryLocked: "Entry encrypted",
+        diaryLockedNote: "Complete previous episode to unlock.",
+        labNoExperiment: "No lab experiment for this level",
+        labBonus: "Lab bonus +120 points and +20 shield!",
+        labNeedSliders: "Not yet — adjust the sliders!",
+        labExcellent: "Excellent! Experiment completed ⭐",
         pulseReady: "Pulse ready — press SPACE or button",
         pulseCooldown: "Recharging",
         bossTitle: "BOSS LEVEL",
@@ -33857,7 +33879,7 @@ const KvantVoice = {
             setTimeout(populate, 500);
             setTimeout(populate, 1500);
         } else {
-            document.getElementById('kvant-status').textContent = 'TTS не поддерживается';
+            if(document.getElementById("kvant-status")) document.getElementById("kvant-status").textContent= 'TTS не поддерживается';
         }
         if (voiceSel) voiceSel.addEventListener('change', () => { this.voiceName = voiceSel.value; this.save(); this.updateStatus(); });
         document.getElementById('kvant-test-btn')?.addEventListener('click', () => {
@@ -34182,7 +34204,7 @@ const PWA = {
         if (dismissed && Date.now() - parseInt(dismissed) < 3*24*3600*1000) return;
         if (isIOSHint) {
             bar.querySelector('[data-i18n="installNote"]').textContent = 'На iPhone: нажми Поделиться → На экран Домой';
-            document.getElementById('btn-pwa-install').style.display = 'none';
+            if(document.getElementById("btn-pwa-install")) document.getElementById("btn-pwa-install").style.display= 'none';
         }
         bar.classList.add('show');
     },
@@ -34707,16 +34729,16 @@ const Teacher = {
         this.populateTopicSelect();
 
         // Смена типа задания → обновить поля ответа
-        document.getElementById("form-type").addEventListener("change", () => this.renderAnswerFields());
+        document.getElementById("form-type")?.addEventListener("change", () => this.renderAnswerFields());
 
         // Сохранение формы
-        document.getElementById("task-form").addEventListener("submit", (e) => {
+        document.getElementById("task-form")?.addEventListener("submit", (e) => {
             e.preventDefault();
             this.saveTask();
         });
 
         // Сброс формы
-        document.getElementById("task-form").addEventListener("reset", () => {
+        document.getElementById("task-form")?.addEventListener("reset", () => {
             setTimeout(() => this.renderAnswerFields(), 0);
             this.editingId = null;
         });
@@ -34725,17 +34747,17 @@ const Teacher = {
         this.renderAnswerFields();
 
         // Кнопка "Назад" в режиме учителя
-        document.getElementById("btn-teacher-back").addEventListener("click", () => {
+        document.getElementById("btn-teacher-back")?.addEventListener("click", () => {
             showScreen("menu-screen");
         });
 
         // Добавление своих уроков
-        document.getElementById("btn-add-lesson").addEventListener("click", () => this.addLesson());
+        document.getElementById("btn-add-lesson")?.addEventListener("click", () => this.addLesson());
 
         // Назначения ученикам и классам
-        document.getElementById("btn-add-assignment").addEventListener("click", () => this.addAssignment());
+        document.getElementById("btn-add-assignment")?.addEventListener("click", () => this.addAssignment());
         // Импорт кодов результатов от учеников
-        document.getElementById("btn-import-assignment-result").addEventListener("click", () => {
+        document.getElementById("btn-import-assignment-result")?.addEventListener("click", () => {
             const input = document.getElementById("assignment-result-code-input");
             const status = document.getElementById("assignment-result-import-status");
             const value = String(input.value || "").trim();
@@ -34753,10 +34775,10 @@ const Teacher = {
             if (typeof this.renderJournal === "function") this.renderJournal();
             if (typeof this.renderHistory === "function") this.renderHistory();
         });
-        document.getElementById("btn-save-class").addEventListener("click", () => this.addClass());
-        document.getElementById("btn-assign-class").addEventListener("click", () => this.assignToClass());
-        document.getElementById("btn-export-assignments").addEventListener("click", () => this.exportAssignments());
-        document.getElementById("assignment-import-file").addEventListener("change", (event) => this.importAssignments(event));
+        document.getElementById("btn-save-class")?.addEventListener("click", () => this.addClass());
+        document.getElementById("btn-assign-class")?.addEventListener("click", () => this.assignToClass());
+        document.getElementById("btn-export-assignments")?.addEventListener("click", () => this.exportAssignments());
+        document.getElementById("assignment-import-file")?.addEventListener("change", (event) => this.importAssignments(event));
         this.populateAssignmentLevelSelect();
         this.populateAssignmentLevelSelect(true, "class-assignment-level");
         this.populateClassSelect();
@@ -34895,7 +34917,7 @@ const Teacher = {
     },
 
     assignToClass() {
-        const classId = document.getElementById("assignment-class").value;
+        const classId = document.getElementById("assignment-class")?.value;
         const levelInput = document.getElementById("class-assignment-level");
         const noteInput = document.getElementById("class-assignment-note");
         if (!classId) {
@@ -35037,7 +35059,7 @@ const Teacher = {
 
     // Динамические поля в зависимости от типа
     renderAnswerFields() {
-        const type = document.getElementById("form-type").value;
+        const type = document.getElementById("form-type")?.value;
         const container = document.getElementById("answer-fields");
         const lang = I18n.currentLang;
 
@@ -35147,7 +35169,7 @@ const Teacher = {
         // После рендера — навесить обработчики
         if (type === "multiple-choice" || type === "multi-select") {
             this.renderOptions(type === "multi-select");
-            document.getElementById("btn-add-option").addEventListener("click", () => this.addOption(null, type === "multi-select"));
+            document.getElementById("btn-add-option")?.addEventListener("click", () => this.addOption(null, type === "multi-select"));
         }
     },
 
@@ -35190,14 +35212,14 @@ const Teacher = {
     },
 
     saveTask() {
-        const type = document.getElementById("form-type").value;
-        const topic = document.getElementById("form-topic").value;
-        const difficulty = parseInt(document.getElementById("form-difficulty").value, 10);
+        const type = document.getElementById("form-type")?.value;
+        const topic = document.getElementById("form-topic")?.value;
+        const difficulty = parseInt(document.getElementById("form-difficulty")?.value, 10);
 
         const question = {
-            ru: document.getElementById("form-question-ru").value.trim(),
-            en: document.getElementById("form-question-en").value.trim(),
-            kk: document.getElementById("form-question-kk").value.trim()
+            ru: document.getElementById("form-question-ru")?.value.trim(),
+            en: document.getElementById("form-question-en")?.value.trim(),
+            kk: document.getElementById("form-question-kk")?.value.trim()
         };
         if (!question.ru) {
             showNotification(I18n.t("fillQuestionRu"), "warning");
@@ -35206,12 +35228,12 @@ const Teacher = {
         if (!question.en) question.en = question.ru;
         if (!question.kk) question.kk = question.ru;
 
-        const formula = document.getElementById("form-formula").value.trim();
-        const hint = document.getElementById("form-hint").value.trim();
+        const formula = document.getElementById("form-formula")?.value.trim();
+        const hint = document.getElementById("form-hint")?.value.trim();
         const explanation = {
-            ru: document.getElementById("form-explanation").value.trim(),
-            en: document.getElementById("form-explanation").value.trim(),
-            kk: document.getElementById("form-explanation").value.trim()
+            ru: document.getElementById("form-explanation")?.value.trim(),
+            en: document.getElementById("form-explanation")?.value.trim(),
+            kk: document.getElementById("form-explanation")?.value.trim()
         };
 
         const task = {
@@ -35261,9 +35283,9 @@ const Teacher = {
                 break;
             }
             case "short-answer": {
-                const ru = document.getElementById("form-answer-ru").value.trim();
-                const en = document.getElementById("form-answer-en").value.trim();
-                const kk = document.getElementById("form-answer-kk").value.trim();
+                const ru = document.getElementById("form-answer-ru")?.value.trim();
+                const en = document.getElementById("form-answer-en")?.value.trim();
+                const kk = document.getElementById("form-answer-kk")?.value.trim();
                 if (!ru) {
                     showNotification(I18n.t("fillCorrectAnswer"), "warning");
                     return;
@@ -35276,8 +35298,8 @@ const Teacher = {
                 break;
             }
             case "numeric": {
-                const v = parseFloat(document.getElementById("form-correct-value").value);
-                const tol = parseFloat(document.getElementById("form-tolerance").value) || 0.1;
+                const v = parseFloat(document.getElementById("form-correct-value")?.value);
+                const tol = parseFloat(document.getElementById("form-tolerance")?.value) || 0.1;
                 if (isNaN(v)) {
                     showNotification(I18n.t("enterNumericAnswer"), "warning");
                     return;
@@ -35296,13 +35318,13 @@ const Teacher = {
                     return { ru: parts[0] || "", en: parts[1] || parts[0] || "", kk: parts[2] || parts[0] || "" };
                 }).filter(c => c.ru);
 
-                const left = parseCol(document.getElementById("form-left").value);
-                const right = parseCol(document.getElementById("form-right").value);
+                const left = parseCol(document.getElementById("form-left")?.value);
+                const right = parseCol(document.getElementById("form-right")?.value);
                 if (left.length < 2 || right.length < 2) {
                     showNotification(I18n.t("minTwoItems"), "warning");
                     return;
                 }
-                const pairs = document.getElementById("form-pairs").value
+                const pairs = document.getElementById("form-pairs")?.value
                     .split("|").map(s => s.trim()).filter(Boolean)
                     .map(p => p.split(",").map(n => parseInt(n.trim(), 10)));
                 if (pairs.length === 0) {
@@ -35330,8 +35352,8 @@ const Teacher = {
                 break;
             }
             case "fill-blank": {
-                const ans = document.getElementById("form-blank-answer").value.trim();
-                const alts = document.getElementById("form-blank-alternatives").value.trim();
+                const ans = document.getElementById("form-blank-answer")?.value.trim();
+                const alts = document.getElementById("form-blank-alternatives")?.value.trim();
                 if (!ans) {
                     showNotification(I18n.t("fillCorrectAnswer"), "warning");
                     return;
@@ -35402,15 +35424,15 @@ const Teacher = {
         this.editingId = id;
         this.switchTab("create");
 
-        document.getElementById("form-type").value = task.type;
-        document.getElementById("form-topic").value = task.topic;
-        document.getElementById("form-difficulty").value = task.difficulty;
-        document.getElementById("form-question-ru").value = task.question.ru || "";
-        document.getElementById("form-question-en").value = task.question.en || "";
-        document.getElementById("form-question-kk").value = task.question.kk || "";
-        document.getElementById("form-formula").value = task.formula || "";
-        document.getElementById("form-hint").value = task.hint?.ru || "";
-        document.getElementById("form-explanation").value = task.explanation?.ru || "";
+        if(document.getElementById("form-type")) document.getElementById("form-type").value= task.type;
+        if(document.getElementById("form-topic")) document.getElementById("form-topic").value= task.topic;
+        if(document.getElementById("form-difficulty")) document.getElementById("form-difficulty").value= task.difficulty;
+        if(document.getElementById("form-question-ru")) document.getElementById("form-question-ru").value= task.question.ru || "";
+        if(document.getElementById("form-question-en")) document.getElementById("form-question-en").value= task.question.en || "";
+        if(document.getElementById("form-question-kk")) document.getElementById("form-question-kk").value= task.question.kk || "";
+        if(document.getElementById("form-formula")) document.getElementById("form-formula").value= task.formula || "";
+        if(document.getElementById("form-hint")) document.getElementById("form-hint").value= task.hint?.ru || "";
+        if(document.getElementById("form-explanation")) document.getElementById("form-explanation").value= task.explanation?.ru || "";
 
         this.renderAnswerFields();
 
@@ -35452,18 +35474,18 @@ const Teacher = {
                     const ca = task.correctAnswer;
                     const dict = (ca && typeof ca === "object" && !Array.isArray(ca)) ? ca : { ru: ca, en: ca, kk: ca };
                     const asArr = (v) => Array.isArray(v) ? v : (v == null ? [] : [String(v)]);
-                    document.getElementById("form-answer-ru").value = asArr(dict.ru).join(", ");
-                    document.getElementById("form-answer-en").value = asArr(dict.en).join(", ");
-                    document.getElementById("form-answer-kk").value = asArr(dict.kk).join(", ");
+                    if(document.getElementById("form-answer-ru")) document.getElementById("form-answer-ru").value= asArr(dict.ru).join(", ");
+                    if(document.getElementById("form-answer-en")) document.getElementById("form-answer-en").value= asArr(dict.en).join(", ");
+                    if(document.getElementById("form-answer-kk")) document.getElementById("form-answer-kk").value= asArr(dict.kk).join(", ");
                     break;
                 }
                 case "numeric": {
-                    document.getElementById("form-correct-value").value = task.correctAnswer;
-                    document.getElementById("form-tolerance").value = task.tolerance || 0.1;
+                    if(document.getElementById("form-correct-value")) document.getElementById("form-correct-value").value= task.correctAnswer;
+                    if(document.getElementById("form-tolerance")) document.getElementById("form-tolerance").value= task.tolerance || 0.1;
                     break;
                 }
                 case "true-false": {
-                    document.getElementById("form-true-false").value = task.correctAnswer ? "true" : "false";
+                    if(document.getElementById("form-true-false")) document.getElementById("form-true-false").value= task.correctAnswer ? "true" : "false";
                     break;
                 }
                 case "matching": {
@@ -35476,9 +35498,9 @@ const Teacher = {
                         }
                         return "";
                     };
-                    document.getElementById("form-left").value = colText(task.pairs.left);
-                    document.getElementById("form-right").value = colText(task.pairs.right);
-                    document.getElementById("form-pairs").value = task.correctPairs
+                    if(document.getElementById("form-left")) document.getElementById("form-left").value= colText(task.pairs.left);
+                    if(document.getElementById("form-right")) document.getElementById("form-right").value= colText(task.pairs.right);
+                    if(document.getElementById("form-pairs")) document.getElementById("form-pairs").value= task.correctPairs
                         .map(p => Array.isArray(p) ? p.join(",") : `${p.left},${p.right}`)
                         .join(" | ");
                     break;
@@ -35491,8 +35513,8 @@ const Teacher = {
                         const ru = Array.isArray(ca.ru) ? ca.ru[0] : ca.ru;
                         main = String(ru == null ? "" : ru);
                     } else main = String(ca == null ? "" : ca);
-                    document.getElementById("form-blank-answer").value = main;
-                    document.getElementById("form-blank-alternatives").value = (task.alternatives || []).join(", ");
+                    if(document.getElementById("form-blank-answer")) document.getElementById("form-blank-answer").value= main;
+                    if(document.getElementById("form-blank-alternatives")) document.getElementById("form-blank-alternatives").value= (task.alternatives || []).join(", ");
                     break;
                 }
             }
@@ -35503,13 +35525,13 @@ const Teacher = {
         const stats = Storage.getStats();
         const progress = Storage.getProgress();
 
-        document.getElementById("stat-total").textContent = stats.totalAnswered || 0;
-        document.getElementById("stat-correct").textContent = stats.correctAnswers || 0;
+        if(document.getElementById("stat-total")) document.getElementById("stat-total").textContent= stats.totalAnswered || 0;
+        if(document.getElementById("stat-correct")) document.getElementById("stat-correct").textContent= stats.correctAnswers || 0;
         const acc = stats.totalAnswered > 0
             ? Math.round((stats.correctAnswers / stats.totalAnswered) * 100)
             : 0;
-        document.getElementById("stat-accuracy").textContent = acc + "%";
-        document.getElementById("stat-best").textContent = progress.bestScore || 0;
+        if(document.getElementById("stat-accuracy")) document.getElementById("stat-accuracy").textContent= acc + "%";
+        if(document.getElementById("stat-best")) document.getElementById("stat-best").textContent= progress.bestScore || 0;
 
         // По темам
         const topicsContainer = document.getElementById("topic-stats");
@@ -35584,18 +35606,18 @@ const Teacher = {
 
     // === Свои уроки учителя ===
     addLesson() {
-        const ru = document.getElementById("lesson-name-ru").value.trim();
+        const ru = document.getElementById("lesson-name-ru")?.value.trim();
         if (!ru) {
             showNotification(I18n.t("fillLessonNameRu"), "warning");
             return;
         }
-        const en = document.getElementById("lesson-name-en").value.trim() || ru;
-        const kk = document.getElementById("lesson-name-kk").value.trim() || ru;
+        const en = document.getElementById("lesson-name-en")?.value.trim() || ru;
+        const kk = document.getElementById("lesson-name-kk")?.value.trim() || ru;
         Storage.addCustomLesson({ name: { ru, en, kk } });
         showNotification(I18n.t("lessonSaved"), "success");
-        document.getElementById("lesson-name-ru").value = "";
-        document.getElementById("lesson-name-en").value = "";
-        document.getElementById("lesson-name-kk").value = "";
+        if(document.getElementById("lesson-name-ru")) document.getElementById("lesson-name-ru").value= "";
+        if(document.getElementById("lesson-name-en")) document.getElementById("lesson-name-en").value= "";
+        if(document.getElementById("lesson-name-kk")) document.getElementById("lesson-name-kk").value= "";
         this.renderLessonsList();
         this.populateTopicSelect(true);
         this.populateAssignmentLevelSelect(false);
@@ -36015,15 +36037,15 @@ const Game = {
     document.getElementById("btn-lab")?.addEventListener("click", ()=>{
         const lvl = Game.currentLevel;
         if(LabGames.configs[lvl]) LabGames.tryShow(lvl, Game);
-        else showNotification("На этом уровне нет лаб. эксперимента", "info");
+        else showNotification(I18n.t("labNoExperiment"), "info");
     });
     document.getElementById("lab-check")?.addEventListener("click", ()=>{
         const resEl=document.getElementById("lab-result");
         if(resEl && resEl._ok){
-            showNotification("Отлично! Эксперимент засчитан ⭐", "success");
+            showNotification(I18n.t("labExcellent"), "success");
             LabGames.hide(true);
         } else {
-            showNotification("Пока не в цели — подстрой слайдеры!", "warning");
+            showNotification(I18n.t("labNeedSliders"), "warning");
             if(navigator.vibrate) navigator.vibrate(80);
         }
     });
@@ -36055,7 +36077,7 @@ const Game = {
         this.paused = false;
         this.pausedTotal = 0;
         this.pauseStartedAt = 0;
-        document.getElementById("pause-overlay").classList.remove("active");
+        document.getElementById("pause-overlay")?.classList.remove("active");
 
         // Очистить таймеры предыдущего уровня (перезапуск без endLevel)
         clearInterval(this.asteroidTimer);
@@ -36133,13 +36155,13 @@ const Game = {
         clearInterval(this.energyTimer);
         if (this.firstTaskTimeout) { clearTimeout(this.firstTaskTimeout); this.firstTaskTimeout = null; }
         this.sessionId = (this.sessionId || 0) + 1;
-        document.getElementById("task-modal").classList.remove("active");
+        document.getElementById("task-modal")?.classList.remove("active");
         this.isTaskActive = false;
         this.currentTask = null;
         this.paused = false;
         this.pausedTotal = 0;
         this.pauseStartedAt = 0;
-        document.getElementById("pause-overlay").classList.remove("active");
+        document.getElementById("pause-overlay")?.classList.remove("active");
         showLevelSelect();
     },
 
@@ -36166,7 +36188,7 @@ const Game = {
         // Сбросить «залипшие» клавиши движения, чтобы не рванул после снятия паузы
         this.keys = {};
         this.dragTarget = null;   // сенсорное управление: сбросить ведение пальцем
-        document.getElementById("pause-overlay").classList.add("active");
+        document.getElementById("pause-overlay")?.classList.add("active");
         const btn = document.getElementById("btn-pause");
         if (btn) btn.innerHTML = `▶ <span data-i18n="resume">${I18n.t("resume")}</span>`;
         this.updateHUD();
@@ -36178,7 +36200,7 @@ const Game = {
         this.pauseStartedAt = 0;
         this.paused = false;
         this.lastTime = performance.now(); // без скачка dt после паузы
-        document.getElementById("pause-overlay").classList.remove("active");
+        document.getElementById("pause-overlay")?.classList.remove("active");
         const btn = document.getElementById("btn-pause");
         if (btn) btn.innerHTML = `⏸ <span data-i18n="pause">${I18n.t("pause")}</span>`;
         this.canvas.focus();
@@ -36199,10 +36221,10 @@ const Game = {
         if (this.firstTaskTimeout) { clearTimeout(this.firstTaskTimeout); this.firstTaskTimeout = null; }
         this.sessionId = (this.sessionId || 0) + 1; // отложенные триггеры заданий больше не действительны
         // Закрыть модальное задание, если уровень закончился во время вопроса
-        document.getElementById("task-modal").classList.remove("active");
+        document.getElementById("task-modal")?.classList.remove("active");
         this.isTaskActive = false;
         this.currentTask = null;
-        document.getElementById("pause-overlay").classList.remove("active");
+        document.getElementById("pause-overlay")?.classList.remove("active");
         // Время уровня без учёта пауз
         const pausedNow = this.paused ? (Date.now() - this.pauseStartedAt) : 0;
         this.paused = false;
@@ -36346,7 +36368,7 @@ const Game = {
             const copyStatus = document.getElementById("copy-result-status");
             if (copyStatus) { copyStatus.textContent = ""; copyStatus.className = "copy-result-status"; }
             if (resultAssignments.length) {
-                document.getElementById("assignment-result-code").value = Storage.createResultShareCode({
+                if(document.getElementById("assignment-result-code")) document.getElementById("assignment-result-code").value= Storage.createResultShareCode({
                     level: this.currentLevel,
                     score: result.score,
                     time: result.time,
@@ -36431,8 +36453,8 @@ const Game = {
         this.taskHintsLeft = 3;
 
         const modal = document.getElementById("task-modal");
-        document.getElementById("task-title").textContent = I18n.t("task") + " #" + (this.completedTaskIds.length + 1);
-        document.getElementById("task-type-badge").textContent = I18n.t(i18nTypeKey(task.type));
+        if(document.getElementById("task-title")) document.getElementById("task-title").textContent= I18n.t("task") + " #" + (this.completedTaskIds.length + 1);
+        if(document.getElementById("task-type-badge")) document.getElementById("task-type-badge").textContent= I18n.t(i18nTypeKey(task.type));
 
         // Рендер тела задания
         this.renderTaskBody(task);
@@ -36650,14 +36672,14 @@ const Game = {
         this.updateTaskStats();
 
         if (this.taskHintsLeft === 0) {
-            document.getElementById("btn-hint").disabled = true;
+            if(document.getElementById("btn-hint")) document.getElementById("btn-hint").disabled= true;
         }
     },
 
     updateTaskStats() {
-        document.getElementById("task-attempts").textContent =
+        if(document.getElementById("task-attempts")) document.getElementById("task-attempts").textContent=
             `${I18n.t("attempts")} ${this.taskAttempts} / ${MAX_TASK_ATTEMPTS}`;
-        document.getElementById("task-hint-stat").textContent =
+        if(document.getElementById("task-hint-stat")) document.getElementById("task-hint-stat").textContent=
             `${I18n.t("hintsAvailable")} ${this.taskHintsLeft}`;
         // Прогресс: какой по счёту вопрос темы сейчас задан
         const qStat = document.getElementById("task-question-stat");
@@ -36708,8 +36730,8 @@ const Game = {
             this.spawnShieldWave();
 
             // Отключить кнопки
-            document.getElementById("btn-submit").disabled = true;
-            document.getElementById("btn-hint").disabled = true;
+            if(document.getElementById("btn-submit")) document.getElementById("btn-submit").disabled= true;
+            if(document.getElementById("btn-hint")) document.getElementById("btn-hint").disabled= true;
 
             // Закрыть через 1.8 сек (таймер отслеживается — см. autoCloseTimeout)
             if (this.autoCloseTimeout) clearTimeout(this.autoCloseTimeout);
@@ -36733,8 +36755,8 @@ const Game = {
                 if (!this.failedTaskIds.includes(this.currentTask.id)) {
                     this.failedTaskIds.push(this.currentTask.id);
                 }
-                document.getElementById("btn-submit").disabled = true;
-                document.getElementById("btn-hint").disabled = true;
+                if(document.getElementById("btn-submit")) document.getElementById("btn-submit").disabled= true;
+                if(document.getElementById("btn-hint")) document.getElementById("btn-hint").disabled= true;
                 showNotification(I18n.t("outOfAttempts"), "error");
                 if (this.cityHealth <= 0) {
                     this.closeTask(false);
@@ -36872,7 +36894,7 @@ const Game = {
 
     closeTask(success) {
         if (this.autoCloseTimeout) { clearTimeout(this.autoCloseTimeout); this.autoCloseTimeout = null; }
-        document.getElementById("task-modal").classList.remove("active");
+        document.getElementById("task-modal")?.classList.remove("active");
         this.isTaskActive = false;
         this.currentTask = null;
         this.updateHUD();
@@ -37322,20 +37344,20 @@ const Game = {
     // ============ HUD ============
     updateHUD() {
         if(typeof RPG!=="undefined") RPG.updateHUD();
-        document.getElementById("score-value").textContent = this.score;
-        document.getElementById("level-value").textContent = this.currentLevelLabel();
-        document.getElementById("shield-value").textContent = Math.round(this.shield);
+        if(document.getElementById("score-value")) document.getElementById("score-value").textContent= this.score;
+        if(document.getElementById("level-value")) document.getElementById("level-value").textContent= this.currentLevelLabel();
+        if(document.getElementById("shield-value")) document.getElementById("shield-value").textContent= Math.round(this.shield);
         const hpPct = Math.max(0, Math.round((this.cityHealth / this.cityMaxHealth) * 100));
-        document.getElementById("city-health-fill").style.width = hpPct + "%";
-        document.getElementById("city-health-value").textContent = hpPct + "%";
+        if(document.getElementById("city-health-fill")) document.getElementById("city-health-fill").style.width= hpPct + "%";
+        if(document.getElementById("city-health-value")) document.getElementById("city-health-value").textContent= hpPct + "%";
         if (hpPct < 30) {
-            document.getElementById("city-health-fill").style.background = "linear-gradient(90deg, var(--danger), #ff6600)";
+            if(document.getElementById("city-health-fill")) document.getElementById("city-health-fill").style.background= "linear-gradient(90deg, var(--danger), #ff6600)";
         } else if (hpPct < 60) {
-            document.getElementById("city-health-fill").style.background = "linear-gradient(90deg, var(--warning), var(--accent))";
+            if(document.getElementById("city-health-fill")) document.getElementById("city-health-fill").style.background= "linear-gradient(90deg, var(--warning), var(--accent))";
         } else {
-            document.getElementById("city-health-fill").style.background = "linear-gradient(90deg, var(--success), var(--accent))";
+            if(document.getElementById("city-health-fill")) document.getElementById("city-health-fill").style.background= "linear-gradient(90deg, var(--success), var(--accent))";
         }
-        document.getElementById("time-value").textContent = formatTimeShort(this.timeElapsed);
+        if(document.getElementById("time-value")) document.getElementById("time-value").textContent= formatTimeShort(this.timeElapsed);
     },
 
     // ============ РЕНДЕР ============
@@ -38025,6 +38047,7 @@ const I18n = {
 // Глобальный показ уведомлений
 function showNotification(text, type = "info") {
     const el = document.getElementById("notification");
+    if(!el) return;
     el.textContent = text;
     el.className = `notification ${type} show`;
     setTimeout(() => el.classList.remove("show"), 2500);
@@ -38131,12 +38154,12 @@ function initApp() {
     setupMainMenu();
     setupModals();
     // shop / skills modals
-    document.getElementById("btn-open-shop")?.addEventListener("click", ()=>{ RPG.renderShop(); document.getElementById("shop-modal").classList.add("active"); });
-    document.getElementById("btn-shop-close")?.addEventListener("click", ()=> document.getElementById("shop-modal").classList.remove("active"));
+    document.getElementById("btn-open-shop")?.addEventListener("click", ()=>{ RPG.renderShop(); document.getElementById("shop-modal")?.classList.add("active"); });
+    document.getElementById("btn-shop-close")?.addEventListener("click", ()=> document.getElementById("shop-modal")?.classList.remove("active"));
     document.getElementById("shop-modal")?.addEventListener("click", (e)=>{ if(e.target.id==="shop-modal") e.currentTarget.classList.remove("active"); });
     document.getElementById("skills-modal")?.addEventListener("click", (e)=>{ if(e.target.id==="skills-modal") e.currentTarget.classList.remove("active"); });
-    document.getElementById("btn-open-skills")?.addEventListener("click", ()=>{ RPG.renderSkills(); document.getElementById("skills-modal").classList.add("active"); });
-    document.getElementById("btn-skills-close")?.addEventListener("click", ()=> document.getElementById("skills-modal").classList.remove("active"));
+    document.getElementById("btn-open-skills")?.addEventListener("click", ()=>{ RPG.renderSkills(); document.getElementById("skills-modal")?.classList.add("active"); });
+    document.getElementById("btn-skills-close")?.addEventListener("click", ()=> document.getElementById("skills-modal")?.classList.remove("active"));
     // pulse
     document.getElementById("pulse-btn")?.addEventListener("click", ()=> Mechanics.onPulse(Game));
     window.addEventListener("keydown", (e)=>{
@@ -38151,17 +38174,17 @@ function initApp() {
 
 // ============ ГЛАВНОЕ МЕНЮ ============
 function setupMainMenu() {
-    document.getElementById("btn-start").addEventListener("click", () => {
+    document.getElementById("btn-start")?.addEventListener("click", () => {
         showLevelSelect();
     });
 
-    document.getElementById("btn-continue").addEventListener("click", () => {
+    document.getElementById("btn-continue")?.addEventListener("click", () => {
         const progress = Storage.getProgress();
         const last = progress.completedLevels[progress.unlockedLevel - 1] ? progress.unlockedLevel : 1;
         Game.startLevel(last);
     });
 
-    document.getElementById("btn-teacher").addEventListener("click", () => {
+    document.getElementById("btn-teacher")?.addEventListener("click", () => {
         showScreen("teacher-screen");
         Teacher.populateTopicSelect(true);
         Teacher.populateAssignmentLevelSelect(true);
@@ -38171,56 +38194,56 @@ function setupMainMenu() {
         if(typeof QuickAssign!=="undefined") QuickAssign.render();
     });
 
-    document.getElementById("btn-records").addEventListener("click", () => {
+    document.getElementById("btn-records")?.addEventListener("click", () => {
         showRecords();
     });
 
-    document.getElementById("btn-howto").addEventListener("click", () => {
+    document.getElementById("btn-howto")?.addEventListener("click", () => {
         showHowToPlay();
     });
 
-    document.getElementById("btn-about").addEventListener("click", () => {
+    document.getElementById("btn-about")?.addEventListener("click", () => {
         showAbout();
     });
 
     // Профиль пилота (РПГ)
-    document.getElementById("btn-profile").addEventListener("click", () => {
+    document.getElementById("btn-profile")?.addEventListener("click", () => {
         showProfile();
     });
-    document.getElementById("btn-profile-back").addEventListener("click", () => {
+    document.getElementById("btn-profile-back")?.addEventListener("click", () => {
         showScreen("menu-screen");
     });
-    document.getElementById("profile-name").addEventListener("input", (e) => {
+    document.getElementById("profile-name")?.addEventListener("input", (e) => {
         const s = Storage.getSettings();
         s.playerName = e.target.value.trim();
         Storage.setSettings(s);
     });
 
     // Теория перед уровнем
-    document.getElementById("btn-theory-start").addEventListener("click", () => {
+    document.getElementById("btn-theory-start")?.addEventListener("click", () => {
         const id = pendingLevelId;
         closeTheory();
         if (id !== null && id !== undefined) Game.startLevel(id);
     });
-    document.getElementById("btn-theory-back").addEventListener("click", () => {
+    document.getElementById("btn-theory-back")?.addEventListener("click", () => {
         closeTheory();
     });
 
-    document.getElementById("btn-back-to-menu").addEventListener("click", () => {
+    document.getElementById("btn-back-to-menu")?.addEventListener("click", () => {
         showScreen("menu-screen");
     });
 
     // Пауза: HUD-кнопка и кнопка «Продолжить» на оверлее
-    document.getElementById("btn-pause").addEventListener("click", (e) => {
+    document.getElementById("btn-pause")?.addEventListener("click", (e) => {
         Game.togglePause();
         e.currentTarget.blur(); // чтобы пробел после клика не «жмякал» кнопку снова
     });
-    document.getElementById("btn-resume").addEventListener("click", () => {
+    document.getElementById("btn-resume")?.addEventListener("click", () => {
         Game.togglePause();
     });
 
     // Кнопка выхода из уровня (в HUD, видна на каждом уровне)
-    document.getElementById("btn-exit-level").addEventListener("click", () => {
+    document.getElementById("btn-exit-level")?.addEventListener("click", () => {
         if (!Game.running) return;
         if (confirm(I18n.t("exitConfirm"))) Game.exitLevel();
     });
@@ -38228,20 +38251,20 @@ function setupMainMenu() {
     // Кнопка continue видна, если есть прогресс
     const progress = Storage.getProgress();
     if (Object.keys(progress.completedLevels).length > 0) {
-        document.getElementById("btn-continue").style.display = "inline-flex";
+        if(document.getElementById("btn-continue")) document.getElementById("btn-continue").style.display= "inline-flex";
     }
 
     // Кнопка retry
-    document.getElementById("btn-retry").addEventListener("click", () => {
+    document.getElementById("btn-retry")?.addEventListener("click", () => {
         Game.startLevel(Game.currentLevel);
     });
-    document.getElementById("btn-menu").addEventListener("click", () => {
+    document.getElementById("btn-menu")?.addEventListener("click", () => {
         showScreen("menu-screen");
     });
-    document.getElementById("btn-next-level").addEventListener("click", () => {
+    document.getElementById("btn-next-level")?.addEventListener("click", () => {
         Game.startLevel(Game.currentLevel + 1);
     });
-    document.getElementById("btn-victory-menu").addEventListener("click", () => {
+    document.getElementById("btn-victory-menu")?.addEventListener("click", () => {
         showScreen("menu-screen");
     });
 
@@ -38260,9 +38283,9 @@ function refreshAfterLangChange() {
     // вопрос, варианты, формулу и локализованные поля ответа должны смениться сразу.
     if (typeof Game !== "undefined" && Game.isTaskActive && Game.currentTask) {
         Game.renderTaskBody(Game.currentTask);
-        document.getElementById("task-title").textContent = I18n.t("task") + " #" + (Game.completedTaskIds.length + 1);
-        document.getElementById("task-type-badge").textContent = I18n.t(i18nTypeKey(Game.currentTask.type));
-        document.getElementById("btn-submit").textContent = I18n.t("submit");
+        if(document.getElementById("task-title")) document.getElementById("task-title").textContent= I18n.t("task") + " #" + (Game.completedTaskIds.length + 1);
+        if(document.getElementById("task-type-badge")) document.getElementById("task-type-badge").textContent= I18n.t(i18nTypeKey(Game.currentTask.type));
+        if(document.getElementById("btn-submit")) document.getElementById("btn-submit").textContent= I18n.t("submit");
         const taskFeedback = document.getElementById("task-feedback");
         if (taskFeedback) {
             taskFeedback.className = "task-feedback";
@@ -38310,7 +38333,7 @@ function showLevelSelect() {
     const settings = Storage.getSettings();
     const pname = settings.playerName ? escapeHtml(settings.playerName) : I18n.t("anonymous");
     const st = getRocketStyle(settings.rocketStyle);
-    document.getElementById("pilot-line").innerHTML =
+    if(document.getElementById("pilot-line")) document.getElementById("pilot-line").innerHTML=
         `👨‍🚀 ${I18n.t("pilot")}: <strong style="color:${st.accent}">${pname}</strong>`;
 
     const L = I18n.currentLang || "ru";
@@ -38520,7 +38543,7 @@ let currentTheoryKey = null;
 function openTheory(levelId) {
     pendingLevelId = levelId;
     currentTheoryKey = theoryKeyFor(levelId);
-    document.getElementById("theory-title").textContent = levelTitleText(levelId);
+    if(document.getElementById("theory-title")) document.getElementById("theory-title").textContent= levelTitleText(levelId);
     const tabs = document.getElementById("theory-tabs");
     if (CONSPECT[currentTheoryKey]) {
         tabs.style.display = "flex";
@@ -38529,7 +38552,7 @@ function openTheory(levelId) {
         tabs.style.display = "none";
         renderTheoryContent("textbook");
     }
-    document.getElementById("theory-modal").classList.add("active");
+    document.getElementById("theory-modal")?.classList.add("active");
 }
 
 function setTheoryTab(tab) {
@@ -38616,7 +38639,7 @@ function conspektKeys() {
 
 function openConspektFull() {
     const keys = conspektKeys();
-    document.getElementById("conspekt-toc").innerHTML = keys.map(k =>
+    if(document.getElementById("conspekt-toc")) document.getElementById("conspekt-toc").innerHTML= keys.map(k =>
         `<button type="button" class="conspekt-toc-item" data-k="${k}">${escapeHtml(conspektTitle(CONSPECT[k]))}</button>`
     ).join("");
     document.querySelectorAll("#conspekt-toc .conspekt-toc-item").forEach(b => {
@@ -38629,7 +38652,7 @@ function openConspektFull() {
             }
         });
     });
-    document.getElementById("conspekt-content").innerHTML = keys.map(k => {
+    if(document.getElementById("conspekt-content")) document.getElementById("conspekt-content").innerHTML= keys.map(k => {
         const c = CONSPECT[k];
         return `<section class="conspekt-section" id="conspekt-sec-${k}">
             <h3 class="conspekt-section-title">${escapeHtml(conspektTitle(c))}</h3>
@@ -38638,7 +38661,7 @@ function openConspektFull() {
     }).join("");
     const mc = document.querySelector("#conspekt-modal .modal-content");
     if (mc) mc.scrollTop = 0;
-    document.getElementById("conspekt-modal").classList.add("active");
+    document.getElementById("conspekt-modal")?.classList.add("active");
 }
 
 function downloadConspektPdf() {
@@ -38646,7 +38669,7 @@ function downloadConspektPdf() {
 }
 
 function closeTheory() {
-    document.getElementById("theory-modal").classList.remove("active");
+    document.getElementById("theory-modal")?.classList.remove("active");
     pendingLevelId = null;
 }
 
@@ -38685,7 +38708,7 @@ function updateProfileNotesDownload() {
 
 function showProfile() {
     const s = Storage.getSettings();
-    document.getElementById("profile-name").value = s.playerName || "";
+    if(document.getElementById("profile-name")) document.getElementById("profile-name").value= s.playerName || "";
     const playerIdField = document.getElementById("profile-player-id");
     if (playerIdField) playerIdField.value = s.playerId || "";
     renderRocketGrid();
@@ -38716,14 +38739,14 @@ function renderRocketGrid() {
 
 // ============ МОДАЛКИ ============
 function setupModals() {
-    document.getElementById("btn-clear-records").addEventListener("click", () => {
+    document.getElementById("btn-clear-records")?.addEventListener("click", () => {
         if (confirm(I18n.t("clearRecordsConfirm"))) {
             Storage.clearRecords();
             showNotification(I18n.t("recordsCleared"), "success");
             showRecords();
         }
     });
-    document.getElementById("btn-clear-history").addEventListener("click", () => {
+    document.getElementById("btn-clear-history")?.addEventListener("click", () => {
         if (confirm(I18n.t("clearHistoryConfirm"))) {
             Storage.clearHistory();
             showNotification(I18n.t("historyCleared"), "success");
@@ -38733,21 +38756,21 @@ function setupModals() {
     document.querySelectorAll("#records-tabs [data-record-view]").forEach(button => {
         button.addEventListener("click", () => showRecords(button.dataset.recordView));
     });
-    document.getElementById("btn-records-close").addEventListener("click", () => {
-        document.getElementById("records-modal").classList.remove("active");
+    document.getElementById("btn-records-close")?.addEventListener("click", () => {
+        document.getElementById("records-modal")?.classList.remove("active");
     });
-    document.getElementById("btn-howto-close").addEventListener("click", () => {
-        document.getElementById("howto-modal").classList.remove("active");
+    document.getElementById("btn-howto-close")?.addEventListener("click", () => {
+        document.getElementById("howto-modal")?.classList.remove("active");
     });
-    document.getElementById("btn-about-close").addEventListener("click", () => {
-        document.getElementById("about-modal").classList.remove("active");
+    document.getElementById("btn-about-close")?.addEventListener("click", () => {
+        document.getElementById("about-modal")?.classList.remove("active");
     });
     document.querySelectorAll("#theory-tabs .theory-tab").forEach(b => {
         b.addEventListener("click", () => setTheoryTab(b.dataset.tab));
     });
-    document.getElementById("btn-download-conspekt").addEventListener("click", downloadConspektPdf);
-    document.getElementById("btn-conspekt-close").addEventListener("click", () => {
-        document.getElementById("conspekt-modal").classList.remove("active");
+    document.getElementById("btn-download-conspekt")?.addEventListener("click", downloadConspektPdf);
+    document.getElementById("btn-conspekt-close")?.addEventListener("click", () => {
+        document.getElementById("conspekt-modal")?.classList.remove("active");
     });
 }
 
@@ -38815,7 +38838,7 @@ function showRecords(view = currentRecordsView) {
             }).join("")}
         `;
     }
-    document.getElementById("records-modal").classList.add("active");
+    document.getElementById("records-modal")?.classList.add("active");
 }
 
 function showHowToPlay() {
@@ -38876,7 +38899,7 @@ function showHowToPlay() {
             <li>📝 ${I18n.t("type_fill_blank")} — ${I18n.t("typeHelp_fill_blank")}</li>
         </ul>
     `;
-    document.getElementById("howto-modal").classList.add("active");
+    document.getElementById("howto-modal")?.classList.add("active");
 }
 
 function storyChapterUnlock(i) {
@@ -38991,11 +39014,11 @@ function renderStoryBody() {
     body.innerHTML = s;
 }
 
-document.getElementById("tab-btn-levels").addEventListener("click", () => switchLevelTab("levels"));
-document.getElementById("tab-btn-assigned").addEventListener("click", () => { renderAssignedView(); switchLevelTab("assigned"); });
+document.getElementById("tab-btn-levels")?.addEventListener("click", () => switchLevelTab("levels"));
+document.getElementById("tab-btn-assigned")?.addEventListener("click", () => { renderAssignedView(); switchLevelTab("assigned"); });
 
 // Копирование кода результата для учителя
-document.getElementById("btn-copy-assignment-result").addEventListener("click", async () => {
+document.getElementById("btn-copy-assignment-result")?.addEventListener("click", async () => {
     const codeInput = document.getElementById("assignment-result-code");
     const status = document.getElementById("copy-result-status");
     const code = codeInput.value;
@@ -39015,18 +39038,18 @@ document.getElementById("btn-copy-assignment-result").addEventListener("click", 
     }
 });
 
-document.getElementById("btn-story").addEventListener("click", () => {
+document.getElementById("btn-story")?.addEventListener("click", () => {
     renderStoryBody();
-    document.getElementById("story-modal").classList.add("active");
+    document.getElementById("story-modal")?.classList.add("active");
 });
     document.getElementById("btn-diary")?.addEventListener("click", ()=> Diary.open(0));
     document.getElementById("btn-open-diary")?.addEventListener("click", ()=> Diary.open(0));
-    document.getElementById("diary-close")?.addEventListener("click", ()=> document.getElementById("diary-modal").classList.remove("active"));
+    document.getElementById("diary-close")?.addEventListener("click", ()=> document.getElementById("diary-modal")?.classList.remove("active"));
     document.getElementById("diary-next")?.addEventListener("click", ()=> Diary.next());
     document.getElementById("diary-prev")?.addEventListener("click", ()=> Diary.prev());
     document.getElementById("diary-modal")?.addEventListener("click", (e)=>{ if(e.target.id==="diary-modal") e.currentTarget.classList.remove("active"); });
-document.getElementById("btn-story-close").addEventListener("click", () => {
-    document.getElementById("story-modal").classList.remove("active");
+document.getElementById("btn-story-close")?.addEventListener("click", () => {
+    document.getElementById("story-modal")?.classList.remove("active");
 });
 
 function showAbout() {
@@ -39047,7 +39070,7 @@ function showAbout() {
         <h3>${I18n.t("aboutLicense")}</h3>
         <p>${I18n.t("aboutLicenseText")}</p>
     `;
-    document.getElementById("about-modal").classList.add("active");
+    document.getElementById("about-modal")?.classList.add("active");
 }
 
 
@@ -39294,10 +39317,10 @@ const Journal = {
         });
         const resetBtn = document.getElementById("btn-journal-reset");
         if(resetBtn) resetBtn.addEventListener("click", ()=>{
-            document.getElementById("journal-search").value="";
-            document.getElementById("journal-filter-class").value="";
-            document.getElementById("journal-filter-level").value="";
-            document.getElementById("journal-filter-status").value="";
+            if(document.getElementById("journal-search")) document.getElementById("journal-search").value="";
+            if(document.getElementById("journal-filter-class")) document.getElementById("journal-filter-class").value="";
+            if(document.getElementById("journal-filter-level")) document.getElementById("journal-filter-level").value="";
+            if(document.getElementById("journal-filter-status")) document.getElementById("journal-filter-status").value="";
             Journal.render();
         });
         document.getElementById("btn-export-journal-csv")?.addEventListener("click", ()=>Journal.exportCSV());
@@ -39675,7 +39698,7 @@ const LabGames = {
             if(success){
                 this.activeGame.score+=120;
                 this.activeGame.shield=Math.min(this.activeGame.levelConfig.shieldCapacity, this.activeGame.shield+20);
-                if(typeof showNotification!=="undefined") showNotification("Лаб. бонус +120 очков и +20 щита!", "success");
+                if(typeof showNotification!=="undefined") showNotification(I18n.t("labBonus"), "success");
                 // RPG bonus
                 if(typeof RPG!=="undefined"){ RPG.addCoins(15); RPG.updateHUD(); }
                 this.activeGame.updateHUD();
@@ -39726,21 +39749,24 @@ const KvantArchive = {
 
 const BossIntro = {
     bossQuotes: {
-        8: "КВАНТ: «Курсант, это Гравитрон! Он искривляет пространство — даже свет не убежит. Смотри на колодцы, не лети в лоб!»",
-        13: "КВАНТ: «Это — Параллакс. Он прячется за звездами. Измерь его смещение, иначе не найдешь!»",
-        20: "КВАНТ: «Встречай Баллистику — королеву спутников. Она знает первую космическую лучше тебя. Докажи обратное!»",
-        24: "КВАНТ: «Ядро Энергии проснулось! Оно питается твоими ошибками. Бей точно — и оно уснет.»",
-        32: "КВАНТ: «Резонатор! Он ловит твою частоту. Нажми ИМПУЛЬС в такт, иначе разнесет щит.»",
-        37: "КВАНТ: «Атомный Призрак — он из квантов. Фотоэффект остановит его. Помни про h·ν!»",
-        42: "КВАНТ: «Это Ядро древнего реактора. Финальный босс. Если проиграешь — Земля получит дозу. Ты готов?»",
-        48: "КВАНТ: «Последний эксперимент — сама вода! Волны в кювете шепчут: v=λ·ν. Услышишь?»"
+        8: {ru:"КВАНТ: «Курсант, это Гравитрон! Он искривляет пространство — даже свет не убежит. Смотри на колодцы, не лети в лоб!\"",en:"QUANT: \"Cadet, this is Gravitron! It bends space — even light can't escape. Watch the wells!\"",kk:"КВАНТ: «Курсант, бұл Гравитрон! Ол кеңістікті иеді — тіпті жарық қашып құтылмайды. Құдықтарға қара!\""},
+        13: {ru:"КВАНТ: «Это — Параллакс. Он прячется за звездами. Измерь его смещение, иначе не найдешь!\"",en:"QUANT: \"This is Parallax. It hides behind stars. Measure its shift!\"",kk:"КВАНТ: «Бұл — Параллакс. Ол жұлдыздар артында жасырынады. Ығысуын өлше!\""},
+        20: {ru:"КВАНТ: «Встречай Баллистику — королеву спутников. Она знает первую космическую лучше тебя. Докажи обратное!\"",en:"QUANT: \"Meet Ballistics — queen of satellites. She knows first cosmic better than you!\"",kk:"КВАНТ: «Баллистиканы қарсы ал — спутниктер патшайымы. Бірінші ғарыштықты сенен жақсы біледі!\""},
+        24: {ru:"КВАНТ: «Ядро Энергии проснулось! Оно питается твоими ошибками. Бей точно — и оно уснет.\"",en:"QUANT: \"Energy Core awakened! It feeds on your mistakes. Hit precisely!\"",kk:"КВАНТ: «Энергия Ядросы оянды! Қателеріңмен қоректенеді. Дәл ти!\""},
+        32: {ru:"КВАНТ: «Резонатор! Он ловит твою частоту. Нажми ИМПУЛЬС в такт, иначе разнесет щит.\"",en:"QUANT: \"Resonator! It catches your frequency. Press PULSE in rhythm!\"",kk:"КВАНТ: «Резонатор! Жиілігіңді ұстайды. Ырғақта ИМПУЛЬС бас!\""},
+        37: {ru:"КВАНТ: «Атомный Призрак — он из квантов. Фотоэффект остановит его. Помни про h·ν!\"",en:"QUANT: \"Atomic Ghost — made of quanta. Photoeffect will stop it. Remember h·ν!\"",kk:"КВАНТ: «Атомдық Елес — кванттардан. Фотоэффект тоқтатады. h·ν есіңде!\""},
+        42: {ru:"КВАНТ: «Это Ядро древнего реактора. Финальный босс. Если проиграешь — Земля получит дозу. Ты готов?\"",en:"QUANT: \"This is Core of ancient reactor. Final boss. If you lose — Earth gets irradiated. Ready?\"",kk:"КВАНТ: «Бұл ежелгі реактор Ядросы. Финал босс. Жеңілсең — Жер сәуле алады. Дайынсың ба?\""},
+        48: {ru:"КВАНТ: «Последний эксперимент — сама вода! Волны в кювете шепчут: v=λ·ν. Услышишь?\"",en:"QUANT: \"Final experiment — water itself! Waves whisper: v=λ·ν. Will you hear?\"",kk:"КВАНТ: «Соңғы тәжірибе — судың өзі! Толқындар сыбырлайды: v=λ·ν. Естисің бе?\""}
     },
     show(levelId, levelConfig, onGo){
-        const quotes=this.bossQuotes[levelId] || `КВАНТ: «Босс уровня ${levelId}. Готов? Это твой экзамен.»`;
+        const raw=this.bossQuotes[levelId];
+        const L=(typeof I18n!=="undefined"&&I18n.currentLang)||"ru";
+        let quotes="";
+        if(raw){ quotes= typeof raw==="string" ? raw : (raw[L]||raw.ru||raw.en); } else { quotes= L==="en" ? `QUANT: "Boss level ${levelId}. Ready? This is your exam."` : L==="kk" ? `КВАНТ: «${levelId} деңгей боссы. Дайынсың ба? Бұл емтиханың.»` : `КВАНТ: «Босс уровня ${levelId}. Готов? Это твой экзамен.»`; }
         const epData = typeof EPISODES!=="undefined" ? EPISODES.find(e=>e.levels.includes(levelId)) : null;
-        document.getElementById("boss-intro-ep").textContent = epData ? epData.title : "БОСС УРОВЕНЬ "+levelId;
-        document.getElementById("boss-intro-title").textContent = levelConfig.boss ? `👾 БОСС #${levelId}: ${levelConfig.desc||"Угроза"}` : `⭐ ФИНАЛ ЭПИЗОДА`;
-        document.getElementById("boss-intro-quote").textContent = quotes;
+        if(document.getElementById("boss-intro-ep")) document.getElementById("boss-intro-ep").textContent= epData ? epData.title : "БОСС УРОВЕНЬ "+levelId;
+        if(document.getElementById("boss-intro-title")) document.getElementById("boss-intro-title").textContent= levelConfig.boss ? `👾 БОСС #${levelId}: ${levelConfig.desc||"Угроза"}` : `⭐ ФИНАЛ ЭПИЗОДА`;
+        if(document.getElementById("boss-intro-quote")) document.getElementById("boss-intro-quote").textContent= quotes;
         const overlay=document.getElementById("boss-intro");
         overlay.classList.add("active");
         const goBtn=document.getElementById("boss-intro-go");
@@ -39773,58 +39799,61 @@ const Endings = {
 
 
 /* ===== Дневник экспедиции — комикс между эпизодами ===== */
+
 const Diary = {
+    // helper для локализации
+    _t(obj){ if(!obj) return ""; if(typeof obj==="string") return obj; const L=(typeof I18n!=="undefined"&&I18n.currentLang)||"ru"; return obj[L]||obj.ru||obj.en||obj.kk||""; },
     entries: [
-        { ep:0, title:"Пролог: Сигнал", date:"12 марта 2087, 03:14", panels:[
-            { art:"🛰️💤", who:"КВАНТ", text:"Я спал 50 лет. Реакторы — 0%. Экипаж — на Земле. Приказ: ждать." },
-            { art:"📡⚡", who:"СИГНАЛ", text:"Внезапно — всплеск. Метеорный рой Персеиды-Х + магнитная буря. Я проснулся." },
-            { art:"👤🚀", who:"ТЫ", text:"Курсант, твой шаттл уже на подходе. Надень комбинезон. Физика — твой щит." }
-        ], bubble:"Квант включил TTS и впервые за полвека сказал 'Привет'." },
-        { ep:1, title:"Эп.1: Допуск", date:"13 марта, лаборатория", panels:[
-            { art:"⚠️🧤", who:"ИНСТРУКТАЖ", text:"Незаземлённый прибор? Реактив не там? Квант помнит каждую аварию 2030-х." },
-            { art:"✅📋", who:"ТЫ", text:"Сдал допуск на 100%. Квант: 'Неплохо. Люди думают ТБ — скучно. Это — опыт выживших.'" },
-            { art:"🚪🌌", who:"ШЛЮЗ", text:"Сертификат получен. Шлюз открыт. Впереди — настоящий космос." }
-        ], bubble:"С этого момента Квант перестает называть тебя 'курсант' и говорит 'пилот'." },
-        { ep:2, title:"Эп.2: Кинематика", date:"14-20 марта, орбита-тренажёр", panels:[
-            { art:"☄️📐", who:"ПРОМАХ", text:"Первый перехват — мимо на 200м. Глазомер в космосе = смерть." },
-            { art:"📈🧮", who:"ТРЕНИРОВКИ", text:"7 дней графиков, a, v, s. Каждый расчёт точнее. Точка встречи сошлась." },
-            { art:"🎯💥", who:"ПОПАДАНИЕ", text:"Модуль НАВИГАЦИЯ загорелся. Квант: 'Теперь полетим по-настоящему.'" }
-        ], bubble:"Ты выучил: путь ≠ перемещение. Квант записал это в лог #2." },
-        { ep:3, title:"Эп.3: Звезды", date:"21 марта, край системы", panels:[
-            { art:"🌌😵", who:"СЛЕПОТА", text:"Датчики захлебнулись шумом. Экраны в помехах. Корабль ослеп." },
-            { art:"✨🧭", who:"КВАНТ-ШТУРМАН", text:"'Звёзды никогда не врут. Вот Полярная. Вот сфера. Измерь параллакс.'" },
-            { art:"🗺️📍", who:"КАРТА", text:"Координаты сошлись. Источник угрозы — точка на экране. Впереди поле обломков." }
-        ], bubble:"Астронавигация восстановлена. Ты нашел Темірқазық." },
-        { ep:4, title:"Эп.4: Гравитация", date:"22 марта, поле астероидов", panels:[
-            { art:"🪨🪨🪨", who:"ПОЛЕ", text:"Тысяча камней размером с дом. Лететь в лоб — самоубийство." },
-            { art:"🍎⚖️", who:"НЬЮТОН", text:"'Лети не силой, а законами. Каждый камень — твой союзник, если считать притяжение.'" },
-            { art:"↗️🚀", who:"РОГАТКА", text:"Грави-манёвр! Камни разогнали тебя без топлива. Модуль МАНЁВР активен." }
-        ], bubble:"Босс 20 повержен — ты освоил 1-ю космическую." },
-        { ep:5, title:"Эп.5: Энергия", date:"23 марта, 02:11 — блэкаут", panels:[
-            { art:"🌑🔴", who:"ТЬМА", text:"Энергоядро село. Резерв 2 часа. Паника жрёт энергию быстрее приборов." },
-            { art:"♻️🔋", who:"СБОР", text:"Маховики, балласт, тепло радиаторов — каждый джоуль в цепь. Закон сохранения в деле." },
-            { art:"💡⚡", who:"СВЕТ", text:"Щелчок рубильника — станция загудела. Энергоядро янтарное. Связь... пропала." }
-        ], bubble:"Босс 24 — энергоядро — ожил твоими руками." },
-        { ep:6, title:"Эп.6: Сигнал", date:"23 марта, антенна", panels:[
-            { art:"📡❌", who:"ТИШИНА", text:"Земля молчит 3 часа. Антенна сбита манёвром. Маятник качается вразнобой." },
-            { art:"🎛️📻", who:"РЕЗОНАНС", text:"Период, частота, резонанс — поймал ту самую волну. Стрелка дрогнула." },
-            { art:"👋🌍", who:"ЗЕМЛЯ", text:"'Орбита-9, слышим вас!' Ты рассмеялся впервые за дни. Связь восстановлена." }
-        ], bubble:"Босс-резонатор 32 пал — ты вернул голос Земле." },
-        { ep:7, title:"Эп.7: Атом", date:"24 марта, радиационный пояс", panels:[
-            { art:"☢️👻", who:"НЕВИДИМКА", text:"Поток частиц невидим. Обшивка держит минуты. Обычная броня бесполезна." },
-            { art:"🔬✨", who:"КВАНТЫ", text:"Фотоэффект, h·ν, Планк — настроил поле на частоту частиц. Они отскакивают как горох!" },
-            { art:"🛡️🔵", who:"ЩИТ", text:"Радиационный щит синий. Квант: 'Ты переиграл радиацию в её игру.'" }
-        ], bubble:"Босс-атом 37 — щит держит. Дальше — древний реактор." },
-        { ep:8, title:"Эп.8: Ядро", date:"24 марта, древний реактор", panels:[
-            { art:"🏚️☢️", who:"РЕАКТОР", text:"Тёмная громада, внутри свет. Цепная реакция разгоняется. Один заход." },
-            { art:"⚛️💥", who:"ДЕЛЕНИЕ", text:"Протоны, нейтроны, энергия связи — понял, как остановить распад." },
-            { art:"🤝🔒", who:"ФИНАЛ", text:"Реактор уснул. Квант тихо: 'Ты остановил взрыв, который летел к Земле.'" }
-        ], bubble:"Финальный босс 42 — сердце ядра — обезврежено." },
-        { ep:9, title:"Эпилог: Картина мира", date:"25 марта, вид на Землю", panels:[
-            { art:"🌍💙", who:"ДОМ", text:"Смотришь на Землю глазами физика — от частиц до Галактик." },
-            { art:"📼💾", who:"АРХИВ", text:"Все логи Кванта открыты. Его последняя фраза: 'Расскажи другим.'" },
-            { art:"🎖️🚀", who:"ЛЕГЕНДА", text:"Ты — не курсант. Ты — Легенда Орбиты-9. Щит держит. Миссия выполнена." }
-        ], bubble:"3 концовки ждут: спаси идеально (90%+80★) — получи скин Кванта!" }
+        { ep:0, title:{ru:"Пролог: Сигнал",en:"Prologue: Signal",kk:"Пролог: Сигнал"}, date:{ru:"12 марта 2087, 03:14",en:"March 12, 2087, 03:14",kk:"12 наурыз 2087, 03:14"}, panels:[
+            { art:"🛰️💤", who:{ru:"КВАНТ",en:"QUANT",kk:"КВАНТ"}, text:{ru:"Я спал 50 лет. Реакторы — 0%. Экипаж — на Земле. Приказ: ждать.",en:"I slept for 50 years. Reactors at 0%. Crew on Earth. Order: wait.",kk:"Мен 50 жыл ұйықтадым. Реакторлар — 0%. Экипаж — Жерде. Бұйрық: күту."} },
+            { art:"📡⚡", who:{ru:"СИГНАЛ",en:"SIGNAL",kk:"СИГНАЛ"}, text:{ru:"Внезапно — всплеск. Метеорный рой Персеиды-Х + магнитная буря. Я проснулся.",en:"Suddenly — a surge. Perseid-X meteor swarm + magnetic storm. I woke up.",kk:"Кенеттен — жарқыл. Персеид-Х метеор ағыны + магниттік дауыл. Мен ояндым."} },
+            { art:"👤🚀", who:{ru:"ТЫ",en:"YOU",kk:"СЕН"}, text:{ru:"Курсант, твой шаттл уже на подходе. Надень комбинезон. Физика — твой щит.",en:"Cadet, your shuttle is approaching. Put on the suit. Physics is your shield.",kk:"Курсант, шаттлың жақындап қалды. Комбинезон ки. Физика — сенің қалқаның."} }
+        ], bubble:{ru:"Квант включил TTS и впервые за полвека сказал 'Привет'.",en:"Quant turned on TTS and said 'Hello' for the first time in half a century.",kk:"Квант TTS-ті қосты және жарты ғасырда алғаш рет 'Сәлем' деді."} },
+        { ep:1, title:{ru:"Эп.1: Допуск",en:"Ep.1: Clearance",kk:"Эп.1: Рұқсат"}, date:{ru:"13 марта, лаборатория",en:"March 13, lab",kk:"13 наурыз, зертхана"}, panels:[
+            { art:"⚠️🧤", who:{ru:"ИНСТРУКТАЖ",en:"BRIEFING",kk:"НҰСҚАУЛЫҚ"}, text:{ru:"Незаземлённый прибор? Реактив не там? Квант помнит каждую аварию 2030-х.",en:"Ungrounded device? Reagent in wrong place? Quant remembers every accident of the 2030s.",kk:"Жерге қосылмаған құрылғы? Реактив орнында емес пе? Квант 2030-жылдардағы әр апатты еске алады."} },
+            { art:"✅📋", who:{ru:"ТЫ",en:"YOU",kk:"СЕН"}, text:{ru:"Сдал допуск на 100%. Квант: 'Неплохо. Люди думают ТБ — скучно. Это — опыт выживших.'",en:"Passed clearance 100%. Quant: 'Not bad. People think safety is boring. It's the experience of survivors.'",kk:"Рұқсатты 100% тапсырдың. Квант: 'Жақсы. Адамдар ҚТ-ны зеріктіреді деп ойлайды. Бұл — тірі қалғандар тәжірибесі.'"} },
+            { art:"🚪🌌", who:{ru:"ШЛЮЗ",en:"AIRLOCK",kk:"ШЛЮЗ"}, text:{ru:"Сертификат получен. Шлюз открыт. Впереди — настоящий космос.",en:"Certificate received. Airlock open. Ahead — real space.",kk:"Сертификат алынды. Шлюз ашық. Алда — нағыз космос."} }
+        ], bubble:{ru:"С этого момента Квант перестает называть тебя 'курсант' и говорит 'пилот'.",en:"From this moment Quant stops calling you 'cadet' and says 'pilot'.",kk:"Осы сәттен бастап Квант сені 'курсант' емес, 'ұшқыш' деп атайды."} },
+        { ep:2, title:{ru:"Эп.2: Кинематика",en:"Ep.2: Kinematics",kk:"Эп.2: Кинематика"}, date:{ru:"14-20 марта, орбита-тренажёр",en:"March 14-20, orbital trainer",kk:"14-20 наурыз, орбита-жаттықтырушы"}, panels:[
+            { art:"☄️📐", who:{ru:"ПРОМАХ",en:"MISS",kk:"ҚАТЕ"}, text:{ru:"Первый перехват — мимо на 200м. Глазомер в космосе = смерть.",en:"First intercept — miss by 200m. Eyeballing in space = death.",kk:"Алғашқы ұстап алу — 200 м қате. Көзбен өлшеу космоста = өлім."} },
+            { art:"📈🧮", who:{ru:"ТРЕНИРОВКИ",en:"TRAINING",kk:"ЖАТТЫҒУЛАР"}, text:{ru:"7 дней графиков, a, v, s. Каждый расчёт точнее. Точка встречи сошлась.",en:"7 days of graphs, a, v, s. Each calculation more accurate. Rendezvous point converged.",kk:"7 күн графиктер, a, v, s. Әр есеп дәлірек. Кездесу нүктесі сәйкес келді."} },
+            { art:"🎯💥", who:{ru:"ПОПАДАНИЕ",en:"HIT",kk:"ТИЮ"}, text:{ru:"Модуль НАВИГАЦИЯ загорелся. Квант: 'Теперь полетим по-настоящему.'",en:"NAVIGATION module lit up. Quant: 'Now we fly for real.'",kk:"НАВИГАЦИЯ модулі жанды. Квант: 'Енді нағыз ұшамыз.'"} }
+        ], bubble:{ru:"Ты выучил: путь ≠ перемещение. Квант записал это в лог #2.",en:"You learned: distance ≠ displacement. Quant logged it as #2.",kk:"Сен үйрендің: жол ≠ орын ауыстыру. Квант оны лог #2-ге жазды."} },
+        { ep:3, title:{ru:"Эп.3: Звезды",en:"Ep.3: Stars",kk:"Эп.3: Жұлдыздар"}, date:{ru:"21 марта, край системы",en:"March 21, system edge",kk:"21 наурыз, жүйе шеті"}, panels:[
+            { art:"🌌😵", who:{ru:"СЛЕПОТА",en:"BLINDNESS",kk:"СОҚЫРЛЫҚ"}, text:{ru:"Датчики захлебнулись шумом. Экраны в помехах. Корабль ослеп.",en:"Sensors choked with noise. Screens jammed. Ship blinded.",kk:"Датчиктер шуға тұншықты. Экрандар бөгетте. Кеме соқыр болды."} },
+            { art:"✨🧭", who:{ru:"КВАНТ-ШТУРМАН",en:"QUANT-NAV",kk:"КВАНТ-ШТУРМАН"}, text:{ru:"'Звёзды никогда не врут. Вот Полярная. Вот сфера. Измерь параллакс.'",en:"'Stars never lie. Here is Polaris. Here is the sphere. Measure the parallax.'",kk:"'Жұлдыздар ешқашан алдамайды. Міне Темірқазық. Міне сфера. Параллаксты өлше.'"} },
+            { art:"🗺️📍", who:{ru:"КАРТА",en:"MAP",kk:"КАРТА"}, text:{ru:"Координаты сошлись. Источник угрозы — точка на экране. Впереди поле обломков.",en:"Coordinates converged. Threat source — dot on screen. Ahead — debris field.",kk:"Координаталар сәйкес келді. Қауіп көзі — экрандағы нүкте. Алда — сынықтар алаңы."} }
+        ], bubble:{ru:"Астронавигация восстановлена. Ты нашел Темірқазық.",en:"Astronavigation restored. You found Polaris.",kk:"Астронавигация қалпына келді. Темірқазықты таптың."} },
+        { ep:4, title:{ru:"Эп.4: Гравитация",en:"Ep.4: Gravity",kk:"Эп.4: Гравитация"}, date:{ru:"22 марта, поле астероидов",en:"March 22, asteroid field",kk:"22 наурыз, астероид алаңы"}, panels:[
+            { art:"🪨🪨🪨", who:{ru:"ПОЛЕ",en:"FIELD",kk:"АЛАҢ"}, text:{ru:"Тысяча камней размером с дом. Лететь в лоб — самоубийство.",en:"A thousand house-sized rocks. Flying head-on — suicide.",kk:"Мың үйдей тастар. Маңдаймен ұшу — өз-өзіне қол жұмсау."} },
+            { art:"🍎⚖️", who:{ru:"НЬЮТОН",en:"NEWTON",kk:"НЬЮТОН"}, text:{ru:"'Лети не силой, а законами. Каждый камень — твой союзник, если считать притяжение.'",en:"'Fly not by force, but by laws. Every rock is your ally if you calculate gravity.'",kk:"'Күшпен емес, заңмен ұш. Әр тас — тартылысты есептесең, одақтасың.'"} },
+            { art:"↗️🚀", who:{ru:"РОГАТКА",en:"SLINGSHOT",kk:"РОГАТКА"}, text:{ru:"Грави-манёвр! Камни разогнали тебя без топлива. Модуль МАНЁВР активен.",en:"Gravity maneuver! Rocks accelerated you without fuel. MANEUVER module active.",kk:"Грави-маневр! Тастар сені отынсыз үдетті. МАНЕВР модулі белсенді."} }
+        ], bubble:{ru:"Босс 20 повержен — ты освоил 1-ю космическую.",en:"Boss 20 defeated — you mastered 1st cosmic velocity.",kk:"Босс 20 жеңілді — 1-ші ғарыштық жылдамдықты меңгердің."} },
+        { ep:5, title:{ru:"Эп.5: Энергия",en:"Ep.5: Energy",kk:"Эп.5: Энергия"}, date:{ru:"23 марта, 02:11 — блэкаут",en:"March 23, 02:11 — blackout",kk:"23 наурыз, 02:11 — блэкаут"}, panels:[
+            { art:"🌑🔴", who:{ru:"ТЬМА",en:"DARKNESS",kk:"ТҮНЕК"}, text:{ru:"Энергоядро село. Резерв 2 часа. Паника жрёт энергию быстрее приборов.",en:"Power core down. 2 hours reserve. Panic drains energy faster than devices.",kk:"Энергоядро отырды. Резерв 2 сағат. Үрей құрылғылардан тез энергия жейді."} },
+            { art:"♻️🔋", who:{ru:"СБОР",en:"COLLECTION",kk:"ЖЫЮ"}, text:{ru:"Маховики, балласт, тепло радиаторов — каждый джоуль в цепь. Закон сохранения в деле.",en:"Flywheels, ballast, radiator heat — every joule into circuit. Conservation law in action.",kk:"Маховиктер, балласт, радиатор жылуы — әр джоуль тізбекке. Сақталу заңы істе."} },
+            { art:"💡⚡", who:{ru:"СВЕТ",en:"LIGHT",kk:"ЖАРЫҚ"}, text:{ru:"Щелчок рубильника — станция загудела. Энергоядро янтарное. Связь... пропала.",en:"Switch click — station hummed. Core amber. Connection... lost.",kk:"Рубильник шерті — станция гуілдеді. Ядро янтарь. Байланыс... үзілді."} }
+        ], bubble:{ru:"Босс 24 — энергоядро — ожил твоими руками.",en:"Boss 24 — power core — revived by your hands.",kk:"Босс 24 — энергоядро — қолыңмен тірілді."} },
+        { ep:6, title:{ru:"Эп.6: Сигнал",en:"Ep.6: Signal",kk:"Эп.6: Сигнал"}, date:{ru:"23 марта, антенна",en:"March 23, antenna",kk:"23 наурыз, антенна"}, panels:[
+            { art:"📡❌", who:{ru:"ТИШИНА",en:"SILENCE",kk:"ТЫНЫШТЫҚ"}, text:{ru:"Земля молчит 3 часа. Антенна сбита манёвром. Маятник качается вразнобой.",en:"Earth silent 3 hours. Antenna сбита maneuver. Pendulum swings out of sync.",kk:"Жер 3 сағат үнсіз. Антенна маневрден құлады. Маятник келіссіз тербеледі."} },
+            { art:"🎛️📻", who:{ru:"РЕЗОНАНС",en:"RESONANCE",kk:"РЕЗОНАНС"}, text:{ru:"Период, частота, резонанс — поймал ту самую волну. Стрелка дрогнула.",en:"Period, frequency, resonance — caught that very wave. Needle twitched.",kk:"Период, жиілік, резонанс — сол толқынды ұстадың. Тіл дірілдеді."} },
+            { art:"👋🌍", who:{ru:"ЗЕМЛЯ",en:"EARTH",kk:"ЖЕР"}, text:{ru:"'Орбита-9, слышим вас!' Ты рассмеялся впервые за дни. Связь восстановлена.",en:"'Orbit-9, we hear you!' You laughed for the first time in days. Connection restored.",kk:"'Орбита-9, естиміз!' Күндерде алғаш рет күлдің. Байланыс қалпына келді."} }
+        ], bubble:{ru:"Босс-резонатор 32 пал — ты вернул голос Земле.",en:"Boss-resonator 32 fell — you returned voice to Earth.",kk:"Босс-резонатор 32 құлады — Жерге дауысты қайтардың."} },
+        { ep:7, title:{ru:"Эп.7: Атом",en:"Ep.7: Atom",kk:"Эп.7: Атом"}, date:{ru:"24 марта, радиационный пояс",en:"March 24, radiation belt",kk:"24 наурыз, радиациялық белдеу"}, panels:[
+            { art:"☢️👻", who:{ru:"НЕВИДИМКА",en:"INVISIBLE",kk:"КӨРІНБЕЙТІН"}, text:{ru:"Поток частиц невидим. Обшивка держит минуты. Обычная броня бесполезна.",en:"Particle flow invisible. Hull holds minutes. Normal armor useless.",kk:"Бөлшектер ағыны көрінбейді. Қабық минуттар ұстайды. Кәдімгі сауыт пайдасыз."} },
+            { art:"🔬✨", who:{ru:"КВАНТЫ",en:"QUANTA",kk:"КВАНТТАР"}, text:{ru:"Фотоэффект, h·ν, Планк — настроил поле на частоту частиц. Они отскакивают как горох!",en:"Photoeffect, h·ν, Planck — tuned field to particle frequency. They bounce like peas!",kk:"Фотоэффект, h·ν, Планк — өрісті бөлшектер жиілігіне баптадың. Олар бұршақтай секіреді!"} },
+            { art:"🛡️🔵", who:{ru:"ЩИТ",en:"SHIELD",kk:"ҚАЛҚАН"}, text:{ru:"Радиационный щит синий. Квант: 'Ты переиграл радиацию в её игру.'",en:"Radiation shield blue. Quant: 'You outplayed radiation at its own game.'",kk:"Радиация қалқаны көк. Квант: 'Сен радиацияны өз ойынында жеңдің.'"} }
+        ], bubble:{ru:"Босс-атом 37 — щит держит. Дальше — древний реактор.",en:"Boss-atom 37 — shield holds. Next — ancient reactor.",kk:"Босс-атом 37 — қалқан ұстайды. Әрі қарай — ежелгі реактор."} },
+        { ep:8, title:{ru:"Эп.8: Ядро",en:"Ep.8: Core",kk:"Эп.8: Ядро"}, date:{ru:"24 марта, древний реактор",en:"March 24, ancient reactor",kk:"24 наурыз, ежелгі реактор"}, panels:[
+            { art:"🏚️☢️", who:{ru:"РЕАКТОР",en:"REACTOR",kk:"РЕАКТОР"}, text:{ru:"Тёмная громада, внутри свет. Цепная реакция разгоняется. Один заход.",en:"Dark bulk, light inside. Chain reaction accelerating. One approach.",kk:"Қараңғы алып, ішінде жарық. Тізбекті реакция үдейді. Бір кіру."} },
+            { art:"⚛️💥", who:{ru:"ДЕЛЕНИЕ",en:"FISSION",kk:"БӨЛІНУ"}, text:{ru:"Протоны, нейтроны, энергия связи — понял, как остановить распад.",en:"Protons, neutrons, binding energy — understood how to stop decay.",kk:"Протондар, нейтрондар, байланыс энергиясы — ыдырауды қалай тоқтатуды түсіндің."} },
+            { art:"🤝🔒", who:{ru:"ФИНАЛ",en:"FINALE",kk:"ФИНАЛ"}, text:{ru:"Реактор уснул. Квант тихо: 'Ты остановил взрыв, который летел к Земле.'",en:"Reactor fell asleep. Quant quietly: 'You stopped the explosion heading for Earth.'",kk:"Реактор ұйықтады. Квант жай: 'Жерге ұшқан жарылысты тоқтаттың.'"} }
+        ], bubble:{ru:"Финальный босс 42 — сердце ядра — обезврежено.",en:"Final boss 42 — core heart — neutralized.",kk:"Финал босс 42 — ядро жүрегі — залалсыздандырылды."} },
+        { ep:9, title:{ru:"Эпилог: Картина мира",en:"Epilogue: Picture of World",kk:"Эпилог: Әлем бейнесі"}, date:{ru:"25 марта, вид на Землю",en:"March 25, view of Earth",kk:"25 наурыз, Жерге көрініс"}, panels:[
+            { art:"🌍💙", who:{ru:"ДОМ",en:"HOME",kk:"ҮЙ"}, text:{ru:"Смотришь на Землю глазами физика — от частиц до Галактик.",en:"You look at Earth through physicist's eyes — from particles to galaxies.",kk:"Жерге физик көзімен қарайсың — бөлшектерден Галактикаларға дейін."} },
+            { art:"📼💾", who:{ru:"АРХИВ",en:"ARCHIVE",kk:"МҰРАҒАТ"}, text:{ru:"Все логи Кванта открыты. Его последняя фраза: 'Расскажи другим.'",en:"All Quant logs open. His last phrase: 'Tell others.'",kk:"Кванттың барлық логтары ашық. Соңғы сөзі: 'Басқаларға айт.'"} },
+            { art:"🎖️🚀", who:{ru:"ЛЕГЕНДА",en:"LEGEND",kk:"АҢЫЗ"}, text:{ru:"Ты — не курсант. Ты — Легенда Орбиты-9. Щит держит. Миссия выполнена.",en:"You are no cadet. You are Legend of Orbit-9. Shield holds. Mission complete.",kk:"Сен курсант емессің. Сен — Орбита-9 Аңызысың. Қалқан ұстайды. Миссия орындалды."} }
+        ], bubble:{ru:"3 концовки ждут: спаси идеально (90%+80★) — получи скин Кванта!",en:"3 endings await: save perfectly (90%+80★) — get Quant skin!",kk:"3 аяқталу күтеді: мінсіз құтқар (90%+80★) — Квант скинін ал!"} }
     ],
     current: 0,
     isUnlocked(entry){
@@ -39847,34 +39876,29 @@ const Diary = {
         if(typeof page==="number") this.current=page;
         const entry=this.entries[this.current];
         if(!entry) return;
-        document.getElementById("diary-title").textContent="📖 "+entry.title;
-        document.getElementById("diary-subtitle").textContent=entry.date;
+        const L=(typeof I18n!=="undefined"&&I18n.currentLang)||"ru";
+        if(document.getElementById("diary-title")) document.getElementById("diary-title").textContent="📖 "+this._t(entry.title);
+        if(document.getElementById("diary-subtitle")) document.getElementById("diary-subtitle").textContent=this._t(entry.date);
         const comic=document.getElementById("diary-comic");
         const unlocked=this.isUnlocked(entry);
         if(!unlocked){
-            comic.innerHTML=`<div class="diary-locked">🔒 Запись зашифрована<br><small>Пройди предыдущий эпизод, чтобы открыть. Прогресс: ${EPISODES[entry.ep-1]?.title||""}</small></div>`;
+            comic.innerHTML=`<div class="diary-locked">🔒 ${I18n.t("diaryLocked")}<br><small>${I18n.t("diaryLockedNote")} ${EPISODES[entry.ep-1]?.title||""}</small></div>`;
         } else {
             comic.innerHTML=entry.panels.map(p=>`
                 <div class="comic-panel">
                     <div class="comic-art">${p.art}</div>
-                    <div class="comic-caption"><small>${p.who}</small>${p.text}</div>
+                    <div class="comic-caption"><small>${this._t(p.who)}</small>${this._t(p.text)}</div>
                 </div>
             `).join("");
         }
         const bubble=document.getElementById("diary-bubble");
         if(unlocked && entry.bubble){
             bubble.style.display="flex";
-            bubble.innerHTML=`<span>🤖</span><span><b>Квант шепчет:</b> ${entry.text||entry.bubble}</span>`;
-            // озвучка дневника
-            if(typeof KvantVoice!=="undefined" && entry.panels[0]) {
-                const txt = entry.panels.map(p=>p.text).join(" ");
-                // не авто-спамим, только по кнопке
-            }
+            bubble.innerHTML=`<span>🤖</span><span><b>Квант ${I18n.t("kvantVoiceTitle").replace("🔊 ","")}:</b> ${this._t(entry.bubble)}</span>`;
         } else bubble.style.display="none";
-        document.getElementById("diary-page").textContent=(this.current+1)+" / "+this.entries.length;
-        document.getElementById("diary-meta").textContent= unlocked ? `Страница ${this.current+1} • ${entry.panels.length} кадров` : "🔒 Закрыто";
-        document.getElementById("diary-modal").classList.add("active");
-        // вибрация на открытии новой записи
+        if(document.getElementById("diary-page")) document.getElementById("diary-page").textContent=(this.current+1)+" / "+this.entries.length;
+        if(document.getElementById("diary-meta")) document.getElementById("diary-meta").textContent= unlocked ? `${I18n.t("storyLevelWord")} ${this.current+1} • ${entry.panels.length} ${L==="en"?"frames":L==="kk"?"кадр":"кадров"}` : "🔒 "+I18n.t("locked");
+        document.getElementById("diary-modal")?.classList.add("active");
         if(navigator.vibrate && unlocked) navigator.vibrate(30);
     },
     next(){ this.current=(this.current+1)%this.entries.length; this.open(); },
@@ -40141,7 +40165,7 @@ const QuickAssign = {
         Teacher.renderAssignments();
         Journal.render();
         showNotification("Назначено: "+count, "success");
-        document.getElementById("quick-assign-note").value="";
+        if(document.getElementById("quick-assign-note")) document.getElementById("quick-assign-note").value="";
     },
     assignNext(){
         const students = QuickAssign.getSelectedStudents();
