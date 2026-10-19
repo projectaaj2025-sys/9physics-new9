@@ -1,0 +1,48 @@
+{
+  "name": "Физика-Квест: Орбита-9 — Щит Земли",
+  "short_name": "Орбита-9",
+  "description": "Образовательная RPG-игра по физике 9 класса (Закирова). 48 уровней: техника безопасности, параграфы, лабораторные.",
+  "start_url": "./physics-quest-9-grade.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#f0f4fa",
+  "theme_color": "#00b8d4",
+  "lang": "ru",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-180.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Продолжить игру",
+      "url": "./physics-quest-9-grade.html#continue",
+      "description": "Продолжить с последнего уровня",
+      "icons": [{ "src": "icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Журнал учителя",
+      "url": "./physics-quest-9-grade.html#teacher",
+      "description": "Открыть журнал учителя",
+      "icons": [{ "src": "icon-192.png", "sizes": "192x192" }]
+    }
+  ],
+  "categories": ["education", "games"],
+  "screenshots": []
+}
