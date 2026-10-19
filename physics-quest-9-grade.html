@@ -736,7 +736,28 @@ html, body {
 .story-ep-row.done { background: rgba(0,200,83,0.09); }
 .story-ep-mark { color: var(--success); font-weight: 700; margin-right: 4px; }
 .story-ep-count { color: var(--text-dim); float: right; }
-.level-tabs { display: flex; gap: 10px; justify-content: center; margin: 0 0 18px; flex-wrap: wrap; }
+/* old level-tabs replaced */
+
+/* === Экран выбора уровня — как в 8 классе === */
+#level-screen { background: transparent; flex-direction: column; align-items: center; justify-content: flex-start; padding: 40px 20px; overflow-y: auto; position: relative; }
+.level-screen-tabs { width: min(1100px, 100%); display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin: 0 auto 20px; }
+.level-screen-tab { display: inline-flex; align-items: center; justify-content: center; gap: 7px; min-width: 190px; max-width: 100%; padding: 11px 18px; border: 1px solid var(--border); border-radius: 9px; background: var(--bg-card); color: var(--text); cursor: pointer; font: inherit; font-size: 14px; font-weight: 800; box-shadow: var(--shadow); }
+.level-screen-tab:hover { background: var(--bg-card-hover); border-color: var(--primary); }
+.level-screen-tab.active { background: var(--primary); color: #fff; border-color: var(--primary); box-shadow: var(--glow); }
+.assignment-count { display: inline-flex; align-items: center; justify-content: center; min-width: 21px; height: 21px; padding: 0 5px; border-radius: 999px; background: var(--warning); color: #fff; font-size: 11px; line-height: 1; }
+.level-screen-tab.active .assignment-count { background: #fff; color: var(--primary-dark); }
+.level-panel { width: min(1300px, 100%); display: flex; flex-direction: column; align-items: center; }
+#level-screen.showing-assignments #levels-panel { display: none !important; }
+#level-screen.showing-assignments #student-assignments-panel { display: grid !important; }
+#level-screen:not(.showing-assignments) #student-assignments-panel { display: none !important; }
+.level-topbar { width: min(1100px, 100%); display: flex; justify-content: flex-end; margin: -18px 0 10px; }
+.level-story-top { padding: 10px 15px; font-size: 13px; border-color: rgba(255, 179, 0, .65); background: linear-gradient(135deg, #fffaf0, #fff); }
+.level-story-top:hover { border-color: var(--warning); }
+#level-screen h2 { font-size: 36px; margin-bottom: 30px; color: var(--primary-dark); text-shadow: 0 2px 10px rgba(0, 184, 212, 0.3); text-align:center; }
+.student-assignments-panel { width: min(1100px, 100%); margin: 0 0 72px; padding: 0; border: 0; background: transparent; box-shadow: none; box-sizing: border-box; display: grid; gap: 36px; }
+
+/* .level-tabs legacy */
+.level-tabs-legacy { display: flex; gap: 10px; justify-content: center; margin: 0 0 18px; flex-wrap: wrap; }
 .level-tab { background: var(--bg-card); border: 2px solid var(--border); color: var(--text); padding: 10px 22px; border-radius: 10px; font-family: inherit; font-size: 15px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; transition: all .2s; box-shadow: var(--shadow); display: inline-flex; align-items: center; gap: 8px; }
 .level-tab:hover { border-color: var(--primary); transform: translateY(-2px); box-shadow: var(--glow), var(--shadow-strong); }
 .level-tab.active { background: var(--gradient-primary); color: #fff; border-color: var(--primary); box-shadow: var(--glow); }
@@ -2149,25 +2170,47 @@ html, body {
     </div>
 
     <!-- Экран выбора уровня -->
+        <!-- Экран выбора уровня — как в 8 классе -->
     <div id="level-screen" class="screen">
-        <div class="level-tabs">
-            <button type="button" class="level-tab active" id="tab-btn-levels"><span data-i18n="selectLevel">Выбери уровень</span></button>
-            <button type="button" class="level-tab" id="tab-btn-assigned">📋 <span data-i18n="assignedTab">Назначено тебе</span><span class="level-tab-count" id="assigned-count" style="display:none"></span></button>
+        <div class="level-topbar">
+            <button class="btn btn-secondary level-story-top" id="btn-story" type="button">
+                📜 <span data-i18n="storyLoreButton">Лор и сюжет</span><span class="story-btn-count" id="story-btn-progress"></span>
+            </button>
         </div>
+        <div class="level-screen-tabs" role="tablist" aria-label="Навигация по экрану игры">
+            <button class="level-screen-tab active" id="btn-levels-tab" type="button" role="tab" aria-selected="true">
+                📚 <span data-i18n="selectLevel">Выбери уровень</span>
+            </button>
+            <button class="level-screen-tab" id="btn-student-assignments-tab" type="button" role="tab" aria-selected="false">
+                📌 <span data-i18n="assignedTab">Назначенные уроки</span>
+                <span class="assignment-count" id="student-assignments-count" style="display:none"></span>
+                <span class="level-tab-count" id="assigned-count" style="display:none"></span>
+            </button>
+        </div>
+        <!-- Для совместимости со старым JS -->
+        <div style="display:none">
+            <button id="tab-btn-levels"></button>
+            <button id="tab-btn-assigned"></button>
+        </div>
+
         <div class="pilot-line" id="pilot-line"></div>
-        <button class="btn btn-primary level-story-btn" id="btn-story">
-            <span class="btn-icon">📖</span>
-            <span data-i18n="storyBtn">Сюжет и лор</span><span class="story-btn-count" id="story-btn-progress"></span>
-        </button>
-        <div class="levels-grid" id="levels-grid"></div>
-        <div class="assigned-view" id="assigned-view" style="display:none"></div>
+        <div class="level-panel" id="levels-panel">
+            <h2 data-i18n="selectLevel">Выбери уровень</h2>
+            <div class="story-progress" id="story-progress"></div>
+            <div class="levels-grid" id="levels-grid"></div>
+        </div>
+
+        <div class="student-assignments-panel" id="student-assignments-panel" hidden>
+            <div class="assigned-view" id="assigned-view"></div>
+            <div class="student-assignments-list" id="student-assignments-list"></div>
+        </div>
+
         <button class="btn btn-back" id="btn-back-to-menu">
             <span data-i18n="back">← Назад</span>
         </button>
     </div>
 
-    <!-- Экран профиля пилота -->
-    <div id="profile-screen" class="screen">
+<div id="profile-screen" class="screen">
         <div class="profile-wrap">
             <h2 data-i18n="profileTitle">👤 Профиль пилота</h2>
             <p class="profile-sub" data-i18n="profileSub">Настрой имя и дизайн ракеты — как в РПГ</p>
@@ -39302,16 +39345,33 @@ function renderAssignedView() {
 function switchLevelTab(tab) {
     currentLevelTab = tab;
     const showAssigned = tab === "assigned";
+    // старые ID
     const btnL = document.getElementById("tab-btn-levels");
     const btnA = document.getElementById("tab-btn-assigned");
     if (btnL) btnL.classList.toggle("active", !showAssigned);
     if (btnA) btnA.classList.toggle("active", showAssigned);
+    // новые 8-класс ID
+    const btnL2 = document.getElementById("btn-levels-tab");
+    const btnA2 = document.getElementById("btn-student-assignments-tab");
+    if (btnL2) { btnL2.classList.toggle("active", !showAssigned); btnL2.setAttribute("aria-selected", !showAssigned); }
+    if (btnA2) { btnA2.classList.toggle("active", showAssigned); btnA2.setAttribute("aria-selected", showAssigned); }
     const grid = document.getElementById("levels-grid");
     const view = document.getElementById("assigned-view");
+    const panel = document.getElementById("levels-panel");
+    const studPanel = document.getElementById("student-assignments-panel");
     if (grid) grid.style.display = showAssigned ? "none" : "";
     if (view) view.style.display = showAssigned ? "" : "none";
+    if (panel) panel.style.display = showAssigned ? "none" : "";
+    if (studPanel) studPanel.hidden = !showAssigned;
+    const lvlScreen = document.getElementById("level-screen");
+    if (lvlScreen) lvlScreen.classList.toggle("showing-assignments", showAssigned);
     const sb = document.getElementById("btn-story");
     if (sb) sb.style.display = showAssigned ? "none" : "";
+    // синхронизировать assigned-count
+    const cnt = document.getElementById("assigned-count");
+    const cnt2 = document.getElementById("student-assignments-count");
+    if (cnt && cnt2) cnt2.textContent = cnt.textContent;
+    if (cnt2) cnt2.style.display = cnt.style.display;
 }
 
 function renderStoryStats() {
@@ -39361,6 +39421,8 @@ function renderStoryBody() {
 
 document.getElementById("tab-btn-levels")?.addEventListener("click", () => switchLevelTab("levels"));
 document.getElementById("tab-btn-assigned")?.addEventListener("click", () => { renderAssignedView(); switchLevelTab("assigned"); });
+document.getElementById("btn-levels-tab")?.addEventListener("click", () => switchLevelTab("levels"));
+document.getElementById("btn-student-assignments-tab")?.addEventListener("click", () => { renderAssignedView(); switchLevelTab("assigned"); });
 
 // Копирование кода результата для учителя
 document.getElementById("btn-copy-assignment-result")?.addEventListener("click", async () => {
