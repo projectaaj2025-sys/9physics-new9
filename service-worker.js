@@ -1,5 +1,5 @@
 /* Орбита-9 Service Worker — офлайн-кэш и push-уведомления */
-const CACHE_NAME = 'orbita9-v5';
+const CACHE_NAME = 'orbita9-v6';
 const CORE_ASSETS = [
   './physics-quest-9-grade.html',
   './manifest.json',
