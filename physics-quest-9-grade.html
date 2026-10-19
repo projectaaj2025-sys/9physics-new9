@@ -309,38 +309,7 @@ html, body {
     margin-right: 8px;
 }
 /* ===== Фильтр сложности (как в 8 классе) ===== */
-.difficulty-filter { position: relative; z-index: 1;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    align-items: center;
-    margin: 14px 0 10px;
-    padding: 10px 14px;
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    box-shadow: var(--shadow);
-}
-.difficulty-filter-label {
-    font-weight: 800;
-    font-size: 13px;
-    color: var(--text-dim);
-    margin-right: 4px;
-}
-.diff-btn {
-    padding: 6px 14px;
-    border-radius: 8px;
-    border: 1.5px solid var(--border);
-    background: var(--bg-card);
-    color: var(--text);
-    cursor: pointer;
-    font-weight: 800;
-    font-size: 13px;
-    font-family: inherit;
-    transition: all .2s;
-}
-.diff-btn:hover { transform: translateY(-1px); border-color: var(--primary); }
-.diff-btn.active { background: var(--gradient-primary); color: #fff; border-color: var(--primary); box-shadow: var(--glow); }
+
 .section-theme-badge {
     display: inline-flex;
     align-items: center;
@@ -362,17 +331,7 @@ html, body {
 .theme-em { border-color: #d81b60; color: #880e4f; }
 .theme-atomic { border-color: #ff3d00; color: #bf360c; }
 .theme-lab { border-color: #e040fb; color: #6a1b9a; }
-.difficulty-badge-task {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    font-size: 12px;
-    font-weight: 800;
-    padding: 4px 10px;
-    border-radius: 20px;
-    margin-left: 8px;
-    border: 1.5px solid transparent;
-}
+
 .diff-1 { background: rgba(0,200,83,0.12); color: #2e7d32; border-color: rgba(0,200,83,0.3); }
 .diff-2 { background: rgba(255,179,0,0.14); color: #ef6c00; border-color: rgba(255,179,0,0.35); }
 .diff-3 { background: rgba(255,61,0,0.12); color: #bf360c; border-color: rgba(255,61,0,0.3); }
@@ -2070,6 +2029,12 @@ html, body {
         .task-item { background: #f5fbff; color: #1a2942; border: 1px solid rgba(0,0,0,0.08); border-radius: 10px; padding: 15px; }
     
 /* ===== Сюжет «Орбита-9» ===== */
+
+/* Выбор сложности перед уровнем — как в 8 классе */
+.diff-choose-btn { justify-content:center; padding:12px 14px; font-size:15px; font-weight:800; border-radius:12px; }
+.diff-choose-btn.active { border-width:2px; }
+#level-difficulty-modal .modal-content { animation: modalIn .2s ease; }
+
 .episode-banner { grid-column: 1 / -1; width: 100%; margin: 20px 0 2px; padding: 8px 14px; border-left: 4px solid var(--ep-color, #00b8d4); background: rgba(255,255,255,0.05); border-radius: 8px; font-weight: 700; letter-spacing: .07em; color: var(--ep-color, #00b8d4); text-transform: uppercase; font-size: 13px; }
 .episode-brief { margin: 0 0 14px; padding: 10px 12px; border-left: 3px solid #00b8d4; background: rgba(0,184,212,0.08); border-radius: 8px; font-size: 13px; line-height: 1.55; }
 .episode-unlock { margin-top: 14px; padding: 10px 12px; border: 1px solid; border-radius: 8px; font-weight: 600; text-align: center; font-size: 14px; }
@@ -2204,6 +2169,34 @@ html, body {
                 <div class="rocket-grid" id="rocket-grid"></div>
             </div>
             <div class="profile-field">
+                <label data-i18n="kvantVoiceTitle">🔊 Голос КВАНТа</label>
+                <p class="profile-sub" style="margin:0 0 10px" data-i18n="kvantVoiceNote">ИИ-наставник озвучит историю, теорию и задания. Работает офлайн (Web Speech API).</p>
+                <div class="kvant-voice-panel" style="margin:0">
+                    <div class="kvant-voice-row">
+                        <label style="font-size:13px; font-weight:700" data-i18n="kvantAuto">Автоозвучка:</label>
+                        <select id="kvant-auto" class="kvant-select">
+                            <option value="off" data-i18n="kvantAutoOff">Выкл</option>
+                            <option value="theory" data-i18n="kvantAutoTheory">Теория перед уровнем</option>
+                            <option value="all" data-i18n="kvantAutoAll">Теория + сюжет</option>
+                        </select>
+                        <button type="button" class="kvant-btn" id="kvant-test-btn">🎤 <span data-i18n="kvantTest">Проверка голоса</span></button>
+                        <button type="button" class="kvant-btn" id="kvant-stop-btn">⏹ <span data-i18n="kvantStop">Стоп</span></button>
+                    </div>
+                    <div class="kvant-voice-row">
+                        <label style="font-size:13px" data-i18n="voice">Голос:</label>
+                        <select id="kvant-voice-select" class="kvant-select"></select>
+                        <span id="kvant-status" class="kvant-status"></span>
+                        <span id="kvant-wave" class="kvant-wave" style="display:none"><span class="kvant-bar"></span><span class="kvant-bar"></span><span class="kvant-bar"></span></span>
+                    </div>
+                    <div class="kvant-voice-row">
+                        <label>Скорость <span id="kvant-rate-val">1.0</span></label>
+                        <input type="range" id="kvant-rate" min="0.6" max="1.4" step="0.1" value="1.0" style="flex:1">
+                        <label>Высота</label>
+                        <input type="range" id="kvant-pitch" min="0.8" max="1.3" step="0.1" value="1.0" style="flex:1">
+                    </div>
+                </div>
+            </div>
+            <div class="profile-field">
                 <label data-i18n="profileConspektTitle">📘 Полный конспект</label>
                 <p class="profile-sub" style="margin:0 0 10px" data-i18n="profileConspektNote">Полный конспект всех 43 параграфов — открой в окне</p>
                 <div class="profile-conspekt-actions">
@@ -2325,12 +2318,30 @@ html, body {
         </div>
     </div>
 
+        <!-- Выбор сложности перед стартом уровня (как в 8 классе) -->
+    <div id="level-difficulty-modal" class="modal">
+        <div class="modal-content" style="max-width:480px; text-align:center">
+            <h3 id="level-difficulty-title" style="margin:0 0 8px">🚀 Выбери сложность</h3>
+            <p id="level-difficulty-desc" class="profile-sub" style="margin:0 0 14px">Сложность влияет на вопросы — лёгкие дают больше подсказок, сложные — больше очков.</p>
+            <div id="level-difficulty-options" style="display:grid; gap:10px; margin:12px 0">
+                <button type="button" class="btn btn-secondary diff-choose-btn" data-diff="1">⭐ <span data-i18n="difficultyEasy">Лёгкий</span> — больше подсказок</button>
+                <button type="button" class="btn btn-secondary diff-choose-btn" data-diff="2">⭐⭐ <span data-i18n="difficultyMedium">Средний</span> — баланс</button>
+                <button type="button" class="btn btn-primary diff-choose-btn" data-diff="3">⭐⭐⭐ <span data-i18n="difficultyHard">Сложный</span> — максимум очков</button>
+                <button type="button" class="btn btn-secondary" id="btn-difficulty-all" data-diff="0" style="background:#eef2ff; border-color:#aab4ff">🌟 <span data-i18n="difficultyAll">Все вопросы</span> — микс</button>
+            </div>
+            <div style="display:flex; gap:8px; justify-content:center; margin-top:8px">
+                <button type="button" class="btn btn-back" id="btn-difficulty-cancel"><span data-i18n="cancel">Отмена</span></button>
+            </div>
+            <p id="level-difficulty-hint" class="profile-sub" style="margin-top:10px; font-size:12px">💡 <span data-i18n="difficultyHint">Подсказка: лёгкий — для изучения, сложный — для рекорда</span></p>
+        </div>
+    </div>
+
     <!-- Модальное окно с заданием -->
     <div id="task-modal" class="modal">
         <div class="modal-content task-content">
             <div class="task-header">
                 <h3 id="task-title" data-i18n="task">Задание</h3>
-                <span class="task-type-badge" id="task-type-badge"></span> <span class="difficulty-badge-task" id="task-difficulty-badge" style="display:none"></span></div>
+                <span class="task-type-badge" id="task-type-badge"></span>
             </div>
             <div class="task-body" id="task-body"></div>
             <div class="task-feedback" id="task-feedback"></div>
@@ -36641,14 +36652,7 @@ const Game = {
 
         const modal = document.getElementById("task-modal");
         if(document.getElementById("task-title")) document.getElementById("task-title").textContent= I18n.t("task") + " #" + (this.completedTaskIds.length + 1);
-        const diffBadge = document.getElementById("task-difficulty-badge");
-        if(diffBadge){
-            const d = task.difficulty || 1;
-            const diffKeys = {1: "difficultyEasy", 2: "difficultyMedium", 3: "difficultyHard"};
-            diffBadge.textContent = "★".repeat(d) + " " + I18n.t(diffKeys[d] || "difficultyEasy");
-            diffBadge.className = "difficulty-badge-task diff-" + d;
-            diffBadge.style.display = "inline-flex";
-        }
+        // difficulty badge removed — restored original question view
         if(document.getElementById("task-type-badge")) document.getElementById("task-type-badge").textContent= I18n.t(i18nTypeKey(task.type));
 
         // Рендер тела задания
@@ -38539,36 +38543,6 @@ function refreshAfterLangChange() {
 // ============ ВЫБОР УРОВНЯ ============
 function showLevelSelect() {
     const grid = document.getElementById("levels-grid");
-    (function renderDifficultyFilter(){
-        let bar = document.getElementById("difficulty-filter");
-        if(!bar){
-            const levelScreen = document.getElementById("level-screen");
-            const gridEl = document.getElementById("levels-grid");
-            bar = document.createElement("div");
-            bar.id = "difficulty-filter";
-            bar.className = "difficulty-filter";
-            if(levelScreen && gridEl) levelScreen.insertBefore(bar, gridEl);
-        }
-        const L = I18n.currentLang || "ru";
-        const diff = (typeof Game!=="undefined" && Game.selectedDifficulty) ? Game.selectedDifficulty : 0;
-        bar.innerHTML = `<span class="difficulty-filter-label">${I18n.t("difficultyFilter")}</span>`
-            + [0,1,2,3].map(d => {
-                const keys = {0:"difficultyAll",1:"difficultyEasy",2:"difficultyMedium",3:"difficultyHard"};
-                const label = I18n.t(keys[d]);
-                const stars = d===0 ? "" : "★".repeat(d);
-                return `<button type="button" class="diff-btn ${d===diff?"active":""}" data-diff="${d}">${stars} ${label}</button>`;
-              }).join("");
-        bar.querySelectorAll(".diff-btn").forEach(btn=>{
-            btn.addEventListener("click", ()=>{
-                const v = parseInt(btn.dataset.diff,10);
-                if(typeof Game!=="undefined") Game.selectedDifficulty = v;
-                bar.querySelectorAll(".diff-btn").forEach(b=>b.classList.toggle("active", parseInt(b.dataset.diff,10)===v));
-                const keys = {0:"difficultyAll",1:"difficultyEasy",2:"difficultyMedium",3:"difficultyHard"};
-                showNotification(I18n.t("selectedDifficultyInfo", I18n.t(keys[v])), "info");
-                showLevelSelect();
-            });
-        });
-    })();
     const progress = Storage.getProgress();
 
     // Строка пилота (РПГ)
@@ -38740,12 +38714,56 @@ function showLevelSelect() {
             }
             const raw = c.dataset.id;
             const id = raw.indexOf("custom:") === 0 ? raw : parseInt(raw, 10);
-            Game.startLevel(id);
+            // Как в 8 классе — выбор сложности перед стартом уровня
+            showLevelDifficultyChooser(id);
         });
     });
 
     showScreen("level-screen");
 }
+
+// === Выбор сложности перед уровнем — как в 8 классе ===
+let _pendingLevelForDifficulty = null;
+function showLevelDifficultyChooser(levelId){
+    _pendingLevelForDifficulty = levelId;
+    const cfg = getLevelConfig(levelId);
+    const titleEl = document.getElementById("level-difficulty-title");
+    const descEl = document.getElementById("level-difficulty-desc");
+    if(titleEl) titleEl.textContent = "🚀 " + levelTitleText(levelId);
+    if(descEl) descEl.textContent = cfg ? (I18n.t("level")+" "+levelId+": "+levelTitleText(levelId)) : "";
+    // highlight current difficulty
+    const cur = (typeof Game!=="undefined" && Game.selectedDifficulty) ? Game.selectedDifficulty : 0;
+    document.querySelectorAll("#level-difficulty-modal .diff-choose-btn").forEach(b=>{
+        const d = parseInt(b.dataset.diff,10);
+        b.classList.toggle("active", d===cur);
+    });
+    document.getElementById("level-difficulty-modal")?.classList.add("active");
+}
+function hideLevelDifficultyChooser(){
+    document.getElementById("level-difficulty-modal")?.classList.remove("active");
+    _pendingLevelForDifficulty = null;
+}
+(function bindDifficultyChooser(){
+    document.addEventListener("click", (e)=>{
+        const btn = e.target.closest("#level-difficulty-modal .diff-choose-btn");
+        if(btn){
+            const diff = parseInt(btn.dataset.diff,10);
+            if(typeof Game!=="undefined") Game.selectedDifficulty = diff;
+            const keys = {0:"difficultyAll",1:"difficultyEasy",2:"difficultyMedium",3:"difficultyHard"};
+            const label = I18n.t(keys[diff]||"difficultyAll");
+            showNotification(I18n.t("selectedDifficultyInfo", label), "info");
+            const lvlId = _pendingLevelForDifficulty;
+            hideLevelDifficultyChooser();
+            if(lvlId!==null && lvlId!==undefined){
+                setTimeout(()=> Game.startLevel(lvlId), 150);
+            }
+        }
+    });
+    document.getElementById("btn-difficulty-cancel")?.addEventListener("click", hideLevelDifficultyChooser);
+    document.getElementById("level-difficulty-modal")?.addEventListener("click", (e)=>{
+        if(e.target.id==="level-difficulty-modal") hideLevelDifficultyChooser();
+    });
+})();
 
 // ============ ТЕОРИЯ ПЕРЕД УРОВНЕМ ============
 let pendingLevelId = null;
