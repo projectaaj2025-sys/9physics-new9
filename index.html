@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ru" data-lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta http-equiv="refresh" content="0; url=./physics-quest-9-grade.html" />
+    <meta name="description" content="Физика-Квест: Орбита-9 — Щит Земли. Образовательная RPG-игра по физике 9 класса." />
+    <title>Физика-Квест: Орбита-9 — Щит Земли</title>
+    <link rel="manifest" href="./manifest.json" />
+    <link rel="icon" type="image/png" href="./icon-192.png" />
+    <link rel="apple-touch-icon" href="./icon-180.png" />
+    <meta name="theme-color" content="#00b8d4" />
+    <script>
+        /* Мгновенный редирект на игру (сохраняем hash, например #teacher / #continue) */
+        (function () {
+            var target = "./physics-quest-9-grade.html" + (location.hash || "");
+            try { location.replace(target); } catch (e) { location.href = target; }
+        })();
+    </script>
+    <style>
+        html, body { height: 100%; margin: 0; }
+        body {
+            display: flex; align-items: center; justify-content: center;
+            font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+            background: #f0f4fa; color: #1a2942; text-align: center; padding: 24px;
+        }
+        .card {
+            background: #ffffff; border: 1px solid rgba(0, 184, 212, .35);
+            border-radius: 18px; padding: 28px 24px; max-width: 420px;
+            box-shadow: 0 12px 40px rgba(26, 41, 66, .10);
+        }
+        h1 { font-size: 20px; margin: 0 0 8px; letter-spacing: .3px; }
+        p { font-size: 14px; color: #5a6b85; margin: 0 0 18px; line-height: 1.5; }
+        a.btn {
+            display: inline-block; text-decoration: none; font-weight: 800; font-size: 15px;
+            color: #fff; background: #00b8d4; border-radius: 12px; padding: 12px 22px;
+        }
+        .spin { font-size: 34px; animation: spin 2.4s linear infinite; display: inline-block; margin-bottom: 10px; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="spin">🛰️</div>
+        <h1>Орбита-9 — Щит Земли</h1>
+        <p>Загружаем игру… Если переадресация не сработала, нажми кнопку ниже.</p>
+        <a class="btn" href="./physics-quest-9-grade.html">🚀 Открыть игру</a>
+    </div>
+    <noscript>
+        <p style="position:fixed;left:0;right:0;bottom:16px;font-size:13px">
+            JavaScript отключён — <a href="./physics-quest-9-grade.html">перейти к игре</a>.
+        </p>
+    </noscript>
+</body>
+</html>
