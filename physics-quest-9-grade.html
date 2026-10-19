@@ -2,7 +2,12 @@
 <html lang="ru" data-lang="ru">
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="manifest" href="manifest.json" />
+    <meta name="theme-color" content="#00b8d4" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="Орбита-9" />
+    <link rel="apple-touch-icon" href="icon-180.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=5.0" />
     <meta name="description" content="Физика-Квест: Орбита-9 — образовательная RPG-игра по физике 9 класса (учебник Н.А. Закировой). 48 уровней: техника безопасности, 43 параграфа, лабораторные работы." />
     <meta name="author" content="Physics Quest Project" />
     <meta name="keywords" content="физика, 9 класс, образование, RPG, игра, геймификация, кинематика, динамика, колебания, атомное ядро, Закирова" />
@@ -812,7 +817,7 @@ html, body {
     top: 60px;
     left: 0;
     width: 100vw;
-    height: calc(100vh - 60px);
+    height: calc(var(--vh, 1vh) * 100 - 60px);
     display: block;
     background: radial-gradient(ellipse at center, #0a1235 0%, #000 100%);
     z-index: 1;
@@ -1636,7 +1641,7 @@ html, body {
 
     html, body { overscroll-behavior: none; }
     #game-screen .hud { height: 58px; padding: 0 5px; gap: 4px; }
-    #game-canvas { top: 58px; height: calc(100vh - 58px); }
+    #game-canvas { top: 58px; height: calc(var(--vh, 1vh) * 100 - 58px); }
     .hud-left, .hud-right { gap: 3px; min-width: 0; }
     .hud-center { flex: 1; min-width: 54px; }
     .hud-label, .health-label { display: none; }
@@ -1777,6 +1782,189 @@ html, body {
 .story-progress-bar { height: 8px; border-radius: 999px; background: rgba(20,45,95,.85); overflow: hidden; }
 .story-progress-fill { height: 100%; width: 0%; border-radius: inherit; background: linear-gradient(90deg, var(--gold), #ffb020); transition: width .3s ease; }
 
+
+/* ===== УЛУЧШЕННАЯ ПАНЕЛЬ УЧИТЕЛЯ + RPG + МЕХАНИКИ ===== */
+
+@media print {
+  body * { visibility: hidden; }
+  #teacher-screen, #teacher-screen * { visibility: visible; }
+  #teacher-screen { position: absolute; left:0; top:0; width:100%; }
+  .teacher-tabs, .bulk-import, .quick-assign-panel, .journal-filters .btn, .assignment-result-import { display:none !important; }
+}
+
+.teacher-dashboard { display: flex; flex-direction: column; gap: 16px; width: 100%; }
+.journal-overview { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px,1fr)); gap: 12px; }
+.journal-card { background: var(--bg-darker); border: 1px solid var(--border); border-radius: 10px; padding: 14px; text-align: center; }
+.journal-card b { display: block; font-size: 22px; color: var(--primary); }
+.journal-card span { font-size: 12px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.5px; }
+.journal-filters { display: flex; flex-wrap: wrap; gap: 8px; align-items: end; background: var(--bg-darker); border: 1px solid var(--border); border-radius: 10px; padding: 12px; }
+.journal-filters .form-group { flex: 1 1 180px; }
+.journal-table-wrap { overflow-x: auto; border: 1px solid var(--border); border-radius: 10px; background: #fff; }
+.journal-table { width: 100%; border-collapse: collapse; min-width: 720px; }
+.journal-table th, .journal-table td { padding: 8px 10px; border-bottom: 1px solid #eef3f8; font-size: 13px; text-align: left; white-space: nowrap; }
+.journal-table th { background: #f5f8ff; color: var(--primary-dark); font-weight: 800; position: sticky; top: 0; }
+.journal-table tr:hover { background: #f9fbff; }
+.journal-table td .mini-badge { display: inline-block; padding: 2px 6px; border-radius: 999px; font-size: 11px; font-weight: 800; }
+.mini-badge.ok { background: #e6f7ed; color: #1b7a3d; }
+.mini-badge.pending { background: #fff4e0; color: #8a5a00; }
+.bulk-import { display: flex; flex-direction: column; gap: 8px; }
+.bulk-import textarea { min-height: 90px; resize: vertical; }
+.quick-assign-panel { background: var(--bg-darker); border: 1px solid var(--border); border-radius: 12px; padding: 14px; display: flex; flex-direction: column; gap: 12px; }
+.assign-matrix { max-height: 280px; overflow: auto; border: 1px solid var(--border); border-radius: 8px; background: #fff; padding: 8px; }
+.assign-matrix-row { display: flex; gap: 8px; align-items: center; padding: 6px 4px; border-bottom: 1px solid #f0f4f8; }
+.assign-matrix-row:last-child { border: none; }
+.assign-matrix-row label { flex: 1; font-size: 13px; }
+.assign-pill { display: inline-block; padding: 2px 8px; border-radius: 999px; background: rgba(0,184,212,0.1); border: 1px solid rgba(0,184,212,0.3); font-size: 12px; }
+.mechanic-badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 999px; font-size: 12px; font-weight: 800; background: rgba(124,77,255,0.12); border: 1px solid rgba(124,77,255,0.35); color: #5e35b1; }
+.mechanic-badge.gravity { background: rgba(216,27,96,0.10); border-color: rgba(216,27,96,0.35); color: #d81b60; }
+.mechanic-badge.resonance { background: rgba(0,200,83,0.10); border-color: rgba(0,200,83,0.35); color: #0a7a2e; }
+.mechanic-badge.orbital { background: rgba(124,77,255,0.12); border-color: rgba(124,77,255,0.35); color: #5e35b1; }
+.mechanic-badge.energy { background: rgba(255,138,0,0.12); border-color: rgba(255,138,0,0.35); color: #a85a00; }
+.mechanic-badge.radiation { background: rgba(2,119,189,0.10); border-color: rgba(2,119,189,0.35); color: #0277bd; }
+.mechanic-badge.fusion { background: rgba(229,57,53,0.10); border-color: rgba(229,57,53,0.35); color: #b71c1c; }
+.mechanic-badge.lab { background: rgba(109,76,65,0.12); border-color: rgba(109,76,65,0.35); color: #6d4c41; }
+/* RPG HUD */
+.rpg-hud { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.rpg-level-badge { display: inline-flex; align-items: center; gap: 6px; background: linear-gradient(135deg,#ffd54f,#ffb300); color: #4a3000; font-weight: 900; padding: 4px 10px; border-radius: 999px; border: 1px solid #ffb300; box-shadow: 0 2px 6px rgba(255,179,0,0.3); font-size: 13px; }
+.rpg-coins { display: inline-flex; align-items: center; gap: 4px; background: rgba(255,213,79,0.18); border: 1px solid rgba(255,179,0,0.4); padding: 4px 8px; border-radius: 999px; font-weight: 800; font-size: 13px; color: #6d4c00; }
+.xp-bar { flex: 1; min-width: 120px; height: 10px; background: #e6eef6; border-radius: 999px; overflow: hidden; border: 1px solid var(--border); position: relative; }
+.xp-fill { height: 100%; background: linear-gradient(90deg,#00b8d4,#7c4dff); transition: width .4s; }
+.xp-text { font-size: 11px; color: var(--text-dim); font-weight: 700; }
+.profile-rpg { background: var(--bg-darker); border: 1px solid var(--border); border-radius: 12px; padding: 14px; display: flex; flex-direction: column; gap: 10px; }
+.profile-rpg h4 { margin: 0; color: var(--primary-dark); }
+.achievements-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(180px,1fr)); gap: 10px; }
+.achievement { background: #fff; border: 1px solid var(--border); border-radius: 10px; padding: 10px; display: flex; gap: 10px; align-items: center; }
+.achievement.locked { opacity: .55; filter: grayscale(0.6); }
+.achievement .ico { font-size: 22px; }
+.achievement b { display: block; font-size: 13px; color: var(--text-bright); }
+.achievement span { font-size: 11px; color: var(--text-dim); }
+.shop-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(160px,1fr)); gap: 12px; }
+.shop-item { background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 12px; text-align: center; display: flex; flex-direction: column; gap: 8px; }
+.shop-item.locked { opacity: .6; }
+.shop-item .price { font-weight: 800; color: #6d4c00; font-size: 13px; }
+.pulse-btn { position: absolute; right: 20px; bottom: 90px; z-index: 6; background: radial-gradient(circle at 30% 30%, #00e5ff, #0066a6); color: #fff; border: 2px solid #00e5ff; border-radius: 50%; width: 72px; height: 72px; font-weight: 900; font-size: 13px; display: none; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 0 20px rgba(0,229,255,0.6); }
+.pulse-btn.active { display: flex; }
+.pulse-btn.cooldown { opacity: .5; pointer-events: none; }
+.pulse-btn.pulsing { animation: pulseAnim .45s ease; }
+@keyframes pulseAnim { 0% { transform: scale(1); } 50% { transform: scale(1.15); } 100% { transform: scale(1); } }
+.gravity-well { position: absolute; border-radius: 50%; border: 2px dashed rgba(255,255,255,0.4); display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 900; pointer-events: none; }
+.boss-bar { position: absolute; top: 70px; left: 50%; transform: translateX(-50%); width: min(420px, 80vw); height: 14px; background: rgba(0,0,0,0.45); border: 1px solid rgba(255,255,255,0.6); border-radius: 999px; overflow: hidden; display: none; z-index: 5; }
+.boss-bar.active { display: block; }
+.boss-fill { height: 100%; background: linear-gradient(90deg,#ff5252,#ffb300); transition: width .3s; }
+.qr-box { display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 12px; background: #fff; border: 1px solid var(--border); border-radius: 10px; }
+.teacher-help { background: rgba(0,184,212,0.06); border: 1px dashed var(--border); border-radius: 10px; padding: 10px 12px; font-size: 13px; line-height: 1.5; color: var(--text); }
+
+.kvant-voice-panel { background: linear-gradient(135deg, rgba(0,184,212,0.08), rgba(124,77,255,0.06)); border:1px solid var(--border); border-radius:12px; padding:14px; display:flex; flex-direction:column; gap:10px; }
+.kvant-voice-row { display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
+.kvant-btn { display:inline-flex; align-items:center; gap:6px; padding:8px 12px; border-radius:10px; border:1px solid var(--border); background:#fff; color:var(--text); font-weight:700; cursor:pointer; font-family:inherit; font-size:13px; box-shadow:var(--shadow); }
+.kvant-btn.primary { background:var(--gradient-primary); color:#fff; border-color:var(--primary); }
+.kvant-btn.active { background:var(--primary); color:#fff; }
+.kvant-btn:disabled { opacity:.5; pointer-events:none; }
+.kvant-status { font-size:12px; color:var(--text-dim); }
+.kvant-wave { display:inline-flex; gap:3px; align-items:end; height:18px; }
+.kvant-bar { width:3px; background:var(--primary); border-radius:3px; animation: kvantPulse .6s infinite alternate; }
+.kvant-bar:nth-child(2){ animation-delay:.15s; height:12px; }
+.kvant-bar:nth-child(3){ animation-delay:.30s; }
+@keyframes kvantPulse { from { height:6px; } to { height:18px; } }
+.kvant-select { padding:8px 10px; border-radius:8px; border:1px solid var(--border); background:#fff; font-family:inherit; font-size:13px; min-width:160px; }
+.mobile-safe-top { padding-top: env(safe-area-inset-top); }
+.mobile-safe-bottom { padding-bottom: env(safe-area-inset-bottom); }
+.notification-banner { position:fixed; left:50%; transform:translateX(-50%) translateY(-20px); top: calc(env(safe-area-inset-top,0px) + 10px); background:#0a1a38; color:#fff; border:1px solid #2a4a8c; border-radius:12px; padding:10px 14px; display:none; z-index:300; box-shadow:0 8px 24px rgba(0,0,0,0.3); max-width:min(92vw, 520px); font-size:13px; }
+.notification-banner.show { display:flex; gap:10px; align-items:center; transform:translateX(-50%) translateY(0); transition: transform .3s; }
+.pwa-install-bar { position:fixed; bottom: calc(env(safe-area-inset-bottom,0px) + 10px); left:50%; transform:translateX(-50%); background:rgba(255,255,255,0.95); border:1px solid var(--border); border-radius:14px; padding:10px 14px; display:none; z-index:250; box-shadow:var(--shadow-strong); gap:10px; align-items:center; max-width:92vw; }
+.pwa-install-bar.show { display:flex; }
+@media (max-width: 768px) {
+  .form-group input, .form-group select, .form-group textarea { font-size:16px; } /* prevent iOS zoom */
+  #teacher-screen .teacher-inner { padding: 16px 12px 100px; }
+  #teacher-screen h2 { font-size:26px; }
+  .teacher-tabs { gap:6px; }
+  .tab-btn { padding:8px 12px; font-size:13px; }
+  .journal-table { min-width: 640px; }
+  .journal-filters .form-group { flex: 1 1 140px; }
+  .rpg-hud { top: 62px; left:6px; right:6px; justify-content: space-between; }
+  .boss-bar { top: 92px; width: 92vw; }
+  .modal-content { width: calc(100% - 10px); max-height: 92vh; }
+  .theory-content { font-size:14px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration:0.01ms !important; transition-duration:0.01ms !important; }
+}
+
+
+/* Mobile: teacher tabs horizontal scroll */
+@media (max-width: 768px) {
+  .teacher-tabs { flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; padding-bottom:4px; }
+  .teacher-tabs::-webkit-scrollbar { display:none; }
+  .tab-btn { flex-shrink:0; }
+}
+
+
+
+/* ===== Мини-игры лаборатории ===== */
+.lab-overlay { position: fixed; inset: 0; background: rgba(4,12,32,0.94); display: none; align-items: center; justify-content: center; z-index: 250; backdrop-filter: blur(6px); padding: 12px; }
+.lab-overlay.active { display: flex; }
+.lab-panel { background: #fff; border-radius: 18px; padding: 18px; max-width: 680px; width: 98%; box-shadow: 0 24px 60px rgba(0,0,0,0.5); border: 2px solid #00b8d4; max-height: 90vh; overflow-y: auto; }
+.lab-panel h3 { margin: 0 0 6px; color: #0a1a38; font-size: 18px; }
+.lab-panel .lab-desc { font-size: 13px; color: var(--text); line-height: 1.5; margin: 0 0 12px; background: #f5f8ff; border: 1px solid #e0e8f5; border-radius: 10px; padding: 10px; }
+.lab-slider-row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin: 10px 0; background: #f5f8ff; border: 1px solid #e0e8f5; border-radius: 10px; padding: 10px 12px; }
+.lab-slider-row label { font-weight: 800; flex: 0 0 160px; font-size: 13px; color: #0a1a38; }
+.lab-slider-row input[type=range] { flex: 1 1 160px; accent-color: #00b8d4; }
+.lab-value { min-width: 70px; font-weight: 900; color: #0066a6; background: #e6f0ff; padding: 5px 10px; border-radius: 999px; text-align: center; font-size: 13px; }
+.lab-formula { text-align: center; font-size: 15px; font-weight: 800; color: #5e35b1; background: #ede7f6; border: 1px solid #d1c4e9; border-radius: 10px; padding: 10px; margin: 10px 0; }
+.lab-result { font-size: 20px; font-weight: 900; text-align: center; padding: 14px; background: linear-gradient(135deg,#e0f7fa,#ede7f6); border-radius: 12px; border: 2px solid #b2ebf2; margin: 10px 0; }
+.lab-result.ok { background: linear-gradient(135deg,#e8f5e9,#e0f7fa); border-color: #66bb6a; color: #1b5e20; }
+.lab-result.bad { background: linear-gradient(135deg,#fce4ec,#fff3e0); border-color: #ef9a9a; color: #b71c1c; }
+.lab-actions { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin-top: 12px; }
+.circuit-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; max-width: 340px; margin: 12px auto; }
+.circuit-cell { aspect-ratio: 1; border: 2px solid #b0bec5; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 26px; cursor: pointer; background: #fafdff; transition: all .2s; user-select: none; }
+.circuit-cell.on { background: #e0f7fa; border-color: #00b8d4; box-shadow: 0 0 12px rgba(0,184,212,0.4); transform: scale(1.03); }
+.circuit-cell.done { background: #e8f5e9; border-color: #66bb6a; }
+.lab-hint { font-size: 12px; color: var(--text-dim); text-align: center; margin-top: 6px; }
+
+
+/* ===== Сюжетные улучшения ===== */
+.boss-intro { position: fixed; inset: 0; background: radial-gradient(ellipse at center, #1a0a2e 0%, #050510 70%); display: none; align-items: center; justify-content: center; z-index: 260; flex-direction: column; gap: 16px; padding: 20px; text-align: center; }
+.boss-intro.active { display: flex; animation: bossFade 0.5s ease; }
+@keyframes bossFade { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+.boss-intro h2 { font-size: 28px; color: #ff5252; text-shadow: 0 0 20px rgba(255,82,82,0.8); margin: 0; letter-spacing: 1px; }
+.boss-intro .boss-subtitle { font-size: 14px; color: #ffb74d; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; }
+.boss-intro .boss-quote { max-width: 560px; font-size: 15px; line-height: 1.6; color: #e0e8f5; background: rgba(255,255,255,0.07); border: 1px solid rgba(255,82,82,0.3); border-radius: 12px; padding: 16px; font-style: italic; }
+.boss-intro .boss-warn { font-size: 13px; color: #ff8a65; animation: pulse 1.2s infinite; }
+.kvant-logs { display: grid; gap: 10px; margin-top: 10px; }
+.kvant-log { background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 12px; display: flex; gap: 10px; align-items: flex-start; }
+.kvant-log.locked { opacity: 0.55; filter: grayscale(0.7); }
+.kvant-log .log-ico { font-size: 22px; flex-shrink: 0; }
+.kvant-log b { font-size: 13px; color: #0a1a38; display: block; margin-bottom: 4px; }
+.kvant-log p { font-size: 12px; color: var(--text); line-height: 1.5; margin: 0; }
+.kvant-log .log-meta { font-size: 11px; color: var(--text-dim); margin-top: 4px; }
+.ending-badge { display: inline-block; padding: 6px 14px; border-radius: 999px; font-weight: 900; font-size: 13px; letter-spacing: 0.5px; }
+.ending-badge.good { background: linear-gradient(135deg,#66bb6a,#00b8d4); color: #fff; }
+.ending-badge.neutral { background: linear-gradient(135deg,#ffb300,#ff6f00); color: #fff; }
+.ending-badge.secret { background: linear-gradient(135deg,#7c4dff,#e040fb); color: #fff; }
+
+
+/* ===== Дневник экспедиции — комикс ===== */
+.diary-btn { background: linear-gradient(135deg,#ff6f00,#ffb300); color:#fff; border-color:#ff6f00; font-weight:900; }
+.diary-modal-content { max-width: 780px; background: #fffef7; }
+.diary-title { text-align:center; margin:0 0 4px; color:#4e342e; font-size:20px; }
+.diary-subtitle { text-align:center; color:#8d6e63; font-size:13px; margin:0 0 14px; }
+.comic-strip { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 12px 0; }
+@media (max-width: 640px) { .comic-strip { grid-template-columns: 1fr; } }
+.comic-panel { background: #fff; border: 2px solid #3e2723; border-radius: 14px; overflow: hidden; box-shadow: 0 6px 14px rgba(62,39,35,0.2); position: relative; display: flex; flex-direction: column; min-height: 180px; opacity: 0; transform: translateY(16px) scale(0.98); animation: comicIn 0.6s ease forwards; }
+.comic-panel:nth-child(1) { animation-delay: 0.15s; }
+.comic-panel:nth-child(2) { animation-delay: 0.45s; }
+.comic-panel:nth-child(3) { animation-delay: 0.75s; }
+@keyframes comicIn { to { opacity:1; transform: translateY(0) scale(1); } }
+.comic-art { flex:1; display:flex; align-items:center; justify-content:center; font-size: 48px; background: radial-gradient(ellipse at top, #fff3e0, #ffe0b2); padding: 14px; min-height: 90px; position: relative; }
+.comic-art::after { content: "✦"; position: absolute; right: 8px; top: 6px; font-size: 14px; color: #ff6f00; opacity: 0.7; }
+.comic-caption { background: #3e2723; color: #fff3e0; padding: 10px 12px; font-size: 12.5px; line-height: 1.5; font-weight: 600; }
+.comic-caption small { display:block; color:#ffcc80; font-weight:800; margin-bottom:4px; font-size:10px; letter-spacing:0.6px; text-transform:uppercase; }
+.diary-nav { display:flex; gap:8px; justify-content:center; margin-top: 14px; flex-wrap: wrap; }
+.diary-page-indicator { font-size:12px; color:#8d6e63; font-weight:800; padding:8px 12px; background:#efebe9; border-radius:999px; }
+.diary-locked { text-align:center; padding:24px; background:#efebe9; border:2px dashed #bcaaa4; border-radius:14px; color:#6d4c41; }
+.diary-entry-meta { text-align:center; font-size:11px; color:#a1887f; margin-top:6px; }
+.kvant-voice-bubble { background: linear-gradient(135deg,#e1f5fe,#ede7f6); border:1px solid #90caf9; border-left:4px solid #00b8d4; border-radius:12px; padding:10px 12px; font-size:13px; color:#0a1a38; margin: 10px 0; display:flex; gap:10px; align-items:flex-start; }
+
 </style>
 
     <!-- Fallback inline styles — гарантируют, что игра выглядит правильно
@@ -1865,6 +2053,10 @@ html, body {
                     <span class="btn-icon">ℹ</span>
                     <span data-i18n="about">О проекте</span>
                 </button>
+                <button class="btn btn-secondary diary-btn" id="btn-diary">
+                    <span class="btn-icon">📖</span>
+                    <span data-i18n="diaryBtn">Дневник экспедиции</span>
+                </button>
                 <button class="btn btn-secondary" id="btn-profile">
                     <span class="btn-icon">👤</span>
                     <span data-i18n="profile">Профиль</span>
@@ -1915,6 +2107,29 @@ html, body {
                 <input type="text" id="profile-player-id" readonly aria-describedby="profile-player-id-note">
                 <small id="profile-player-id-note" class="profile-sub" style="display:block; margin:6px 0 0" data-i18n="playerIdNote">Покажи этот ID учителю, если имя ученика совпадает с именем другого игрока.</small>
             </div>
+            
+            <div class="profile-rpg" id="profile-rpg">
+                <h4 data-i18n="profileProgressTitle">🚀 Прогресс пилота</h4>
+                <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap">
+                    <div class="rpg-level-badge" id="profile-level-badge">⭐ Уровень 1 — Курсант</div>
+                    <div class="rpg-coins" id="profile-coins">💎 0</div>
+                </div>
+                <div class="xp-bar"><div class="xp-fill" id="profile-xp-fill" style="width:0%"></div></div>
+                <div class="xp-text" id="profile-xp-text">0 / 100 XP</div>
+                <div style="display:flex; gap:8px; flex-wrap:wrap">
+                    <button type="button" class="btn btn-secondary" id="btn-open-diary">📖 Дневник</button>
+                    <button type="button" class="btn btn-secondary" id="btn-open-shop">🛒 <span data-i18n="openShop">Магазин</span></button>
+                    <button type="button" class="btn btn-secondary" id="btn-open-skills">⚡ <span data-i18n="openSkills">Улучшения</span></button>
+                </div>
+                <div id="profile-achievements" class="achievements-grid"></div>
+            <div class="profile-rpg" style="margin-top:12px">
+                <h4>📼 Архив Кванта — секретные логи</h4>
+                <p class="profile-sub" style="text-align:left; margin:0">Открой все логи, получив 3 звезды. Квант оставит личное сообщение для лучших пилотов.</p>
+                <div id="kvant-archive" class="kvant-logs"></div>
+            </div>
+                <div id="profile-skills" style="display:none"></div>
+            </div>
+
             <div class="profile-field">
                 <label data-i18n="rocketDesign">Дизайн ракеты</label>
                 <div class="rocket-grid" id="rocket-grid"></div>
@@ -1980,12 +2195,24 @@ html, body {
                     <span class="hud-icon">⏱</span>
                     <span class="hud-value" id="time-value">00:00</span>
                 </div>
+                <button id="btn-lab" class="btn-pause" type="button" style="display:none; background:#6d4c41; color:#fff; border-color:#6d4c41">🔬 Лаб</button>
                 <button id="btn-pause" class="btn-pause" type="button">⏸ <span data-i18n="pause">Пауза</span></button>
                 <button id="btn-exit-level" class="btn-exit-level" type="button">✕ <span data-i18n="exitLevel">Выход</span></button>
             </div>
         </div>
 
         <!-- Игровое поле -->
+        
+                <div class="rpg-hud" id="rpg-hud" style="position:absolute; top:66px; left:10px; z-index:6; background:rgba(255,255,255,0.92); border:1px solid var(--border); border-radius:10px; padding:6px 10px; display:flex; gap:8px; align-items:center">
+                    <span class="rpg-level-badge" id="hud-rpg-level">⭐ 1</span>
+                    <div class="xp-bar" style="width:90px"><div class="xp-fill" id="hud-xp-fill" style="width:0%"></div></div>
+                    <span class="rpg-coins" id="hud-rpg-coins">💎 0</span>
+                    <span class="mechanic-badge" id="hud-mechanic" style="display:none"></span>
+                <span id="hud-lab-hint" style="display:none; background:rgba(109,76,65,0.12); border:1px solid rgba(109,76,65,0.35); color:#6d4c41; padding:4px 10px; border-radius:999px; font-size:12px; font-weight:800">🔬 Лаб. режим — изучай теорию, отвечай точнее!</span>
+                </div>
+                <div class="boss-bar" id="boss-bar"><div class="boss-fill" id="boss-fill" style="width:100%"></div></div>
+                <button class="pulse-btn" id="pulse-btn" type="button">⚡<br>ИМПУЛЬС</button>
+
         <canvas id="game-canvas"></canvas>
         <div id="touch-controls" aria-label="Экранное управление">
             <button class="touch-btn touch-up" data-dir="up" aria-label="Вверх">▲</button>
@@ -2063,14 +2290,87 @@ html, body {
         <p class="teacher-intro" data-i18n="teacherIntro">Добавьте свои задания для своих учеников</p>
 
         <div class="teacher-tabs">
-            <button class="tab-btn active" data-tab="create" data-i18n="createTask">Создать задание</button>
+            <button class="tab-btn active" data-tab="journal" data-i18n="teacherJournalTab">Журнал</button>
+            <button class="tab-btn" data-tab="create" data-i18n="createTask">Создать задание</button>
             <button class="tab-btn" data-tab="lessons" data-i18n="teacherLessonsTab">Мои уроки</button>
             <button class="tab-btn" data-tab="assignments" data-i18n="assignmentsTab">Назначения</button>
             <button class="tab-btn" data-tab="manage" data-i18n="manageTasks">Мои задания</button>
             <button class="tab-btn" data-tab="stats" data-i18n="statistics">Статистика</button>
         </div>
 
-        <div class="tab-content active" id="tab-create">
+        
+        <div class="tab-content active" id="tab-journal">
+            <div class="teacher-dashboard">
+                <div class="teacher-help" data-i18n="journalHelp">Журнал собирает все результаты учеников на этом устройстве. Используйте фильтры, экспорт и быстрый импорт кодов. Коды можно вставлять по одному или списком.</div>
+                <div id="teacher-notify-banner" class="notification-banner" style="display:none"><span>🔔 <span data-i18n="pushBannerText">Включите уведомления учителя — узнавай о новых результатах сразу</span></span><button type="button" class="btn btn-primary" id="btn-enable-notify"><span data-i18n="enableNotify">Включить</span></button></div>
+                        <div id="teacher-push-panel" style="display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin:10px 0; padding:10px; background:rgba(255,255,255,0.9); border:1px solid var(--border); border-radius:10px">
+                <span>🔔 <b data-i18n="pushTitle">Уведомления учителя</b> — <span data-i18n="pushNote">Получай уведомление, когда ученик присылает результат</span></span>
+                <span id="push-status" class="profile-sub" style="margin:0"></span>
+                <button type="button" class="btn btn-secondary" id="btn-push-enable" data-i18n="enableNotify">Включить</button>
+                <button type="button" class="btn btn-secondary" id="btn-push-disable" style="display:none" data-i18n="disableNotify">Выключить</button>
+                <button type="button" class="btn btn-secondary" id="btn-push-test" data-i18n="testNotify">Тест</button>
+            </div>
+            <div class="journal-overview" id="journal-overview"></div>
+                <div class="journal-filters">
+                    <div class="form-group" style="min-width:160px">
+                        <label data-i18n="filterSearch">Поиск</label>
+                        <input type="text" id="journal-search" placeholder="Имя или уровень" data-i18n-placeholder="filterSearchPlaceholder">
+                    </div>
+                    <div class="form-group" style="min-width:160px">
+                        <label data-i18n="filterClass">Класс</label>
+                        <select id="journal-filter-class"><option value="" data-i18n="allClasses">Все классы</option></select>
+                    </div>
+                    <div class="form-group" style="min-width:140px">
+                        <label data-i18n="filterLevel">Уровень</label>
+                        <select id="journal-filter-level"><option value="" data-i18n="allLevels">Все уровни</option></select>
+                    </div>
+                    <div class="form-group" style="min-width:140px">
+                        <label data-i18n="filterStatus">Статус</label>
+                        <select id="journal-filter-status">
+                            <option value="" data-i18n="allStatuses">Все</option>
+                            <option value="victory" data-i18n="completedStatus">Пройдено</option>
+                            <option value="failed" data-i18n="failedStatus">Не пройдено</option>
+                        </select>
+                    </div>
+                    <button type="button" class="btn btn-secondary" id="btn-journal-reset" data-i18n="resetFilters">Сбросить</button>
+                
+        
+                <div class="journal-table-wrap"><table class="journal-table" id="journal-table"><thead><tr>
+                    <th data-i18n="playerCol">Ученик</th><th data-i18n="levelCol">Уровень</th><th data-i18n="scoreCol">Очки</th><th data-i18n="accuracy">Точность</th><th>⭐</th><th data-i18n="dateCol">Дата</th><th data-i18n="statusCol">Статус</th><th></th>
+                </tr></thead><tbody id="journal-tbody"></tbody></table></div>
+                <div style="display:flex; gap:8px; flex-wrap:wrap">
+                    <button type="button" class="btn btn-secondary" id="btn-bulk-delete" data-i18n="deleteSelected">Удалить выбранные</button>
+                    <button type="button" class="btn btn-icon-only danger" id="btn-clear-journal" style="margin-left:auto" data-i18n="clearJournal">Очистить журнал</button>
+                </div>
+                <div class="bulk-import">
+                    <h3 data-i18n="bulkImportTitle">Массовый импорт кодов</h3>
+                    <p class="profile-sub" style="margin:0 0 6px; text-align:left" data-i18n="bulkImportNote">Вставьте несколько кодов — каждый с новой строки. Поддерживаются файлы .txt с кодами.</p>
+                    <textarea id="bulk-codes-input" rows="4" placeholder="PQ9R-...&#10;PQ9R-..." data-i18n-placeholder="bulkCodesPlaceholder"></textarea>
+                    <div style="display:flex; gap:8px; flex-wrap:wrap">
+                        <button type="button" class="btn btn-primary" id="btn-bulk-import" data-i18n="importCodes">Импортировать коды</button>
+                        <label class="btn btn-secondary" for="bulk-codes-file" data-i18n="loadTxt">Загрузить .txt</label>
+                        <input type="file" id="bulk-codes-file" accept=".txt,.csv" hidden>
+                        <span id="bulk-import-status" class="copy-result-status"></span>
+                    </div>
+                </div>
+                <div style="display:flex; gap:16px; flex-wrap:wrap">
+                    <div style="flex:1 1 280px">
+                        <h3 data-i18n="shareLinkTitle">Поделиться ссылкой на результат</h3>
+                        <p class="profile-sub" style="text-align:left; margin:0 0 6px" data-i18n="shareLinkNote">Ссылка автоматически импортирует результат при открытии на устройстве учителя.</p>
+                        <div class="assigned-import-row">
+                            <input type="text" id="share-link-input" readonly placeholder="https://...#result=PQ9R-..." style="flex:1 1 200px; background:#f5fbff; border:1px solid var(--border); border-radius:10px; padding:.5rem .7rem; font-size:.78rem">
+                            <button type="button" class="btn btn-secondary" id="btn-copy-share-link" data-i18n="copyLink">Копировать ссылку</button>
+                        </div>
+                    </div>
+                    <div class="qr-box" id="qr-box" style="min-width:160px">
+                        <canvas id="qr-canvas" width="140" height="140" style="border:1px solid #eef3f8; border-radius:8px"></canvas>
+                        <small data-i18n="qrNote" style="color:var(--text-dim)">QR-код последнего результата</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-content" id="tab-create">
             <form id="task-form" class="task-form">
                 <div class="form-group">
                     <label data-i18n="taskType">Тип задания:</label>
@@ -2173,6 +2473,7 @@ html, body {
                 <div id="assignment-result-import-status" class="copy-result-status"></div>
             </div>
             <p class="profile-sub" style="margin:0 0 16px" data-i18n="assignmentsNote">Ученик увидит назначение, если его имя или постоянный ID совпадёт с записью в профиле.</p>
+            <div id="pwa-install-bar" class="pwa-install-bar" style="display:none"><span style="font-weight:800">📲 <span data-i18n="installApp">Установить приложение</span></span><span class="profile-sub" style="margin:0" data-i18n="installNote">Работает без интернета после установки</span><button type="button" class="btn btn-primary" id="btn-pwa-install" data-i18n="install">Установить</button></div>
             <div class="class-assignment-panel">
                 <h3 data-i18n="classManagementTitle">Классы</h3>
                 <p class="profile-sub" style="margin:0 0 12px" data-i18n="classManagementNote">Создайте класс и укажите учеников: один ученик в строке. Для привязки по ID используйте формат «Имя | playerId».</p>
@@ -2207,6 +2508,70 @@ html, body {
                     </button>
                 </div>
                 <div class="class-list" id="classes-list"></div>
+
+            <div class="quick-assign-panel">
+                <h3 data-i18n="quickAssignTitle">⚡ Быстрое назначение</h3>
+                <p class="profile-sub" style="margin:0 0 6px; text-align:left" data-i18n="quickAssignNote">Выберите учеников и уровни — одним кликом назначите всем сразу. Удобно для домашней работы.</p>
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px">
+                    <div>
+                        <label style="font-weight:800; font-size:13px; text-transform:uppercase; letter-spacing:.5px" data-i18n="quickAssignStudents">Ученики</label>
+                        <div class="assign-matrix" id="quick-students-matrix"></div>
+                        <div style="margin-top:6px; display:flex; gap:6px">
+                            <button type="button" class="btn btn-secondary" id="btn-quick-select-all" data-i18n="selectAll">Выбрать всё</button>
+                            <button type="button" class="btn btn-secondary" id="btn-quick-clear" data-i18n="clearSelection">Очистить</button>
+                        </div>
+                    </div>
+                    <div>
+                        <label style="font-weight:800; font-size:13px; text-transform:uppercase; letter-spacing:.5px" data-i18n="quickAssignLevels">Уровни</label>
+                        <div class="assign-matrix" id="quick-levels-matrix"></div>
+                    </div>
+                
+        <div class="teacher-help" style="margin-top:12px">
+            <b>☁️ Синхронизация (опционально)</b><br>
+            Схема <code>PQ9R + #result=</code> работает офлайн. Если есть интернет — включи автосинк через Supabase (бесплатно).
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:8px">
+                <input type="text" id="supa-url" placeholder="https://xxx.supabase.co" style="font-size:13px; padding:6px; border-radius:8px; border:1px solid var(--border)" />
+                <input type="text" id="supa-key" placeholder="anon key" style="font-size:13px; padding:6px; border-radius:8px; border:1px solid var(--border)" />
+            </div>
+            <div style="display:flex; gap:8px; margin-top:8px">
+                <button type="button" class="btn btn-secondary" id="btn-supa-save">💾 Сохранить</button>
+                <button type="button" class="btn btn-secondary" id="btn-supa-test">🧪 Тест</button>
+                <span id="supa-status" style="font-size:12px; color:var(--text-dim)"></span>
+            </div>
+            <small style="color:var(--text-dim)">Данные хранятся в localStorage; при включенном Supabase результаты и назначения дублируются в облако для доступа с любого устройства.</small>
+        </div>
+        <script>
+        (function(){
+            const urlEl=document.getElementById("supa-url");
+            const keyEl=document.getElementById("supa-key");
+            const st=document.getElementById("supa-status");
+            if(!urlEl) return;
+            try{ const cfg=JSON.parse(localStorage.getItem("orbita9_supa")||"null"); if(cfg){ urlEl.value=cfg.url||""; keyEl.value=cfg.key||""; st.textContent=cfg.url?"✓ настроено":""; } }catch(e){}
+            document.getElementById("btn-supa-save")?.addEventListener("click", ()=>{
+                const cfg={url:urlEl.value.trim(), key:keyEl.value.trim()};
+                localStorage.setItem("orbita9_supa", JSON.stringify(cfg));
+                st.textContent="Сохранено";
+                showNotification("Supabase сохранён", "success");
+            });
+            document.getElementById("btn-supa-test")?.addEventListener("click", async ()=>{
+                const cfg=JSON.parse(localStorage.getItem("orbita9_supa")||"{}");
+                if(!cfg.url||!cfg.key){ st.textContent="Заполни URL и key"; return; }
+                st.textContent="Проверка...";
+                try{ const r=await fetch(cfg.url+"/rest/v1/", {headers:{apikey:cfg.key, Authorization:"Bearer "+cfg.key}}); st.textContent=r.ok?"✅ связь есть":"❌ "+r.status; }catch(e){ st.textContent="❌ ошибка сети"; }
+            });
+        })();
+        </script>
+
+                <div style="display:flex; gap:8px; flex-wrap:wrap; align-items:center">
+                    <input type="text" id="quick-assign-note" maxlength="160" placeholder="Комментарий (например: до пятницы)" data-i18n-placeholder="assignmentNotePlaceholder" style="flex:1 1 220px; padding:10px 14px; border-radius:8px; border:1px solid var(--border)">
+                    <button type="button" class="btn btn-primary" id="btn-quick-assign">🚀 <span data-i18n="quickAssignBtn">Назначить выбранным</span></button>
+                </div>
+                <div style="display:flex; gap:8px; flex-wrap:wrap">
+                    <button type="button" class="btn btn-secondary" id="btn-assign-next">⏭ <span data-i18n="assignNextLevel">Назначить следующий уровень</span></button>
+                    <button type="button" class="btn btn-secondary" id="btn-assign-all-remaining">📚 <span data-i18n="assignAllRemaining">Назначить все непройденные</span></button>
+                </div>
+            </div>
+
             </div>
 
             <div class="assignment-form">
@@ -2296,6 +2661,7 @@ html, body {
     <div id="story-modal" class="modal">
         <div class="modal-content">
             <h2 data-i18n="storyTitle">История миссии «Орбита-9»</h2>
+            <div class="kvant-voice-row" id="story-voice-bar" style="justify-content:center; margin:0 0 10px"><button type="button" class="btn btn-secondary" id="kvant-play-story" data-i18n="kvantPlayStory">🔊 Озвучить сюжет</button><button type="button" class="btn btn-secondary" id="kvant-stop-story" style="display:none" data-i18n="stop">⏹ Стоп</button></div>
             <div class="story-body" id="story-body"></div>
             <button class="btn btn-back" id="btn-story-close">
                 <span data-i18n="close">Закрыть</span>
@@ -2325,6 +2691,7 @@ html, body {
                 <button type="button" class="theory-tab" data-tab="conspekt" data-i18n="theoryTabConspekt">📘 Конспект</button>
             </div>
             <div class="theory-content" id="theory-content"></div>
+            <div class="kvant-voice-row" style="margin:8px 0 0; justify-content:flex-start"><button type="button" class="btn btn-secondary" id="kvant-play-theory" data-i18n="kvantListenTheory">🎧 Прослушать теорию</button><button type="button" class="btn btn-secondary" id="kvant-stop-theory" style="display:none" data-i18n="stop">⏹ Стоп</button></div>
             <div class="theory-actions">
                 <button class="btn btn-back" id="btn-theory-back">
                     <span data-i18n="back">← Назад</span>
@@ -2337,6 +2704,73 @@ html, body {
     </div>
 
     <!-- Модальное окно "Полный конспект" -->
+    
+    
+    <!-- Мини-игра лаборатории -->
+    <div id="lab-overlay" class="lab-overlay">
+        <div class="lab-panel">
+            <h3 id="lab-title">🔬 Лабораторный эксперимент</h3>
+            <p id="lab-desc" class="lab-desc">Проведи эксперимент — подбери параметры и получи результат!</p>
+            <div id="lab-content"></div>
+            <div id="lab-formula" class="lab-formula" style="display:none"></div>
+            <div id="lab-result" class="lab-result" style="display:none"></div>
+            <div id="lab-circuit" class="circuit-grid" style="display:none"></div>
+            <p id="lab-hint-text" class="lab-hint"></p>
+            <div class="lab-actions">
+                <button type="button" class="btn btn-primary" id="lab-check">✅ Проверить</button>
+                <button type="button" class="btn btn-secondary" id="lab-close">⏭ Пропустить (без бонуса)</button>
+            </div>
+        </div>
+    </div>
+
+    
+    <div id="boss-intro" class="boss-intro">
+        <div class="boss-subtitle" id="boss-intro-ep">ЭПИЗОД</div>
+        <h2 id="boss-intro-title">👾 БОСС ПРИБЛИЖАЕТСЯ</h2>
+        <div class="boss-quote" id="boss-intro-quote">КВАНТ: "Курсант, это не просто астероид. Это... "</div>
+        <div class="boss-warn">⚠️ Ответы на 20% сложнее • Ошибки бьют по городу сильнее</div>
+        <button type="button" class="btn btn-primary" id="boss-intro-go">🚀 В БОЙ</button>
+        <div style="font-size:12px; color:#90a4ae">Нажми чтобы начать • Пробел</div>
+    </div>
+
+    <div id="shop-modal" class="modal">
+        <div class="modal-content" style="max-width:820px">
+            <h2 data-i18n="shopTitle">🛒 Магазин пилота</h2>
+            <p class="profile-sub" style="text-align:left" data-i18n="shopNote">Трать кристаллы на новые дизайны и улучшения. Кристаллы зарабатываются за прохождение уровней.</p>
+            <div style="display:flex; gap:10px; align-items:center; margin-bottom:14px">
+                <div class="rpg-coins" id="shop-coins">💎 0</div>
+                <div class="rpg-level-badge" id="shop-level">⭐ 1</div>
+            </div>
+            <div class="shop-grid" id="shop-grid"></div>
+            <button class="btn btn-back" id="btn-shop-close" type="button"><span data-i18n="close">Закрыть</span></button>
+        </div>
+    </div>
+    <div id="skills-modal" class="modal">
+        <div class="modal-content" style="max-width:720px">
+            <h2 data-i18n="skillsTitle">⚡ Улучшения корабля</h2>
+            <p class="profile-sub" style="text-align:left" data-i18n="skillsNote">Улучшения действуют во всех уровнях и сохраняются навсегда.</p>
+            <div id="skills-grid" style="display:flex; flex-direction:column; gap:12px"></div>
+            <button class="btn btn-back" id="btn-skills-close" type="button"><span data-i18n="close">Закрыть</span></button>
+        </div>
+    </div>
+
+    
+    <div id="diary-modal" class="modal">
+        <div class="modal-content diary-modal-content">
+            <h2 class="diary-title" id="diary-title">📖 Дневник экспедиции</h2>
+            <p class="diary-subtitle" id="diary-subtitle">Комикс-отчёт между эпизодами — открой все 9 записей!</p>
+            <div id="diary-comic" class="comic-strip"></div>
+            <div id="diary-bubble" class="kvant-voice-bubble" style="display:none"></div>
+            <p id="diary-meta" class="diary-entry-meta"></p>
+            <div class="diary-nav">
+                <button type="button" class="btn btn-secondary" id="diary-prev">← Назад</button>
+                <span class="diary-page-indicator" id="diary-page">1 / 9</span>
+                <button type="button" class="btn btn-secondary" id="diary-next">Вперёд →</button>
+                <button type="button" class="btn btn-primary" id="diary-close">✈️ Продолжить полёт</button>
+            </div>
+        </div>
+    </div>
+
     <div id="conspekt-modal" class="modal">
         <div class="modal-content conspekt-modal-content">
             <h2 data-i18n="profileConspektTitle">📘 Полный конспект</h2>
@@ -29688,6 +30122,8 @@ const LEVELS_CONFIG = [
         "tasksToWin": 20,
         "tasksTotal": 20,
         "energySpawnRate": 4000,
+        "mechanic": "classic",
+        "boss": false,
         "chapter": "bonus",
         "kind": "safety",
         "desc": "Допуск к полётам: правила безопасной работы в кабинете физики"
@@ -29704,6 +30140,8 @@ const LEVELS_CONFIG = [
         "tasksToWin": 15,
         "tasksTotal": 15,
         "energySpawnRate": 3600,
+        "mechanic": "classic",
+        "boss": false,
         "chapter": "p1",
         "kind": "lesson",
         "desc": "кинематика, материальная точка, система отсчёта, относительность движения"
@@ -29720,6 +30158,8 @@ const LEVELS_CONFIG = [
         "tasksToWin": 15,
         "tasksTotal": 15,
         "energySpawnRate": 3600,
+        "mechanic": "classic",
+        "boss": false,
         "chapter": "p2",
         "kind": "lesson",
         "desc": "сложение векторов, проекции на оси координат"
@@ -29736,6 +30176,8 @@ const LEVELS_CONFIG = [
         "tasksToWin": 15,
         "tasksTotal": 15,
         "energySpawnRate": 3600,
+        "mechanic": "classic",
+        "boss": false,
         "chapter": "p3",
         "kind": "lesson",
         "desc": "мгновенная скорость, ускорение, графики движения"
@@ -29752,6 +30194,8 @@ const LEVELS_CONFIG = [
         "tasksToWin": 15,
         "tasksTotal": 15,
         "energySpawnRate": 3600,
+        "mechanic": "classic",
+        "boss": false,
         "chapter": "p4",
         "kind": "lesson",
         "desc": "формулы скорости, перемещения и координаты при РУД"
@@ -29768,6 +30212,8 @@ const LEVELS_CONFIG = [
         "tasksToWin": 15,
         "tasksTotal": 15,
         "energySpawnRate": 3600,
+        "mechanic": "classic",
+        "boss": false,
         "chapter": "p5",
         "kind": "lesson",
         "desc": "опыт Галилея, ускорение свободного падения, падение тел"
@@ -29784,6 +30230,8 @@ const LEVELS_CONFIG = [
         "tasksToWin": 15,
         "tasksTotal": 15,
         "energySpawnRate": 3600,
+        "mechanic": "classic",
+        "boss": false,
         "chapter": "p6",
         "kind": "lesson",
         "desc": "период, частота, линейная и угловая скорости"
@@ -29800,6 +30248,8 @@ const LEVELS_CONFIG = [
         "tasksToWin": 15,
         "tasksTotal": 15,
         "energySpawnRate": 3600,
+        "mechanic": "classic",
+        "boss": true,
         "chapter": "p7",
         "kind": "lesson",
         "desc": "ускорение при движении по окружности"
@@ -29816,6 +30266,8 @@ const LEVELS_CONFIG = [
         "tasksToWin": 15,
         "tasksTotal": 15,
         "energySpawnRate": 3600,
+        "mechanic": "orbital",
+        "boss": false,
         "chapter": "p8",
         "kind": "lesson",
         "desc": "галактики, созвездия, звёздные величины, световой год"
@@ -29832,6 +30284,8 @@ const LEVELS_CONFIG = [
         "tasksToWin": 15,
         "tasksTotal": 15,
         "energySpawnRate": 3600,
+        "mechanic": "orbital",
+        "boss": false,
         "chapter": "p9",
         "kind": "lesson",
         "desc": "небесная сфера, склонение, прямое восхождение"
@@ -29848,6 +30302,8 @@ const LEVELS_CONFIG = [
         "tasksToWin": 15,
         "tasksTotal": 15,
         "energySpawnRate": 3600,
+        "mechanic": "orbital",
+        "boss": false,
         "chapter": "p10",
         "kind": "lesson",
         "desc": "кульминации, местное, поясное и всемирное время"
@@ -29864,6 +30320,8 @@ const LEVELS_CONFIG = [
         "tasksToWin": 15,
         "tasksTotal": 15,
         "energySpawnRate": 3600,
+        "mechanic": "orbital",
+        "boss": false,
         "chapter": "p11",
         "kind": "lesson",
         "desc": "Коперник, законы Кеплера, эллиптические орбиты"
@@ -29880,6 +30338,8 @@ const LEVELS_CONFIG = [
         "tasksToWin": 15,
         "tasksTotal": 15,
         "energySpawnRate": 3600,
+        "mechanic": "orbital",
+        "boss": true,
         "chapter": "p12",
         "kind": "lesson",
         "desc": "параллактическое смещение, расстояния до небесных тел"
@@ -29896,6 +30356,8 @@ const LEVELS_CONFIG = [
         "tasksToWin": 15,
         "tasksTotal": 15,
         "energySpawnRate": 3600,
+        "mechanic": "gravity",
+        "boss": false,
         "chapter": "p13",
         "kind": "lesson",
         "desc": "инерция, инерциальные системы отсчёта"
@@ -29912,6 +30374,8 @@ const LEVELS_CONFIG = [
         "tasksToWin": 15,
         "tasksTotal": 15,
         "energySpawnRate": 3600,
+        "mechanic": "gravity",
+        "boss": false,
         "chapter": "p14",
         "kind": "lesson",
         "desc": "сила тяжести, упругости, трения"
@@ -29928,6 +30392,8 @@ const LEVELS_CONFIG = [
         "tasksToWin": 15,
         "tasksTotal": 15,
         "energySpawnRate": 3600,
+        "mechanic": "gravity",
+        "boss": false,
         "chapter": "p15",
         "kind": "lesson",
         "desc": "основной закон динамики, масса как мера инертности"
@@ -29944,6 +30410,8 @@ const LEVELS_CONFIG = [
         "tasksToWin": 15,
         "tasksTotal": 15,
         "energySpawnRate": 3600,
+        "mechanic": "gravity",
+        "boss": false,
         "chapter": "p16",
         "kind": "lesson",
         "desc": "действие и противодействие, вес и реакция опоры"
@@ -29960,6 +30428,8 @@ const LEVELS_CONFIG = [
         "tasksToWin": 15,
         "tasksTotal": 15,
         "energySpawnRate": 3600,
+        "mechanic": "gravity",
+        "boss": false,
         "chapter": "p17",
         "kind": "lesson",
         "desc": "гравитационная постоянная, закон обратных квадратов"
@@ -29976,6 +30446,8 @@ const LEVELS_CONFIG = [
         "tasksToWin": 15,
         "tasksTotal": 15,
         "energySpawnRate": 3600,
+        "mechanic": "gravity",
+        "boss": false,
         "chapter": "p18",
         "kind": "lesson",
         "desc": "перегрузки, невесомость, вес в движущемся лифте"
@@ -29992,6 +30464,8 @@ const LEVELS_CONFIG = [
         "tasksToWin": 15,
         "tasksTotal": 15,
         "energySpawnRate": 3600,
+        "mechanic": "gravity",
+        "boss": true,
         "chapter": "p19",
         "kind": "lesson",
         "desc": "баллистика, первая космическая скорость, спутники"
@@ -30008,6 +30482,8 @@ const LEVELS_CONFIG = [
         "tasksToWin": 15,
         "tasksTotal": 15,
         "energySpawnRate": 3600,
+        "mechanic": "energy",
+        "boss": false,
         "chapter": "p20",
         "kind": "lesson",
         "desc": "импульс тела и силы, замкнутая система"
@@ -30024,6 +30500,8 @@ const LEVELS_CONFIG = [
         "tasksToWin": 15,
         "tasksTotal": 15,
         "energySpawnRate": 3600,
+        "mechanic": "energy",
+        "boss": false,
         "chapter": "p21",
         "kind": "lesson",
         "desc": "ракеты, Циолковский, многоступенчатость"
@@ -30040,6 +30518,8 @@ const LEVELS_CONFIG = [
         "tasksToWin": 15,
         "tasksTotal": 15,
         "energySpawnRate": 3600,
+        "mechanic": "energy",
+        "boss": false,
         "chapter": "p22",
         "kind": "lesson",
         "desc": "работа, кинетическая и потенциальная энергия, мощность"
@@ -30056,6 +30536,8 @@ const LEVELS_CONFIG = [
         "tasksToWin": 15,
         "tasksTotal": 15,
         "energySpawnRate": 3600,
+        "mechanic": "energy",
+        "boss": true,
         "chapter": "p23",
         "kind": "lesson",
         "desc": "полная механическая энергия, превращения энергии"
@@ -30072,6 +30554,8 @@ const LEVELS_CONFIG = [
         "tasksToWin": 15,
         "tasksTotal": 15,
         "energySpawnRate": 3600,
+        "mechanic": "resonance",
+        "boss": false,
         "chapter": "p24",
         "kind": "lesson",
         "desc": "амплитуда, период, частота, колебательные системы"
@@ -30088,6 +30572,8 @@ const LEVELS_CONFIG = [
         "tasksToWin": 15,
         "tasksTotal": 15,
         "energySpawnRate": 3600,
+        "mechanic": "resonance",
+        "boss": false,
         "chapter": "p25",
         "kind": "lesson",
         "desc": "уравнение гармонических колебаний, энергия колебаний"
@@ -30104,6 +30590,8 @@ const LEVELS_CONFIG = [
         "tasksToWin": 15,
         "tasksTotal": 15,
         "energySpawnRate": 3600,
+        "mechanic": "resonance",
+        "boss": false,
         "chapter": "p26",
         "kind": "lesson",
         "desc": "формулы периодов маятников"
@@ -30120,6 +30608,8 @@ const LEVELS_CONFIG = [
         "tasksToWin": 15,
         "tasksTotal": 15,
         "energySpawnRate": 3600,
+        "mechanic": "resonance",
+        "boss": false,
         "chapter": "p27",
         "kind": "lesson",
         "desc": "затухание, резонанс: польза и вред"
@@ -30136,6 +30626,8 @@ const LEVELS_CONFIG = [
         "tasksToWin": 15,
         "tasksTotal": 15,
         "energySpawnRate": 3600,
+        "mechanic": "resonance",
+        "boss": false,
         "chapter": "p28",
         "kind": "lesson",
         "desc": "колебательный контур, формула Томсона, переменный ток"
@@ -30152,6 +30644,8 @@ const LEVELS_CONFIG = [
         "tasksToWin": 15,
         "tasksTotal": 15,
         "energySpawnRate": 3600,
+        "mechanic": "resonance",
+        "boss": false,
         "chapter": "p29",
         "kind": "lesson",
         "desc": "продольные и поперечные волны, длина волны"
@@ -30168,6 +30662,8 @@ const LEVELS_CONFIG = [
         "tasksToWin": 15,
         "tasksTotal": 15,
         "energySpawnRate": 3600,
+        "mechanic": "resonance",
+        "boss": false,
         "chapter": "p30",
         "kind": "lesson",
         "desc": "скорость звука, высота и громкость, ультразвук, эхо"
@@ -30184,6 +30680,8 @@ const LEVELS_CONFIG = [
         "tasksToWin": 15,
         "tasksTotal": 15,
         "energySpawnRate": 3600,
+        "mechanic": "resonance",
+        "boss": true,
         "chapter": "p31",
         "kind": "lesson",
         "desc": "Максвелл, Герц, шкала электромагнитных волн, дисперсия"
@@ -30200,6 +30698,8 @@ const LEVELS_CONFIG = [
         "tasksToWin": 15,
         "tasksTotal": 15,
         "energySpawnRate": 3600,
+        "mechanic": "radiation",
+        "boss": false,
         "chapter": "p32",
         "kind": "lesson",
         "desc": "излучение и поглощение, абсолютно чёрное тело"
@@ -30216,6 +30716,8 @@ const LEVELS_CONFIG = [
         "tasksToWin": 15,
         "tasksTotal": 15,
         "energySpawnRate": 3600,
+        "mechanic": "radiation",
+        "boss": false,
         "chapter": "p33",
         "kind": "lesson",
         "desc": "кванты, фотоны, уравнение Эйнштейна для фотоэффекта"
@@ -30232,6 +30734,8 @@ const LEVELS_CONFIG = [
         "tasksToWin": 15,
         "tasksTotal": 15,
         "energySpawnRate": 3600,
+        "mechanic": "radiation",
+        "boss": false,
         "chapter": "p34",
         "kind": "lesson",
         "desc": "рентгеновская трубка, проникающая способность"
@@ -30248,6 +30752,8 @@ const LEVELS_CONFIG = [
         "tasksToWin": 15,
         "tasksTotal": 15,
         "energySpawnRate": 3600,
+        "mechanic": "radiation",
+        "boss": false,
         "chapter": "p35",
         "kind": "lesson",
         "desc": "Беккерель, Кюри, альфа-, бета-, гамма-лучи"
@@ -30264,6 +30770,8 @@ const LEVELS_CONFIG = [
         "tasksToWin": 15,
         "tasksTotal": 15,
         "energySpawnRate": 3600,
+        "mechanic": "radiation",
+        "boss": true,
         "chapter": "p36",
         "kind": "lesson",
         "desc": "планетарная модель атома, спектры, спектральный анализ"
@@ -30280,6 +30788,8 @@ const LEVELS_CONFIG = [
         "tasksToWin": 15,
         "tasksTotal": 15,
         "energySpawnRate": 3600,
+        "mechanic": "fusion",
+        "boss": false,
         "chapter": "p37",
         "kind": "lesson",
         "desc": "протоны и нейтроны, изотопы, дефект масс"
@@ -30296,6 +30806,8 @@ const LEVELS_CONFIG = [
         "tasksToWin": 15,
         "tasksTotal": 15,
         "energySpawnRate": 3600,
+        "mechanic": "fusion",
+        "boss": false,
         "chapter": "p38",
         "kind": "lesson",
         "desc": "законы сохранения в реакциях, период полураспада"
@@ -30312,6 +30824,8 @@ const LEVELS_CONFIG = [
         "tasksToWin": 15,
         "tasksTotal": 15,
         "energySpawnRate": 3600,
+        "mechanic": "fusion",
+        "boss": false,
         "chapter": "p39",
         "kind": "lesson",
         "desc": "цепная реакция, коэффициент размножения, АЭС"
@@ -30328,6 +30842,8 @@ const LEVELS_CONFIG = [
         "tasksToWin": 15,
         "tasksTotal": 15,
         "energySpawnRate": 3600,
+        "mechanic": "fusion",
+        "boss": false,
         "chapter": "p40",
         "kind": "lesson",
         "desc": "термоядерный синтез, плазма, радиоизотопы"
@@ -30344,6 +30860,8 @@ const LEVELS_CONFIG = [
         "tasksToWin": 15,
         "tasksTotal": 15,
         "energySpawnRate": 3600,
+        "mechanic": "fusion",
+        "boss": true,
         "chapter": "p41",
         "kind": "lesson",
         "desc": "частицы и античастицы, аннигиляция, Большой взрыв"
@@ -30360,6 +30878,8 @@ const LEVELS_CONFIG = [
         "tasksToWin": 15,
         "tasksTotal": 15,
         "energySpawnRate": 3600,
+        "mechanic": "classic",
+        "boss": false,
         "chapter": "p42",
         "kind": "lesson",
         "desc": "физическая картина мира, место Земли во Вселенной"
@@ -30376,6 +30896,8 @@ const LEVELS_CONFIG = [
         "tasksToWin": 15,
         "tasksTotal": 15,
         "energySpawnRate": 3600,
+        "mechanic": "classic",
+        "boss": true,
         "chapter": "p43",
         "kind": "lesson",
         "desc": "парниковый эффект, радиация, энергосбережение"
@@ -30392,6 +30914,8 @@ const LEVELS_CONFIG = [
         "tasksToWin": 15,
         "tasksTotal": 15,
         "energySpawnRate": 3400,
+        "mechanic": "lab",
+        "boss": false,
         "chapter": "lab",
         "kind": "lab1",
         "desc": "шарик скатывается по наклонному желобу: путь, время, a = 2s/t²"
@@ -30408,6 +30932,8 @@ const LEVELS_CONFIG = [
         "tasksToWin": 15,
         "tasksTotal": 15,
         "energySpawnRate": 3400,
+        "mechanic": "lab",
+        "boss": false,
         "chapter": "lab",
         "kind": "lab2",
         "desc": "начальная скорость шарика по дальности полёта со стола"
@@ -30424,6 +30950,8 @@ const LEVELS_CONFIG = [
         "tasksToWin": 15,
         "tasksTotal": 15,
         "energySpawnRate": 3400,
+        "mechanic": "lab",
+        "boss": false,
         "chapter": "lab",
         "kind": "lab3",
         "desc": "измерение g через период математического маятника"
@@ -30440,6 +30968,8 @@ const LEVELS_CONFIG = [
         "tasksToWin": 15,
         "tasksTotal": 15,
         "energySpawnRate": 3400,
+        "mechanic": "lab",
+        "boss": true,
         "chapter": "lab",
         "kind": "lab4",
         "desc": "скорость волн на поверхности воды в кювете"
@@ -31476,6 +32006,109 @@ const LOCALES = {
         importAssignmentResult: "Добавить результат",
         resultImportedOk: "Результат добавлен в журнал!",
         resultImportError: "Не удалось прочитать код. Проверьте, что код полный.",
+        kvantVoiceTitle: "🔊 Голос КВАНТа",
+        kvantVoiceNote: "ИИ-наставник озвучит историю, теорию и задания. Работает офлайн (Web Speech API).",
+        kvantTest: "Проверка голоса",
+        kvantStop: "Стоп",
+        kvantAuto: "Автоозвучка:",
+        kvantAutoOff: "Выкл",
+        kvantAutoTheory: "Теория перед уровнем",
+        kvantAutoAll: "Теория + сюжет",
+        autoVoice: "авто",
+        kvantPlayStory: "Озвучить сюжет",
+        kvantListenTheory: "Прослушать теорию",
+        kvantVoiceTask: "Озвучить вопрос",
+        installApp: "Установить приложение",
+        installNote: "Работает без интернета после установки",
+        install: "Установить",
+        pushTitle: "Уведомления учителя",
+        pushNote: "Получай уведомление, когда ученик присылает результат",
+        enableNotify: "Включить",
+        disableNotify: "Выключить",
+        testNotify: "Тест",
+        pushGranted: "включены",
+        pushDenied: "запрещены — включи в настройках браузера",
+        pushDefault: "не включены",
+        pushUnsupported: "не поддерживаются этим браузером",
+        pushThanks: "Спасибо! Уведомления включены",
+        pushBannerText: "Включите уведомления учителя — узнавай о новых результатах сразу",
+        newResultTitle: "Новый результат",
+        newResultBody: "Уровень {0}: {1} очков, {2}",
+        pushTestBody: "Это тестовое уведомление. Всё работает!",
+        pushTestSent: "Тестовое уведомление отправлено",
+        stop: "Стоп",
+
+        teacherJournalTab: "Журнал",
+        journalHelp: "Журнал собирает все результаты учеников на этом устройстве. Используйте фильтры, экспорт и быстрый импорт кодов. Коды можно вставлять по одному или списком.",
+        filterSearch: "Поиск",
+        filterSearchPlaceholder: "Имя или уровень",
+        filterClass: "Класс",
+        allClasses: "Все классы",
+        filterLevel: "Уровень",
+        allLevels: "Все уровни",
+        filterStatus: "Статус",
+        allStatuses: "Все",
+        resetFilters: "Сбросить",
+        copyTable: "Копировать",
+        printJournal: "Печать",
+        importJournalFile: "Импорт JSON",
+        deleteSelected: "Удалить выбранные",
+        clearJournal: "Очистить журнал",
+        bulkImportTitle: "Массовый импорт кодов",
+        bulkImportNote: "Вставьте несколько кодов — каждый с новой строки. Поддерживаются файлы .txt с кодами.",
+        bulkCodesPlaceholder: "PQ9R-...\\nPQ9R-...",
+        importCodes: "Импортировать коды",
+        loadTxt: "Загрузить .txt",
+        shareLinkTitle: "Поделиться ссылкой на результат",
+        shareLinkNote: "Ссылка автоматически импортирует результат при открытии на устройстве учителя.",
+        copyLink: "Копировать ссылку",
+        qrNote: "QR-код последнего результата",
+        quickAssignTitle: "⚡ Быстрое назначение",
+        quickAssignNote: "Выберите учеников и уровни — одним кликом назначите всем сразу. Удобно для домашней работы.",
+        quickAssignStudents: "Ученики",
+        quickAssignLevels: "Уровни",
+        selectAll: "Выбрать всё",
+        clearSelection: "Очистить",
+        quickAssignBtn: "Назначить выбранным",
+        assignNextLevel: "Назначить следующий уровень",
+        assignAllRemaining: "Назначить все непройденные",
+        profileProgressTitle: "🚀 Прогресс пилота",
+        openShop: "Магазин",
+        openSkills: "Улучшения",
+        shopTitle: "🛒 Магазин пилота",
+        shopNote: "Трать кристаллы на новые дизайны и улучшения. Кристаллы зарабатываются за прохождение уровней.",
+        skillsTitle: "⚡ Улучшения корабля",
+        skillsNote: "Улучшения действуют во всех уровнях и сохраняются навсегда.",
+        xpNeeded: "Нужно",
+        levelUp: "Новый уровень!",
+        coinsEarned: "Кристаллов получено",
+        achievementUnlocked: "Достижение разблокировано",
+        statusCol: "Статус",
+        mechanicClassic: "Классика",
+        mechanicGravity: "Гравитация",
+        mechanicResonance: "Резонанс",
+        mechanicOrbital: "Орбита",
+        mechanicEnergy: "Энергия",
+        mechanicRadiation: "Радиация",
+        mechanicFusion: "Синтез",
+        mechanicLab: "Лаборатория",
+        mechanicBoss: "Босс",
+        pulseReady: "Импульс готов — нажми ПРОБЕЛ или кнопку",
+        pulseCooldown: "Перезарядка",
+        bossTitle: "БОСС УРОВНЯ",
+        skillSpeed: "Скорость корабля",
+        skillSpeedDesc: "+10% к скорости за уровень (макс 5)",
+        skillShield: "Ёмкость щита",
+        skillShieldDesc: "+15 к максимальному щиту за уровень (макс 5)",
+        skillHeal: "Восстановление города",
+        skillHealDesc: "+2 HP города за правильный ответ за уровень (макс 5)",
+        skillHints: "Запас подсказок",
+        skillHintsDesc: "+1 подсказка за уровень (макс 3)",
+        notEnoughCoins: "Недостаточно кристаллов",
+        alreadyOwned: "Уже куплено",
+        skillMaxed: "Максимум",
+        profileLevel: "Уровень",
+
         storyProgressLabel: "Прогресс миссии",
 
         // Мета
@@ -31981,6 +32614,108 @@ const LOCALES = {
         importAssignmentResult: "Add result",
         resultImportedOk: "Result added to the journal!",
         resultImportError: "Could not read the code. Make sure it is complete.",
+        kvantVoiceTitle: "🔊 QUANT Voice",
+        kvantVoiceNote: "AI mentor will narrate story, theory and tasks. Works offline (Web Speech API).",
+        kvantTest: "Test voice",
+        kvantStop: "Stop",
+        kvantAuto: "Auto narration:",
+        kvantAutoOff: "Off",
+        kvantAutoTheory: "Theory before level",
+        kvantAutoAll: "Theory + story",
+        autoVoice: "auto",
+        kvantPlayStory: "Narrate story",
+        kvantListenTheory: "Listen to theory",
+        kvantVoiceTask: "Read question",
+        installApp: "Install app",
+        installNote: "Works offline after install",
+        install: "Install",
+        pushTitle: "Teacher notifications",
+        pushNote: "Get notified when student sends result",
+        enableNotify: "Enable",
+        disableNotify: "Disable",
+        testNotify: "Test",
+        pushGranted: "enabled",
+        pushDenied: "denied — enable in browser settings",
+        pushDefault: "not enabled",
+        pushUnsupported: "not supported by this browser",
+        pushThanks: "Thanks! Notifications enabled",
+        pushBannerText: "Enable teacher notifications — get new results instantly",
+        newResultTitle: "New result",
+        newResultBody: "Level {0}: {1} points, {2}",
+        pushTestBody: "This is a test notification. Works!",
+        pushTestSent: "Test notification sent",
+        stop: "Stop",
+
+        teacherJournalTab: "Journal",
+        journalHelp: "Journal collects all student results on this device. Use filters, export and bulk import of codes. Codes can be pasted one by one or as a list.",
+        filterSearch: "Search",
+        filterSearchPlaceholder: "Name or level",
+        filterClass: "Class",
+        allClasses: "All classes",
+        filterLevel: "Level",
+        allLevels: "All levels",
+        filterStatus: "Status",
+        allStatuses: "All",
+        resetFilters: "Reset",
+        copyTable: "Copy",
+        printJournal: "Print",
+        importJournalFile: "Import JSON",
+        deleteSelected: "Delete selected",
+        clearJournal: "Clear journal",
+        bulkImportTitle: "Bulk code import",
+        bulkImportNote: "Paste multiple codes — one per line. .txt files with codes are supported.",
+        bulkCodesPlaceholder: "PQ9R-...\\nPQ9R-...",
+        importCodes: "Import codes",
+        loadTxt: "Load .txt",
+        shareLinkTitle: "Share result link",
+        shareLinkNote: "The link auto-imports the result when opened on teacher device.",
+        copyLink: "Copy link",
+        qrNote: "QR code of last result",
+        quickAssignTitle: "⚡ Quick assignment",
+        quickAssignNote: "Select students and levels — assign to all in one click. Handy for homework.",
+        quickAssignStudents: "Students",
+        quickAssignLevels: "Levels",
+        selectAll: "Select all",
+        clearSelection: "Clear",
+        quickAssignBtn: "Assign to selected",
+        assignNextLevel: "Assign next level",
+        assignAllRemaining: "Assign all remaining",
+        profileProgressTitle: "🚀 Pilot progress",
+        openShop: "Shop",
+        openSkills: "Upgrades",
+        shopTitle: "🛒 Pilot shop",
+        shopNote: "Spend crystals on new designs and upgrades. Earn crystals by completing levels.",
+        skillsTitle: "⚡ Ship upgrades",
+        skillsNote: "Upgrades work in all levels and are saved forever.",
+        xpNeeded: "Need",
+        levelUp: "Level up!",
+        coinsEarned: "Crystals earned",
+        achievementUnlocked: "Achievement unlocked",
+        statusCol: "Status",
+        mechanicClassic: "Classic",
+        mechanicGravity: "Gravity",
+        mechanicResonance: "Resonance",
+        mechanicOrbital: "Orbital",
+        mechanicEnergy: "Energy",
+        mechanicRadiation: "Radiation",
+        mechanicFusion: "Fusion",
+        mechanicLab: "Lab",
+        mechanicBoss: "Boss",
+        pulseReady: "Pulse ready — press SPACE or button",
+        pulseCooldown: "Recharging",
+        bossTitle: "BOSS LEVEL",
+        skillSpeed: "Ship speed",
+        skillSpeedDesc: "+10% speed per level (max 5)",
+        skillShield: "Shield capacity",
+        skillShieldDesc: "+15 max shield per level (max 5)",
+        skillHeal: "City healing",
+        skillHealDesc: "+2 city HP per correct answer per level (max 5)",
+        skillHints: "Hint reserve",
+        skillHintsDesc: "+1 hint per level (max 3)",
+        notEnoughCoins: "Not enough crystals",
+        alreadyOwned: "Already owned",
+        skillMaxed: "Maximum",
+        profileLevel: "Level",
         storyProgressLabel: "Mission progress",
 
         loadingTitle: "Loading energy...",
@@ -32471,6 +33206,108 @@ const LOCALES = {
         importAssignmentResult: "Нәтижені қосу",
         resultImportedOk: "Нәтиже журналға қосылды!",
         resultImportError: "Кодты оқу мүмкін болмады. Кодтың толық екенін тексеріңіз.",
+        kvantVoiceTitle: "🔊 КВАНТ дауысы",
+        kvantVoiceNote: "ЖИ тәлімгер сюжетті, теорияны және тапсырмаларды дыбыстайды. Офлайн жұмыс істейді.",
+        kvantTest: "Дауысты тексеру",
+        kvantStop: "Тоқтату",
+        kvantAuto: "Авто дыбыстау:",
+        kvantAutoOff: "Өшіру",
+        kvantAutoTheory: "Деңгей алдындағы теория",
+        kvantAutoAll: "Теория + сюжет",
+        autoVoice: "авто",
+        kvantPlayStory: "Сюжетті дыбыстау",
+        kvantListenTheory: "Теорияны тыңдау",
+        kvantVoiceTask: "Сұрақты оқу",
+        installApp: "Қолданбаны орнату",
+        installNote: "Орнатқаннан кейін офлайн жұмыс істейді",
+        install: "Орнату",
+        pushTitle: "Мұғалім хабарландырулары",
+        pushNote: "Оқушы нәтиже жібергенде хабар ал",
+        enableNotify: "Қосу",
+        disableNotify: "Өшіру",
+        testNotify: "Тест",
+        pushGranted: "қосылған",
+        pushDenied: "тыйым салынған — браузер баптауларынан қосыңыз",
+        pushDefault: "қосылмаған",
+        pushUnsupported: "бұл браузерде қолдау жоқ",
+        pushThanks: "Рахмет! Хабарландырулар қосылды",
+        pushBannerText: "Мұғалім хабарландыруларын қосыңыз — жаңа нәтижелерді бірден біліңіз",
+        newResultTitle: "Жаңа нәтиже",
+        newResultBody: "Деңгей {0}: {1} ұпай, {2}",
+        pushTestBody: "Бұл сынақ хабарландыру. Барлығы жұмыс істейді!",
+        pushTestSent: "Сынақ хабарландыру жіберілді",
+        stop: "Тоқтату",
+
+        teacherJournalTab: "Журнал",
+        journalHelp: "Журнал осы құрылғыдағы барлық оқушы нәтижелерін жинайды. Сүзгілерді, экспортты және кодтарды жаппай импорттауды пайдаланыңыз.",
+        filterSearch: "Іздеу",
+        filterSearchPlaceholder: "Аты немесе деңгей",
+        filterClass: "Сынып",
+        allClasses: "Барлық сыныптар",
+        filterLevel: "Деңгей",
+        allLevels: "Барлық деңгейлер",
+        filterStatus: "Мәртебе",
+        allStatuses: "Барлығы",
+        resetFilters: "Қалпына келтіру",
+        copyTable: "Көшіру",
+        printJournal: "Басып шығару",
+        importJournalFile: "JSON импорт",
+        deleteSelected: "Таңдалғанды жою",
+        clearJournal: "Журналды тазалау",
+        bulkImportTitle: "Кодтарды жаппай импорттау",
+        bulkImportNote: "Бірнеше кодты қойыңыз — әрқайсысы жаңа жолдан. .txt файлдары қолдау көрсетеді.",
+        bulkCodesPlaceholder: "PQ9R-...\\nPQ9R-...",
+        importCodes: "Кодтарды импорттау",
+        loadTxt: "Жүктеу .txt",
+        shareLinkTitle: "Нәтиже сілтемесімен бөлісу",
+        shareLinkNote: "Сілтеме мұғалім құрылғысында ашылғанда нәтижені автоматты түрде импорттайды.",
+        copyLink: "Сілтемені көшіру",
+        qrNote: "Соңғы нәтиженің QR-коды",
+        quickAssignTitle: "⚡ Жылдам тағайындау",
+        quickAssignNote: "Оқушылар мен деңгейлерді таңдаңыз — бір рет басу арқылы бәріне тағайындаңыз.",
+        quickAssignStudents: "Оқушылар",
+        quickAssignLevels: "Деңгейлер",
+        selectAll: "Барлығын таңдау",
+        clearSelection: "Тазалау",
+        quickAssignBtn: "Таңдалғандарға тағайындау",
+        assignNextLevel: "Келесі деңгейді тағайындау",
+        assignAllRemaining: "Барлық өтпегенді тағайындау",
+        profileProgressTitle: "🚀 Ұшқыш прогресі",
+        openShop: "Дүкен",
+        openSkills: "Жақсартулар",
+        shopTitle: "🛒 Ұшқыш дүкені",
+        shopNote: "Кристаллдарды жаңа дизайндар мен жақсартуларға жұмса. Деңгейлерді өту арқылы кристалл жина.",
+        skillsTitle: "⚡ Кеме жақсартулары",
+        skillsNote: "Жақсартулар барлық деңгейлерде жұмыс істейді және мәңгі сақталады.",
+        xpNeeded: "Керек",
+        levelUp: "Жаңа деңгей!",
+        coinsEarned: "Кристалл алынды",
+        achievementUnlocked: "Жетістік ашылды",
+        statusCol: "Мәртебе",
+        mechanicClassic: "Классика",
+        mechanicGravity: "Гравитация",
+        mechanicResonance: "Резонанс",
+        mechanicOrbital: "Орбита",
+        mechanicEnergy: "Энергия",
+        mechanicRadiation: "Радиация",
+        mechanicFusion: "Синтез",
+        mechanicLab: "Зертхана",
+        mechanicBoss: "Босс",
+        pulseReady: "Импульс дайын — ПРОБЕЛ немесе батырманы бас",
+        pulseCooldown: "Қайта зарядталу",
+        bossTitle: "БОСС ДЕҢГЕЙІ",
+        skillSpeed: "Кеме жылдамдығы",
+        skillSpeedDesc: "+10% жылдамдық деңгей сайын (макс 5)",
+        skillShield: "Қалқан сыйымдылығы",
+        skillShieldDesc: "+15 макс қалқан деңгей сайын (макс 5)",
+        skillHeal: "Қаланы қалпына келтіру",
+        skillHealDesc: "+2 қала HP дұрыс жауап үшін деңгей сайын (макс 5)",
+        skillHints: "Көмек қоры",
+        skillHintsDesc: "+1 көмек деңгей сайын (макс 3)",
+        notEnoughCoins: "Кристалл жеткіліксіз",
+        alreadyOwned: "Сатып алынған",
+        skillMaxed: "Максимум",
+        profileLevel: "Деңгей",
         storyProgressLabel: "Миссия барысы",
 
         loadingTitle: "Энергия жүктелуде...",
@@ -32963,6 +33800,404 @@ Object.entries(LEVEL_NAMES_RU).forEach(([id, name]) => {
    STORAGE — Работа с localStorage
    Сохранение прогресса, рекордов, заданий учителя, статистики
    ============================================ */
+
+const KvantVoice = {
+    enabled: true,
+    autoMode: "off", // off | theory | all
+    voiceName: "",
+    rate: 1.0,
+    pitch: 1.0,
+    _voices: [],
+    _speaking: false,
+    _queue: [],
+    init() {
+        const s = Storage.load(Storage.KEYS.SETTINGS, null);
+        // load from settings if exists
+        const st = Storage.getSettings();
+        // migrate
+        if (st.kvantRate !== undefined) this.rate = Number(st.kvantRate) || 1.0;
+        if (st.kvantPitch !== undefined) this.pitch = Number(st.kvantPitch) || 1.0;
+        if (st.kvantVoiceName) this.voiceName = st.kvantVoiceName;
+        if (st.kvantAuto) this.autoMode = st.kvantAuto;
+        // UI
+        const rateEl = document.getElementById('kvant-rate');
+        const pitchEl = document.getElementById('kvant-pitch');
+        const rateVal = document.getElementById('kvant-rate-val');
+        const voiceSel = document.getElementById('kvant-voice-select');
+        const autoSel = document.getElementById('kvant-auto');
+        if (rateEl) { rateEl.value = this.rate; rateEl.addEventListener('input', () => { this.rate = parseFloat(rateEl.value); rateVal.textContent = this.rate.toFixed(1); this.save(); }); }
+        if (pitchEl) pitchEl.addEventListener('input', () => { this.pitch = parseFloat(pitchEl.value); this.save(); });
+        if (autoSel) { autoSel.value = this.autoMode; autoSel.addEventListener('change', () => { this.autoMode = autoSel.value; this.save(); }); }
+        if (rateVal) rateVal.textContent = this.rate.toFixed(1);
+        // speech synthesis voices
+        const populate = () => {
+            const voices = speechSynthesis.getVoices() || [];
+            this._voices = voices;
+            if (!voiceSel) return;
+            const curLang = I18n.currentLang || 'ru';
+            // Filter voices by language prefix
+            voiceSel.innerHTML = '<option value="">— ' + I18n.t('autoVoice') + ' —</option>';
+            voices.forEach(v => {
+                const o = document.createElement('option');
+                o.value = v.name;
+                o.textContent = v.name + ' (' + v.lang + ')' + (v.default ? ' ★' : '');
+                o.selected = v.name === this.voiceName;
+                voiceSel.appendChild(o);
+            });
+            // try to auto-select best voice for current lang
+            if (!this.voiceName) {
+                const pref = voices.find(v => v.lang && v.lang.toLowerCase().startsWith(curLang)) || voices.find(v => v.lang.startsWith('ru')) || voices[0];
+                if (pref) voiceSel.value = pref.name;
+            }
+            this.updateStatus();
+        };
+        if ('speechSynthesis' in window) {
+            populate();
+            speechSynthesis.onvoiceschanged = populate;
+            setTimeout(populate, 500);
+            setTimeout(populate, 1500);
+        } else {
+            document.getElementById('kvant-status').textContent = 'TTS не поддерживается';
+        }
+        if (voiceSel) voiceSel.addEventListener('change', () => { this.voiceName = voiceSel.value; this.save(); this.updateStatus(); });
+        document.getElementById('kvant-test-btn')?.addEventListener('click', () => {
+            const txt = { ru: "Привет, курсант! Я — КВАНТ, наставник орбиты девять. Готов к миссии?", en: "Hello, cadet! I am QUANT, mentor of Orbit Nine. Ready for the mission?", kk: "Сәлем, курсант! Мен — КВАНТ, орбита тоғыздың тәлімгері. Миссияға дайынсың ба?" }[I18n.currentLang] || "Привет, курсант!";
+            this.speak(txt);
+        });
+        document.getElementById('kvant-stop-btn')?.addEventListener('click', () => this.stop());
+        document.getElementById('btn-story-voice')?.addEventListener('click', () => this.speakStory());
+        document.getElementById('btn-story-stop')?.addEventListener('click', () => this.stop());
+        document.getElementById('btn-theory-voice')?.addEventListener('click', () => this.speakTheory());
+        document.getElementById('btn-theory-stop')?.addEventListener('click', () => this.stop());
+        // also speak task question if needed: add button in task modal
+        this.injectTaskVoiceBtn();
+        // handle language change -> update voice suggestion
+        window.addEventListener('langchange', () => { this.updateStatus(); });
+    },
+    save() {
+        const s = Storage.getSettings();
+        s.kvantRate = this.rate;
+        s.kvantPitch = this.pitch;
+        s.kvantVoiceName = this.voiceName;
+        s.kvantAuto = this.autoMode;
+        Storage.setSettings(s);
+    },
+    getVoice() {
+        if (!this._voices.length) return null;
+        if (this.voiceName) {
+            const v = this._voices.find(x => x.name === this.voiceName);
+            if (v) return v;
+        }
+        const lang = I18n.currentLang || 'ru';
+        // try exact lang, then ru, then en
+        let v = this._voices.find(x => x.lang && x.lang.toLowerCase().startsWith(lang));
+        if (!v && lang === 'kk') v = this._voices.find(x => x.lang && x.lang.toLowerCase().startsWith('ru'));
+        if (!v) v = this._voices.find(x => x.lang.startsWith('ru')) || this._voices.find(x => x.lang.startsWith('en')) || this._voices[0];
+        return v;
+    },
+    updateStatus() {
+        const el = document.getElementById('kvant-status');
+        if (!el) return;
+        if (!('speechSynthesis' in window)) { el.textContent = 'TTS недоступен'; return; }
+        const v = this.getVoice();
+        el.textContent = v ? (v.name + ' · ' + v.lang) : 'голос по умолчанию';
+    },
+    speak(text, opts = {}) {
+        if (!('speechSynthesis' in window)) { showNotification('TTS не поддерживается в этом браузере', 'warning'); return; }
+        if (!text || !String(text).trim()) return;
+        this.stop();
+        // Clean HTML
+        const clean = String(text).replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 4000);
+        // Split into chunks for long texts (some browsers limit length)
+        const chunks = this.chunkText(clean);
+        this._speaking = true;
+        this._queue = chunks;
+        this.showWave(true);
+        let idx = 0;
+        const speakNext = () => {
+            if (idx >= chunks.length || !this._speaking) { this._speaking = false; this.showWave(false); return; }
+            const u = new SpeechSynthesisUtterance(chunks[idx]);
+            const voice = this.getVoice();
+            if (voice) u.voice = voice;
+            u.lang = (voice && voice.lang) || (I18n.currentLang === 'kk' ? 'ru-RU' : (I18n.currentLang === 'en' ? 'en-US' : 'ru-RU'));
+            u.rate = this.rate;
+            u.pitch = this.pitch;
+            u.volume = 1;
+            u.onend = () => { idx++; setTimeout(speakNext, 200); };
+            u.onerror = () => { idx++; speakNext(); };
+            speechSynthesis.speak(u);
+        };
+        speakNext();
+    },
+    chunkText(text) {
+        // split by sentences to avoid cutting
+        const sentences = text.match(/[^.!?\n]+[.!?\n]+|[^.!?\n]+/g) || [text];
+        const chunks = [];
+        let cur = "";
+        for (const s of sentences) {
+            if ((cur + " " + s).length > 1200) { if(cur) chunks.push(cur); cur = s; } else cur = cur ? cur + " " + s : s;
+        }
+        if (cur) chunks.push(cur);
+        return chunks;
+    },
+    stop() {
+        this._speaking = false;
+        this._queue = [];
+        try { speechSynthesis.cancel(); } catch(e) {}
+        this.showWave(false);
+    },
+    showWave(on) {
+        const w = document.getElementById('kvant-wave');
+        if (w) w.style.display = on ? 'inline-flex' : 'none';
+    },
+    speakStory() {
+        // speak all STORY_LORE for current lang
+        const L = I18n.currentLang || 'ru';
+        const lore = STORY_LORE[L] || STORY_LORE.ru;
+        const text = lore.map(ch => ch.title + ". " + ch.text).join("\n\n");
+        this.speak(text);
+    },
+    speakTheory() {
+        const content = document.getElementById('theory-content');
+        if (!content) return;
+        const title = document.getElementById('theory-title')?.textContent || '';
+        const txt = (title ? title + ". " : "") + content.innerText;
+        this.speak(txt);
+    },
+    injectTaskVoiceBtn() {
+        const footer = document.querySelector('#task-modal .task-footer');
+        if (!footer || document.getElementById('btn-task-voice')) return;
+        const btn = document.createElement('button');
+        btn.id = 'btn-task-voice';
+        btn.type = 'button';
+        btn.className = 'btn btn-secondary';
+        btn.innerHTML = '🔊 <span data-i18n="kvantVoiceTask">Озвучить вопрос</span>';
+        btn.addEventListener('click', () => {
+            const t = Game && Game.currentTask ? I18n.getLocalized(Game.currentTask, 'question') : '';
+            if (t) this.speak(t);
+            else {
+                const body = document.getElementById('task-body');
+                if (body) this.speak(body.innerText);
+            }
+        });
+        footer.insertBefore(btn, footer.firstChild);
+    },
+    maybeAutoSpeakTheory() {
+        if (this.autoMode === 'theory' || this.autoMode === 'all') {
+            setTimeout(() => this.speakTheory(), 700);
+        }
+    },
+    maybeAutoSpeakStory() {
+        if (this.autoMode === 'all') this.speakStory();
+    }
+};
+
+/* ===== PUSH-УВЕДОМЛЕНИЯ УЧИТЕЛЯ ===== */
+
+const TeacherPush = {
+    enabled: false,
+    init() {
+        // load setting
+        const s = Storage.getSettings();
+        this.enabled = !!s.pushEnabled;
+        // UI in teacher journal: add toggle if not exists
+        const bar = document.getElementById('journal-overview');
+        // create push panel after overview
+        if (bar && !document.getElementById('push-panel')) {
+            const panel = document.createElement('div');
+            panel.id = 'push-panel';
+            panel.className = 'teacher-help';
+            panel.style.display = 'flex';
+            panel.style.flexWrap = 'wrap';
+            panel.style.gap = '8px';
+            panel.style.alignItems = 'center';
+            panel.style.marginTop = '8px';
+            panel.innerHTML = `
+                <span>🔔 <b data-i18n="pushTitle">Уведомления учителя</b> — <span data-i18n="pushNote">Получай уведомление, когда ученик присылает результат</span></span>
+                <button class="kvant-btn primary" id="btn-enable-push" type="button">🔔 <span data-i18n="enableNotify">Включить</span></button>
+                <button class="kvant-btn" id="btn-test-push" type="button" data-i18n="testNotify">Тест</button>
+                <span id="push-status" style="font-size:12px; color:var(--text-dim)"></span>
+            `;
+            bar.parentNode.insertBefore(panel, bar.nextSibling);
+            document.getElementById('btn-enable-push')?.addEventListener('click', () => this.requestPermission());
+            document.getElementById('btn-test-push')?.addEventListener('click', () => this.sendTest());
+            this.updateStatus();
+        }
+        // banner logic
+        this.checkBanner();
+        // listen for new results (import)
+        const origImport = Storage.importAssignmentResultCode;
+        if (origImport && !origImport.__wrapped) {
+            const self = this;
+            Storage.importAssignmentResultCode = function(value) {
+                const res = origImport.call(Storage, value);
+                if (res) {
+                    // get last imported record
+                    const hist = Storage.getHistory();
+                    const last = hist[hist.length-1];
+                    if (last) self.notifyNewResult(last);
+                }
+                return res;
+            };
+            Storage.importAssignmentResultCode.__wrapped = true;
+        }
+        // also handle bulk import via Journal
+        // request via notification banner
+    },
+    updateStatus() {
+        const el = document.getElementById('push-status');
+        const btn = document.getElementById('btn-enable-push');
+        if (!el) return;
+        const perm = (typeof Notification !== 'undefined') ? Notification.permission : 'unsupported';
+        if (perm === 'granted') {
+            el.textContent = '✅ ' + I18n.t('pushGranted');
+            if (btn) btn.textContent = '🔕 ' + I18n.t('disableNotify');
+            this.enabled = true;
+        } else if (perm === 'denied') {
+            el.textContent = '🚫 ' + I18n.t('pushDenied');
+            if (btn) btn.textContent = '🔔 ' + I18n.t('enableNotify');
+        } else if (perm === 'unsupported') {
+            el.textContent = I18n.t('pushUnsupported');
+        } else {
+            el.textContent = I18n.t('pushDefault');
+            if (btn) btn.textContent = '🔔 ' + I18n.t('enableNotify');
+        }
+    },
+    async requestPermission() {
+        if (typeof Notification === 'undefined') { showNotification(I18n.t('pushUnsupported'), 'warning'); return; }
+        if (Notification.permission === 'granted') {
+            // disable? just toggle off by resetting
+            // For demo, we just show test
+            this.sendTest();
+            return;
+        }
+        const perm = await Notification.requestPermission();
+        this.updateStatus();
+        if (perm === 'granted') {
+            showNotification(I18n.t('pushGranted'), 'success');
+            // register service worker notification
+            this.notify('Орбита-9', I18n.t('pushThanks'));
+            const s = Storage.getSettings(); s.pushEnabled = true; Storage.setSettings(s);
+            // hide banner
+            document.getElementById('notify-banner')?.classList.remove('show');
+        } else {
+            showNotification(I18n.t('pushDenied'), 'warning');
+        }
+        this.checkBanner();
+    },
+    checkBanner() {
+        // show banner if permission default and not dismissed recently
+        if (typeof Notification === 'undefined') return;
+        if (Notification.permission !== 'default') return;
+        const dismissed = Storage.load('orbita9_push_banner_dismissed', 0);
+        if (Date.now() - dismissed < 7*24*3600*1000) return; // week
+        const banner = document.getElementById('notify-banner');
+        if (!banner) return;
+        const txt = document.getElementById('notify-banner-text');
+        if (txt) txt.textContent = I18n.t('pushBannerText');
+        banner.classList.add('show');
+        document.getElementById('notify-banner-btn')?.addEventListener('click', () => { this.requestPermission(); banner.classList.remove('show'); });
+        document.getElementById('notify-banner-close')?.addEventListener('click', () => {
+            banner.classList.remove('show');
+            Storage.save('orbita9_push_banner_dismissed', Date.now());
+        });
+    },
+    notify(title, body, tag) {
+        if (typeof Notification === 'undefined') return;
+        if (Notification.permission !== 'granted') return;
+        const opts = { body, icon: 'icon-192.png', badge: 'icon-180.png', tag: tag || 'orbita9', vibrate: [200,100,200] };
+        // Prefer service worker
+        if (navigator.serviceWorker && navigator.serviceWorker.ready) {
+            navigator.serviceWorker.ready.then(reg => reg.showNotification(title, opts));
+        } else {
+            new Notification(title, opts);
+        }
+    },
+    notifyNewResult(record) {
+        const name = record.name || I18n.t('anonymous');
+        const lvl = record.levelLabel || record.level;
+        const score = record.score || 0;
+        const acc = record.accuracy || 0;
+        const title = '✅ ' + I18n.t('newResultTitle') + ': ' + name;
+        const body = I18n.t('newResultBody', lvl, score, acc + '%');
+        this.notify(title, body, 'result-'+record.id);
+        // also in-app notification
+        showNotification(title + ' — ' + body, 'success');
+    },
+    sendTest() {
+        this.notify('Орбита-9 — тест', I18n.t('pushTestBody'), 'test');
+        showNotification(I18n.t('pushTestSent'), 'success');
+    }
+};
+
+
+const PWA = {
+    deferredPrompt: null,
+    init() {
+        // register SW
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('service-worker.js').then(reg => {
+                console.log('SW registered', reg.scope);
+                // check update
+                reg.addEventListener('updatefound', () => console.log('SW update found'));
+            }).catch(err => console.warn('SW fail', err));
+            // listen for messages
+            navigator.serviceWorker.addEventListener('message', (e) => console.log('SW msg', e.data));
+        }
+        // install prompt
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            this.deferredPrompt = e;
+            this.showInstallBar();
+        });
+        window.addEventListener('appinstalled', () => {
+            console.log('PWA installed');
+            document.getElementById('pwa-install-bar')?.classList.remove('show');
+        });
+        document.getElementById('btn-pwa-install')?.addEventListener('click', () => this.install());
+        document.getElementById('btn-pwa-dismiss')?.addEventListener('click', () => {
+            document.getElementById('pwa-install-bar')?.classList.remove('show');
+            localStorage.setItem('orbita9_pwa_dismissed', Date.now());
+        });
+        // Auto show if not installed and not dismissed recently
+        setTimeout(() => {
+            if (!this.deferredPrompt) {
+                // check if standalone
+                const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+                if (!isStandalone && !localStorage.getItem('orbita9_pwa_dismissed')) {
+                    // still show hint for manual install (like iOS)
+                    if (this.isIOS() && !isStandalone) this.showInstallBar(true);
+                }
+            }
+        }, 4000);
+        // Listen for hash #teacher etc to open correct screen
+        if (location.hash === '#teacher') setTimeout(() => { document.getElementById('btn-teacher')?.click(); }, 600);
+        if (location.hash === '#continue') setTimeout(() => { document.getElementById('btn-continue')?.click(); }, 600);
+    },
+    isIOS() { return /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream; },
+    showInstallBar(isIOSHint = false) {
+        const bar = document.getElementById('pwa-install-bar');
+        if (!bar) return;
+        const dismissed = localStorage.getItem('orbita9_pwa_dismissed');
+        if (dismissed && Date.now() - parseInt(dismissed) < 3*24*3600*1000) return;
+        if (isIOSHint) {
+            bar.querySelector('[data-i18n="installNote"]').textContent = 'На iPhone: нажми Поделиться → На экран Домой';
+            document.getElementById('btn-pwa-install').style.display = 'none';
+        }
+        bar.classList.add('show');
+    },
+    async install() {
+        if (!this.deferredPrompt) { showNotification('Установка доступна через меню браузера', 'info'); return; }
+        this.deferredPrompt.prompt();
+        const choice = await this.deferredPrompt.userChoice;
+        console.log('install choice', choice);
+        this.deferredPrompt = null;
+        document.getElementById('pwa-install-bar')?.classList.remove('show');
+    }
+};
+
+/* ===== МОБИЛЬНЫЕ ФИКСЫ ===== */
+
 
 const Storage = {
     KEYS: {
@@ -33532,6 +34767,7 @@ const Teacher = {
         document.querySelectorAll(".tab-btn").forEach(b => b.classList.toggle("active", b.dataset.tab === tabName));
         document.querySelectorAll(".tab-content").forEach(c => c.classList.toggle("active", c.id === `tab-${tabName}`));
 
+        if (tabName === "journal") { if(typeof Journal!=="undefined") Journal.render(); }
         if (tabName === "lessons") this.renderLessonsList();
         if (tabName === "assignments") {
             this.populateAssignmentLevelSelect();
@@ -33539,6 +34775,7 @@ const Teacher = {
             this.populateClassSelect();
             this.renderClasses();
             this.renderAssignments();
+            if(typeof QuickAssign!=="undefined") QuickAssign.render();
         }
         if (tabName === "manage") this.renderTasksList();
         if (tabName === "stats") this.renderStats();
@@ -34760,6 +35997,42 @@ const Game = {
         // Дизайн ракеты и имя пилота из профиля (РПГ)
         this.rocketStyle = getRocketStyle(Storage.getSettings().rocketStyle);
         this.pilotName = Storage.getSettings().playerName || "";
+        // apply RPG skills
+        if(typeof RPG!=="undefined"){
+            const sp = Storage.getProgress().skills||{};
+            this._skillSpeed = 1 + (sp.speed||0)*0.10;
+            this._skillShield = (sp.shield||0)*15;
+            this._skillHeal = (sp.heal||0)*2;
+            this._skillHints = sp.hints||0;
+        } else { this._skillSpeed=1; this._skillShield=0; this._skillHeal=0; this._skillHints=0; }
+        // adjust shield capacity by skill
+        if(this.levelConfig && this._skillShield) this.levelConfig.shieldCapacity += this._skillShield;
+        if(typeof Mechanics!=="undefined") Mechanics.setup(this.levelConfig, this);
+        if(typeof KvantArchive!=="undefined") KvantArchive.render();
+        if(typeof LabGames!=="undefined") LabGames.reset();
+    // lab btn listeners (deferred)
+    setTimeout(()=>{
+    document.getElementById("btn-lab")?.addEventListener("click", ()=>{
+        const lvl = Game.currentLevel;
+        if(LabGames.configs[lvl]) LabGames.tryShow(lvl, Game);
+        else showNotification("На этом уровне нет лаб. эксперимента", "info");
+    });
+    document.getElementById("lab-check")?.addEventListener("click", ()=>{
+        const resEl=document.getElementById("lab-result");
+        if(resEl && resEl._ok){
+            showNotification("Отлично! Эксперимент засчитан ⭐", "success");
+            LabGames.hide(true);
+        } else {
+            showNotification("Пока не в цели — подстрой слайдеры!", "warning");
+            if(navigator.vibrate) navigator.vibrate(80);
+        }
+    });
+    document.getElementById("lab-close")?.addEventListener("click", ()=>LabGames.hide(false));
+    // also allow Mechanics to toggle btn
+}, 600);
+        if(typeof LabGames!=="undefined" && LabGames.configs[this.currentLevel]) setTimeout(()=>LabGames.tryShow(this.currentLevel, this), 800);
+        if(this._skillHints) this.taskHintsLeft = 3 + this._skillHints;
+
 
         // Игрок
         this.player = {
@@ -34817,6 +36090,31 @@ const Game = {
             }
         }, 5000);
 
+        // Босс-интро: кинематографичная пауза перед сложным уровнем
+        if(this.levelConfig && this.levelConfig.boss && typeof BossIntro!=="undefined"){
+            const lvl=this.currentLevel, cfg=this.levelConfig;
+            showScreen("game-screen");
+            requestAnimationFrame(()=>{ this.resize(); this.player.x=this.width/2; this.player.y=this.height-150; });
+            this.updateHUD();
+            this.canvas.focus();
+            // пауза игры до нажатия
+            const wasRunning=this.running;
+            this.running=false;
+            const resume=()=>{
+                this.running=wasRunning;
+                this.lastTime=performance.now();
+                this.paused=false;
+                this.pausedTotal=0;
+                // продолжаем как обычно - таймеры уже запущены выше, но мы их перезапустим
+                clearInterval(this.asteroidTimer); clearInterval(this.energyTimer);
+                const levelNum = typeof this.currentLevel === "number" ? this.currentLevel : 25;
+                const spawnInterval = Math.max(4200, Math.min(5600, 5600 - levelNum * 28));
+                this.asteroidTimer = setInterval(()=>this.spawnAsteroid(), spawnInterval);
+                this.energyTimer = setInterval(()=>{ if(this.energyOrbs.length<7) this.spawnEnergyOrb(); }, this.levelConfig.energySpawnRate);
+            };
+            BossIntro.show(lvl, cfg, resume);
+            return;
+        }
         showScreen("game-screen");
         // Дать браузеру отрисовать новый экран, потом resize
         requestAnimationFrame(() => {
@@ -34938,6 +36236,14 @@ const Game = {
         });
 
         if (victory) {
+            // RPG rewards
+            if(typeof RPG!=="undefined"){
+                const xpGain = Math.round(result.score/12 + (result.stars||1)*30 + result.accuracy);
+                const coinGain = Math.round((result.stars||1)*15 + result.tasksSolved*7 + (result.victory?20:0));
+                RPG.addXP(xpGain);
+                RPG.addCoins(coinGain);
+                result.xpGain = xpGain; result.coinGain = coinGain;
+            }
             // Звёзды: 1 — просто пройдено, 2 — accuracy >= 70%, 3 — accuracy >= 90%
             let stars = 1;
             if (accuracy >= 70) stars = 2;
@@ -34960,6 +36266,22 @@ const Game = {
 
     showVictory(result) {
         const stars = "⭐".repeat(result.stars || 1) + "☆".repeat(3 - (result.stars || 1));
+        // 3 концовки: считаем тотальные звезды
+        try{
+            const hist=Storage.getHistory(); let totalStars=0; hist.forEach(r=>{ if(r.victory) totalStars+=(r.stars||1); });
+            const ending=Endings.getEnding(result, totalStars + (result.stars||0));
+            result.ending=ending.key;
+            // показать бейдж концовки в статистике позже
+            setTimeout(()=>{
+                const el=document.getElementById("victory-stats");
+                if(el && ending){
+                    const badge=document.createElement("div");
+                    badge.style.cssText="margin:10px 0; text-align:center";
+                    badge.innerHTML=`<span class="ending-badge ${ending.badge}">${ending.title}</span><div style="font-size:13px; margin-top:8px; color:var(--text)">${ending.desc}<br><b>${ending.reward}</b></div>`;
+                    el.prepend(badge);
+                }
+            }, 100);
+        }catch(e){}
         const stats = document.getElementById("victory-stats");
         const pname = this.pilotName ? escapeHtml(this.pilotName) : I18n.t("anonymous");
         stats.innerHTML = `
@@ -34970,6 +36292,8 @@ const Game = {
             <div class="stat-line"><span class="stat-line-label">${I18n.t("accuracyStat")}</span><span class="stat-line-value">${result.accuracy}%</span></div>
             <div class="stat-line"><span class="stat-line-label">${I18n.t("timePlayed")}</span><span class="stat-line-value">${formatTime(result.time)}</span></div>
             <div class="stat-line" style="border:none"><span class="stat-line-label">${I18n.t("starsLabel")}</span><span class="stat-line-value" style="font-size:20px">${stars}</span></div>
+            ${result.xpGain? `<div class="stat-line"><span class="stat-line-label">🚀 XP</span><span class="stat-line-value">+${result.xpGain}</span></div>`:""}
+            ${result.coinGain? `<div class="stat-line"><span class="stat-line-label">💎 ${I18n.t("coinsEarned")}</span><span class="stat-line-value">+${result.coinGain}</span></div>`:""}
         `;
 
         // Скрыть кнопку следующего уровня если это последний (или урок учителя)
@@ -34980,11 +36304,42 @@ const Game = {
             nextBtn.style.display = "inline-flex";
         }
 
+        // Дневник: авто-показать комикс между эпизодами
+        if(typeof Diary!=="undefined") Diary.tryAutoShow(this.currentLevel);
         const vEp = (typeof this.currentLevel === "number") ? episodeForLevel(this.currentLevel) : null;
         if (vEp && this.currentLevel === Math.max.apply(null, vEp.levels)) {
             stats.insertAdjacentHTML("beforeend", '<div class="episode-unlock" style="border-color:' + vEp.color + '">🛰 ' + epText(vEp, "title") + ': ' + epText(vEp, "module") + '</div>');
         }
         // Код результата для учителя — только если ученику назначен этот уровень
+        // Add download file button if not exists
+        (function addDownloadBtn(){
+            const existing = document.getElementById("btn-download-result");
+            if(existing) return;
+            const box = document.getElementById("assignment-result-share");
+            if(!box) return;
+            const btn = document.createElement("button");
+            btn.id="btn-download-result"; btn.className="btn btn-secondary"; btn.type="button";
+            btn.textContent="⬇ Скачать файл результата";
+            btn.style.marginTop="8px";
+            btn.onclick=()=>{
+                const codeEl=document.getElementById("assignment-result-code");
+                if(!codeEl || !codeEl.value) return;
+                const blob=new Blob([codeEl.value],{type:"text/plain"});
+                const url=URL.createObjectURL(blob);
+                const a=document.createElement("a"); a.href=url; a.download="result-"+(Game.currentLevel)+".txt"; a.click(); setTimeout(()=>URL.revokeObjectURL(url),2000);
+            };
+            box.appendChild(btn);
+            const shareBtn2=document.createElement("button");
+            shareBtn2.className="btn btn-secondary"; shareBtn2.type="button"; shareBtn2.textContent="🔗 Копировать ссылку";
+            shareBtn2.style.marginTop="8px"; shareBtn2.style.marginLeft="8px";
+            shareBtn2.onclick=()=>{
+                const codeEl=document.getElementById("assignment-result-code");
+                if(!codeEl || !codeEl.value) return;
+                const link = location.origin+location.pathname+"#result="+encodeURIComponent(codeEl.value);
+                navigator.clipboard.writeText(link).then(()=>showNotification(I18n.t("codeCopied"),"success")).catch(()=>{ const t=document.createElement("textarea"); t.value=link; document.body.appendChild(t); t.select(); document.execCommand("copy"); t.remove(); showNotification(I18n.t("codeCopied"),"success"); });
+            };
+            box.appendChild(shareBtn2);
+        })();
         const shareBox = document.getElementById("assignment-result-share");
         if (shareBox) {
             const resultAssignments = Storage.getAssignmentsForCurrentPlayer().filter(a => String(a.levelId) === String(this.currentLevel));
@@ -35340,8 +36695,10 @@ const Game = {
             const reward = 50 + this.currentTask.difficulty * 30;
             this.score += reward;
             this.shield = Math.min(this.shield + 30, this.levelConfig.shieldCapacity);
-            // Правильный ответ слегка укрепляет город (+HP, не выше максимума)
-            this.cityHealth = Math.min(this.cityMaxHealth, this.cityHealth + CITY_HEAL_PER_CORRECT);
+            // Правильный ответ слегка укрепляет город (+HP, не выше максимума) + RPG skill
+            this.cityHealth = Math.min(this.cityMaxHealth, this.cityHealth + CITY_HEAL_PER_CORRECT + (this._skillHeal||0));
+            // Boss hit
+            if(this.levelConfig?.boss && typeof Mechanics!=="undefined") Mechanics.onBossHit(this);
             this.updateHUD(); // баллы обновляются сразу, не дожидаясь закрытия задания
             showNotification(I18n.t("correctAnswerNotif") + ` +${reward} · ${I18n.t("cityHealed", CITY_HEAL_PER_CORRECT)}`, "success");
 
@@ -35683,7 +37040,8 @@ const Game = {
     },
 
     updatePlayer(dt) {
-        const speed = 330; // управление отзывчивее
+        const baseSpeed = 330;
+        const speed = baseSpeed * (this._skillSpeed || 1); // RPG skill
         let dx = 0, dy = 0;
         if (this.keys["w"] || this.keys["arrowup"] || this.keys["ц"] || this.keys["ц"]) dy -= 1;
         if (this.keys["s"] || this.keys["arrowdown"] || this.keys["ы"] || this.keys["і"]) dy += 1;
@@ -35712,6 +37070,16 @@ const Game = {
         this.player.x = Math.max(this.player.size, Math.min(this.width - this.player.size, this.player.x));
         this.player.y = Math.max(this.player.size, Math.min(this.height - this.player.size, this.player.y));
 
+        // Щит для resonance — только во время импульса
+        if(this.levelConfig?.mechanic==="resonance"){
+            if(this.pulseActive>0){
+                this.player.shieldActive=true;
+                this.player.shieldRadius += (110 - this.player.shieldRadius)*0.18;
+            } else {
+                this.player.shieldActive=false;
+                this.player.shieldRadius += (0 - this.player.shieldRadius)*0.18;
+            }
+        } else {
         // Щит вокруг игрока: держится, пока есть энергия (this.shield).
         // Раньше щит «сдувался» сам через 2-3 секунды — теперь стабильный радиус ≈55,
         // гаснет только при нулевой энергии и сам восстанавливается вместе с ней.
@@ -35726,6 +37094,7 @@ const Game = {
             this.player.shieldActive = true;
             this.player.shieldTarget = 55;
         }
+        } // resonance else
     },
 
     updateAsteroids(dt) {
@@ -35916,6 +37285,7 @@ const Game = {
     },
 
     updateParticles(dt) {
+        if(typeof Mechanics!=="undefined" && this.levelConfig) Mechanics.update(this, dt);
         for (let i = this.particles.length - 1; i >= 0; i--) {
             const p = this.particles[i];
             p.x += p.vx;
@@ -35951,6 +37321,7 @@ const Game = {
 
     // ============ HUD ============
     updateHUD() {
+        if(typeof RPG!=="undefined") RPG.updateHUD();
         document.getElementById("score-value").textContent = this.score;
         document.getElementById("level-value").textContent = this.currentLevelLabel();
         document.getElementById("shield-value").textContent = Math.round(this.shield);
@@ -36128,6 +37499,22 @@ const Game = {
             { ox: 55,   w: 50, h: 110 },
             { ox: 110,  w: 45, h: 95 }
         ];
+        // Gravity wells visual
+        if(this.gravityWells && this.gravityWells.length){
+            this.gravityWells.forEach(w=>{
+                ctx.save();
+                ctx.globalAlpha=0.18;
+                ctx.beginPath(); ctx.arc(w.x, w.y, w.radius, 0, Math.PI*2); ctx.fillStyle=w.color; ctx.fill();
+                ctx.globalAlpha=0.35;
+                ctx.setLineDash([6,6]); ctx.beginPath(); ctx.arc(w.x, w.y, w.radius*1.6, 0, Math.PI*2); ctx.strokeStyle=w.color; ctx.lineWidth=2; ctx.stroke();
+                ctx.setLineDash([]);
+                ctx.globalAlpha=1;
+                // planet
+                ctx.beginPath(); ctx.arc(w.x, w.y, 18, 0, Math.PI*2); ctx.fillStyle=w.color; ctx.fill();
+                ctx.fillStyle="#fff"; ctx.font="10px monospace"; ctx.textAlign="center"; ctx.fillText("◉", w.x, w.y+4);
+                ctx.restore();
+            });
+        }
         cityBuildings.forEach(b => {
             const bx = baseX + b.ox;
             const by = groundY - 10;
@@ -36720,13 +38107,46 @@ window.addEventListener("load", () => {
 });
 
 function initApp() {
-    // Инициализация
+    // Миграция прогресса для RPG
+    (function migrateProgress(){
+        const p = Storage.getProgress();
+        if(p.xp===undefined) p.xp=0;
+        if(p.coins===undefined) p.coins=0;
+        if(p.unlockedSkins===undefined) p.unlockedSkins=[ROCKET_STYLES[0].id];
+        if(!p.skills) p.skills={};
+        if(!p.achievements) p.achievements=[];
+        Storage.setProgress(p);
+    })();
     I18n.init();
     Game.init();
     Teacher.init();
+    if(typeof RPG!== "undefined") RPG.updateHUD();
+    if(typeof Journal!== "undefined") Journal.init();
+    if(typeof QuickAssign!== "undefined") QuickAssign.init();
+    if(typeof KvantVoice!=="undefined") KvantVoice.init();
+    if(typeof TeacherPush!=="undefined") TeacherPush.init();
+    if(typeof PWA!=="undefined") PWA.init();
+    if(typeof MobileFix!=="undefined") MobileFix.init();
+    try{ if(location.hash && location.hash.indexOf("#result=")===0) { const code=decodeURIComponent(location.hash.slice(8)); const inp=document.getElementById("result-code-input"); if(inp) inp.value=code; if(typeof Journal!=="undefined") { const added=Storage.importAssignmentResultCode(code); if(added) Journal.render(); } } }catch(e){}
     setupMainMenu();
     setupModals();
+    // shop / skills modals
+    document.getElementById("btn-open-shop")?.addEventListener("click", ()=>{ RPG.renderShop(); document.getElementById("shop-modal").classList.add("active"); });
+    document.getElementById("btn-shop-close")?.addEventListener("click", ()=> document.getElementById("shop-modal").classList.remove("active"));
+    document.getElementById("shop-modal")?.addEventListener("click", (e)=>{ if(e.target.id==="shop-modal") e.currentTarget.classList.remove("active"); });
+    document.getElementById("skills-modal")?.addEventListener("click", (e)=>{ if(e.target.id==="skills-modal") e.currentTarget.classList.remove("active"); });
+    document.getElementById("btn-open-skills")?.addEventListener("click", ()=>{ RPG.renderSkills(); document.getElementById("skills-modal").classList.add("active"); });
+    document.getElementById("btn-skills-close")?.addEventListener("click", ()=> document.getElementById("skills-modal").classList.remove("active"));
+    // pulse
+    document.getElementById("pulse-btn")?.addEventListener("click", ()=> Mechanics.onPulse(Game));
+    window.addEventListener("keydown", (e)=>{
+        if(e.code==="Space" && Game.running && !Game.isTaskActive && Game.levelConfig?.mechanic==="resonance"){
+            e.preventDefault();
+            Mechanics.onPulse(Game);
+        }
+    });
     showScreen("menu-screen");
+    // show journal default? keep create active but we want journal active on teacher open
 }
 
 // ============ ГЛАВНОЕ МЕНЮ ============
@@ -36746,7 +38166,9 @@ function setupMainMenu() {
         Teacher.populateTopicSelect(true);
         Teacher.populateAssignmentLevelSelect(true);
         Teacher.populateAssignmentLevelSelect(true, "class-assignment-level");
-        Teacher.switchTab("create");
+        Teacher.switchTab("journal");
+        if(typeof Journal!=="undefined") Journal.render();
+        if(typeof QuickAssign!=="undefined") QuickAssign.render();
     });
 
     document.getElementById("btn-records").addEventListener("click", () => {
@@ -36857,6 +38279,7 @@ function refreshAfterLangChange() {
         Teacher.populateTopicSelect(true);
         Teacher.renderAnswerFields();
         const activeTab = document.querySelector(".tab-content.active");
+        if (activeTab?.id === "tab-journal") { if(typeof Journal!=="undefined") Journal.render(); }
         if (activeTab?.id === "tab-lessons") Teacher.renderLessonsList();
         if (activeTab?.id === "tab-assignments") {
             Teacher.populateAssignmentLevelSelect(true);
@@ -36864,10 +38287,12 @@ function refreshAfterLangChange() {
             Teacher.populateClassSelect(true);
             Teacher.renderClasses();
             Teacher.renderAssignments();
+            if(typeof QuickAssign!=="undefined") QuickAssign.render();
         }
         if (activeTab?.id === "tab-manage") Teacher.renderTasksList();
         if (activeTab?.id === "tab-stats") Teacher.renderStats();
     }
+    if (typeof RPG!=="undefined") RPG.updateHUD();
     if (document.getElementById("story-modal")?.classList.contains("active")) {
         renderStoryBody();
     }
@@ -36936,6 +38361,7 @@ function showLevelSelect() {
                 <div class="level-number">${level.id}</div>
                 <div class="level-title">${I18n.t(getLevelNameKey(level.id))}</div>
                 <div class="level-desc">${escapeHtml(levelDescText(level))}</div>
+                <div style="margin:6px 0"><span class="mechanic-badge ${level.mechanic||"classic"}">${(level.mechanic==="gravity"?I18n.t("mechanicGravity"):level.mechanic==="resonance"?I18n.t("mechanicResonance"):level.mechanic==="orbital"?I18n.t("mechanicOrbital"):level.mechanic==="energy"?I18n.t("mechanicEnergy"):level.mechanic==="radiation"?I18n.t("mechanicRadiation"):level.mechanic==="fusion"?I18n.t("mechanicFusion"):level.mechanic==="lab"?I18n.t("mechanicLab"):I18n.t("mechanicClassic"))} ${level.boss?"👾 "+I18n.t("mechanicBoss"):""}</span></div>
                 <div class="level-stars">${"⭐".repeat(stars)}${"☆".repeat(3 - stars)}</div>
             </div>
         `;
@@ -37027,6 +38453,7 @@ function showLevelSelect() {
         for (let sIdx = 0; sIdx < total; sIdx++) if (storyChapterUnlock(sIdx)) unlockedN++;
         spBtn.textContent = " — " + unlockedN + " / " + total;
     }
+    if(typeof RPG!=="undefined") RPG.updateHUD();
     renderAssignedView();
     switchLevelTab(currentLevelTab);
 
@@ -37263,6 +38690,7 @@ function showProfile() {
     if (playerIdField) playerIdField.value = s.playerId || "";
     renderRocketGrid();
     updateProfileNotesDownload();
+    if(typeof RPG!=="undefined") RPG.updateHUD();
     showScreen("profile-screen");
 }
 
@@ -37591,6 +39019,12 @@ document.getElementById("btn-story").addEventListener("click", () => {
     renderStoryBody();
     document.getElementById("story-modal").classList.add("active");
 });
+    document.getElementById("btn-diary")?.addEventListener("click", ()=> Diary.open(0));
+    document.getElementById("btn-open-diary")?.addEventListener("click", ()=> Diary.open(0));
+    document.getElementById("diary-close")?.addEventListener("click", ()=> document.getElementById("diary-modal").classList.remove("active"));
+    document.getElementById("diary-next")?.addEventListener("click", ()=> Diary.next());
+    document.getElementById("diary-prev")?.addEventListener("click", ()=> Diary.prev());
+    document.getElementById("diary-modal")?.addEventListener("click", (e)=>{ if(e.target.id==="diary-modal") e.currentTarget.classList.remove("active"); });
 document.getElementById("btn-story-close").addEventListener("click", () => {
     document.getElementById("story-modal").classList.remove("active");
 });
@@ -37618,7 +39052,1144 @@ function showAbout() {
 
 
 </script>
-<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a3873bd1ee9b4470',t:'MTc4ODk2NzgyMQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a3a482c509c08a3a',t:'MTc4OTI3NDgxNA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a3eed675183ae4c2',t:'MTc5MDA1NDE4OA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a3873bd1ee9b4470',t:'MTc4ODk2NzgyMQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a3a482c509c08a3a',t:'MTc4OTI3NDgxNA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a3eed675183ae4c2',t:'MTc5MDA1NDE4OA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();
+/* ===== RPG SYSTEM ===== */
+const RPG = {
+    LEVELS: [0, 100, 250, 500, 850, 1300, 1900, 2700, 3700, 4900, 6300, 8000, 10000, 12300, 15000, 18000, 21500, 25500, 30000, 35000, 40000, 46000, 53000, 61000, 70000],
+    RANKS: {
+        ru: ["Курсант","Пилот","Штурман","Навигатор","Командир","Капитан","Майор","Полковник","Генерал","Легенда"],
+        en: ["Cadet","Pilot","Navigator","Commander","Captain","Major","Colonel","General","Legend","Hero"],
+        kk: ["Курсант","Ұшқыш","Штурман","Навигатор","Командир","Капитан","Майор","Полковник","Генерал","Аңыз"]
+    },
+    ACHIEVEMENTS: [
+        {id:"first_win", title:{ru:"Первый полёт", en:"First flight", kk:"Алғашқы ұшу"}, desc:{ru:"Пройди первый уровень", en:"Complete first level", kk:"Бірінші деңгейді өт"}, icon:"🚀", check: (p,h)=> Object.keys(p.completedLevels||{}).length>=1},
+        {id:"perfect", title:{ru:"Отличник", en:"Perfect", kk:"Үздік"}, desc:{ru:"Точность 100% в уровне", en:"100% accuracy in a level", kk:"Деңгейде 100% дәлдік"}, icon:"🎯", check: (p,h)=> h.some(r=>r.accuracy===100 && r.victory)},
+        {id:"collector", title:{ru:"Коллекционер", en:"Collector", kk:"Коллекционер"}, desc:{ru:"Собери 50 звёзд", en:"Collect 50 stars", kk:"50 жұлдыз жина"}, icon:"⭐", check: (p,h)=> { let s=0; Object.values(p.completedLevels||{}).forEach(v=>s+=(v.stars||0)); return s>=50; }},
+        {id:"streak", title:{ru:"Марафон", en:"Marathon", kk:"Марафон"}, desc:{ru:"Пройди 10 уровней подряд", en:"Complete 10 levels", kk:"10 деңгейді өт"}, icon:"🔥", check:(p,h)=> Object.keys(p.completedLevels||{}).length>=10},
+        {id:"boss_sl", title:{ru:"Победитель боссов", en:"Boss slayer", kk:"Босс жеңімпазы"}, desc:{ru:"Победи 3 босса", en:"Defeat 3 bosses", kk:"3 боссты жең"}, icon:"👾", check:(p,h)=> {
+            // boss levels are 8,13,20,24,32,37,42,44
+            const bosses=[8,13,20,24,32,37,42,44];
+            let c=0; bosses.forEach(b=>{ if(p.completedLevels && p.completedLevels[b]) c++; });
+            return c>=3;
+        }},
+        {id:"speedrun", title:{ru:"Скоростной", en:"Speedrun", kk:"Жылдам"}, desc:{ru:"Пройди уровень за <2 мин", en:"Complete level in <2 min", kk:"Деңгейді <2 мин өту"}, icon:"⚡", check:(p,h)=> h.some(r=>r.victory && r.time<120000)},
+        {id:"scholar", title:{ru:"Учёный", en:"Scholar", kk:"Ғалым"}, desc:{ru:"Достигни 10 уровня пилота", en:"Reach pilot level 10", kk:"Ұшқыштың 10 деңгейіне жет"}, icon:"📚", check:(p,h)=> RPG.getLevel(RPG.getXP(p))>=10},
+        {id:"shopper", title:{ru:"Модник", en:"Shopaholic", kk:"Сәнқой"}, desc:{ru:"Купи 3 предмета в магазине", en:"Buy 3 items in shop", kk:"Дүкеннен 3 зат сатып ал"}, icon:"🛒", check:(p,h)=> (p.unlockedSkins||[]).length>=4},
+    ],
+    SKILLS: [
+        {id:"speed", cost: 30, max:5, titleKey:"skillSpeed", descKey:"skillSpeedDesc"},
+        {id:"shield", cost: 40, max:5, titleKey:"skillShield", descKey:"skillShieldDesc"},
+        {id:"heal", cost: 35, max:5, titleKey:"skillHeal", descKey:"skillHealDesc"},
+        {id:"hints", cost: 50, max:3, titleKey:"skillHints", descKey:"skillHintsDesc"},
+    ],
+    getXP(progress){ return progress.xp || 0; },
+    getLevel(xp){
+        let lvl=1;
+        for(let i=1;i<RPG.LEVELS.length;i++){
+            if(xp >= RPG.LEVELS[i]) lvl=i+1; else break;
+        }
+        return lvl;
+    },
+    getRank(level){
+        const L = (typeof I18n!=="undefined"&&I18n.currentLang)||"ru";
+        const ranks = RPG.RANKS[L]||RPG.RANKS.ru;
+        const idx = Math.min(Math.floor((level-1)/3), ranks.length-1);
+        return ranks[idx];
+    },
+    getProgressToNext(xp){
+        const lvl = RPG.getLevel(xp);
+        const cur = RPG.LEVELS[lvl-1]||0;
+        const nxt = RPG.LEVELS[lvl]|| (RPG.LEVELS[RPG.LEVELS.length-1]+5000);
+        return {lvl, cur, nxt, pct: Math.max(0, Math.min(100, ((xp - cur)/(nxt - cur))*100 )), need: nxt - xp };
+    },
+    addXP(amount){
+        const p = Storage.getProgress();
+        const before = RPG.getLevel(p.xp||0);
+        p.xp = (p.xp||0) + amount;
+        const after = RPG.getLevel(p.xp);
+        Storage.setProgress(p);
+        if(after>before){
+            showNotification(I18n.t("levelUp")+" — "+after+" "+RPG.getRank(after), "success");
+        }
+        RPG.checkAchievements();
+        RPG.updateHUD();
+    },
+    addCoins(amount){
+        const p = Storage.getProgress();
+        p.coins = (p.coins||0) + amount;
+        Storage.setProgress(p);
+        RPG.updateHUD();
+    },
+    spendCoins(amount){
+        const p = Storage.getProgress();
+        if((p.coins||0) < amount) return false;
+        p.coins -= amount;
+        Storage.setProgress(p);
+        RPG.updateHUD();
+        return true;
+    },
+    updateHUD(){
+        const p = Storage.getProgress();
+        const xp = p.xp||0;
+        const coins = p.coins||0;
+        const info = RPG.getProgressToNext(xp);
+        const lvl = info.lvl;
+        const rank = RPG.getRank(lvl);
+        // profile
+        const badge = document.getElementById("profile-level-badge");
+        if(badge) badge.textContent = "⭐ "+I18n.t("profileLevel")+" "+lvl+" — "+rank;
+        const coinsEl = document.getElementById("profile-coins");
+        if(coinsEl) coinsEl.textContent = "💎 "+coins;
+        const fill = document.getElementById("profile-xp-fill");
+        if(fill) fill.style.width = info.pct+"%";
+        const txt = document.getElementById("profile-xp-text");
+        if(txt) txt.textContent = xp+" / "+info.nxt+" XP ("+I18n.t("xpNeeded")+": "+info.need+")";
+        // HUD
+        const hudLvl = document.getElementById("hud-rpg-level");
+        if(hudLvl) hudLvl.textContent = "⭐ "+lvl;
+        const hudCoins = document.getElementById("hud-rpg-coins");
+        if(hudCoins) hudCoins.textContent = "💎 "+coins;
+        const hudFill = document.getElementById("hud-xp-fill");
+        if(hudFill) hudFill.style.width = info.pct+"%";
+        // shop
+        const shopCoins = document.getElementById("shop-coins");
+        if(shopCoins) shopCoins.textContent = "💎 "+coins;
+        const shopLvl = document.getElementById("shop-level");
+        if(shopLvl) shopLvl.textContent = "⭐ "+lvl+" — "+rank;
+        RPG.renderAchievements();
+    },
+    renderAchievements(){
+        const p = Storage.getProgress();
+        const h = Storage.getHistory();
+        const container = document.getElementById("profile-achievements");
+        if(!container) return;
+        container.innerHTML = RPG.ACHIEVEMENTS.map(a=>{
+            const unlocked = a.check(p,h);
+            return `<div class="achievement ${unlocked?"":"locked"}"><div class="ico">${a.icon}</div><div><b>${(a.title[I18n.currentLang]||a.title.ru)}</b><span>${(a.desc[I18n.currentLang]||a.desc.ru)} ${unlocked?"✅":"🔒"}</span></div></div>`;
+        }).join("");
+    },
+    checkAchievements(){
+        const p = Storage.getProgress();
+        const h = Storage.getHistory();
+        if(!p.achievements) p.achievements=[];
+        let changed=false;
+        RPG.ACHIEVEMENTS.forEach(a=>{
+            if(!p.achievements.includes(a.id) && a.check(p,h)){
+                p.achievements.push(a.id);
+                showNotification(I18n.t("achievementUnlocked")+": "+(a.title[I18n.currentLang]||a.title.ru)+" "+a.icon, "success");
+                changed=true;
+                // reward
+                p.coins = (p.coins||0)+20;
+            }
+        });
+        if(changed) Storage.setProgress(p);
+    },
+    renderShop(){
+        const p = Storage.getProgress();
+        const grid = document.getElementById("shop-grid");
+        if(!grid) return;
+        const owned = p.unlockedSkins || [ROCKET_STYLES[0].id];
+        grid.innerHTML = ROCKET_STYLES.map(st=>{
+            const isOwned = owned.includes(st.id);
+            const levelReq = ROCKET_STYLES.indexOf(st)*2 + 1; // simple level requirement
+            const coinPrice = 50 + ROCKET_STYLES.indexOf(st)*20;
+            const curLvl = RPG.getLevel(p.xp||0);
+            const canBuy = !isOwned && (p.coins||0) >= coinPrice && curLvl >= levelReq;
+            return `<div class="shop-item ${isOwned?"":""}">
+                ${rocketSVG(st)}
+                <b>${localName(st.name)}</b>
+                <span style="font-size:11px; color:var(--text-dim)">Уровень ${levelReq}+</span>
+                <div class="price">${isOwned ? I18n.t("alreadyOwned") : "💎 "+coinPrice}</div>
+                ${isOwned ? '<div style="color:var(--success); font-weight:800">✓ Куплено</div>' : `<button class="btn btn-primary" data-shop-buy="${st.id}" ${canBuy?"":"disabled"}>${canBuy? "Купить" : (p.coins||0)<coinPrice ? I18n.t("notEnoughCoins") : "Нужен уровень "+levelReq}</button>`}
+            </div>`;
+        }).join("");
+        grid.querySelectorAll("[data-shop-buy]").forEach(btn=>{
+            btn.addEventListener("click", ()=>{
+                const id = btn.dataset.shopBuy;
+                const st = ROCKET_STYLES.find(s=>s.id===id);
+                if(!st) return;
+                const price = 50 + ROCKET_STYLES.indexOf(st)*20;
+                if(RPG.spendCoins(price)){
+                    const p2 = Storage.getProgress();
+                    if(!p2.unlockedSkins) p2.unlockedSkins=[ROCKET_STYLES[0].id];
+                    if(!p2.unlockedSkins.includes(id)) p2.unlockedSkins.push(id);
+                    Storage.setProgress(p2);
+                    RPG.renderShop();
+                    RPG.updateHUD();
+                    renderRocketGrid();
+                    showNotification("Куплено: "+localName(st.name), "success");
+                    RPG.checkAchievements();
+                } else {
+                    showNotification(I18n.t("notEnoughCoins"), "warning");
+                }
+            });
+        });
+    },
+    renderSkills(){
+        const p = Storage.getProgress();
+        if(!p.skills) p.skills={};
+        const grid = document.getElementById("skills-grid");
+        if(!grid) return;
+        grid.innerHTML = RPG.SKILLS.map(s=>{
+            const lvl = p.skills[s.id]||0;
+            const maxed = lvl>=s.max;
+            const price = s.cost * (lvl+1);
+            return `<div class="shop-item" style="flex-direction:row; text-align:left; align-items:center">
+                <div style="flex:1">
+                    <b>${I18n.t(s.titleKey)}</b>
+                    <div style="font-size:12px; color:var(--text-dim)">${I18n.t(s.descKey)}</div>
+                    <div style="font-size:12px; font-weight:800">Уровень: ${lvl}/${s.max} ${maxed?'— '+I18n.t("skillMaxed"):''}</div>
+                </div>
+                <div style="text-align:center; min-width:90px">
+                    <div class="price">💎 ${maxed?'—':price}</div>
+                    <button class="btn btn-primary" data-skill-buy="${s.id}" ${maxed?"disabled":""}>${maxed? I18n.t("skillMaxed") : "Улучшить"}</button>
+                </div>
+            </div>`;
+        }).join("");
+        grid.querySelectorAll("[data-skill-buy]").forEach(btn=>{
+            btn.addEventListener("click", ()=>{
+                const id = btn.dataset.skillBuy;
+                const skill = RPG.SKILLS.find(s=>s.id===id);
+                if(!skill) return;
+                const p2 = Storage.getProgress();
+                if(!p2.skills) p2.skills={};
+                const cur = p2.skills[id]||0;
+                if(cur>=skill.max){ showNotification(I18n.t("skillMaxed"), "warning"); return; }
+                const price = skill.cost*(cur+1);
+                if((p2.coins||0) < price){ showNotification(I18n.t("notEnoughCoins"), "warning"); return; }
+                p2.coins -= price;
+                p2.skills[id] = cur+1;
+                Storage.setProgress(p2);
+                RPG.updateHUD();
+                RPG.renderSkills();
+                showNotification(I18n.t(skill.titleKey)+" ↑ "+(cur+1), "success");
+            });
+        });
+    },
+    getSkillLevel(id){
+        const p = Storage.getProgress();
+        return (p.skills && p.skills[id])||0;
+    }
+};
+
+/* ===== JOURNAL SYSTEM ===== */
+const Journal = {
+    selected: new Set(),
+    init(){
+        // populate filters
+        const levelSel = document.getElementById("journal-filter-level");
+        if(levelSel){
+            levelSel.innerHTML = '<option value="">'+I18n.t("allLevels")+'</option>' + LEVELS_CONFIG.map(l=> `<option value="${l.id}">#${l.id} — ${escapeHtml(I18n.t(getLevelNameKey(l.id)))}</option>`).join("") + Storage.getCustomLessons().map(l=> `<option value="custom:${l.id}">📝 ${escapeHtml(I18n.getLocalized(l,"name"))}</option>`).join("");
+        }
+        const classSel = document.getElementById("journal-filter-class");
+        if(classSel){
+            const classes = Storage.getClasses();
+            classSel.innerHTML = '<option value="">'+I18n.t("allClasses")+'</option>' + classes.map(c=> `<option value="${c.id}">${escapeHtml(c.name)}</option>`).join("");
+        }
+        // events
+        ["journal-search","journal-filter-class","journal-filter-level","journal-filter-status"].forEach(id=>{
+            const el = document.getElementById(id);
+            if(el) el.addEventListener("input", ()=>Journal.render());
+            if(el && el.tagName==="SELECT") el.addEventListener("change", ()=>Journal.render());
+        });
+        const resetBtn = document.getElementById("btn-journal-reset");
+        if(resetBtn) resetBtn.addEventListener("click", ()=>{
+            document.getElementById("journal-search").value="";
+            document.getElementById("journal-filter-class").value="";
+            document.getElementById("journal-filter-level").value="";
+            document.getElementById("journal-filter-status").value="";
+            Journal.render();
+        });
+        document.getElementById("btn-export-journal-csv")?.addEventListener("click", ()=>Journal.exportCSV());
+        document.getElementById("btn-export-journal-json")?.addEventListener("click", ()=>Journal.exportJSON());
+        document.getElementById("btn-copy-journal")?.addEventListener("click", ()=>Journal.copyTable());
+        document.getElementById("btn-print-journal")?.addEventListener("click", ()=>window.print());
+        document.getElementById("btn-clear-journal")?.addEventListener("click", ()=>{
+            if(confirm(I18n.t("clearJournal")|| I18n.t("clearHistoryConfirm"))){
+                Storage.clearHistory();
+                Storage.clearRecords();
+                Journal.render();
+                Teacher.renderAssignments();
+                showNotification(I18n.t("historyCleared")||"Очищено", "success");
+            }
+        });
+        document.getElementById("btn-bulk-delete")?.addEventListener("click", ()=>Journal.bulkDelete());
+        document.getElementById("journal-import-file")?.addEventListener("change", (e)=>Journal.importJSONFile(e));
+        document.getElementById("btn-bulk-import")?.addEventListener("click", ()=>Journal.bulkImport());
+        document.getElementById("bulk-codes-file")?.addEventListener("change", (e)=>Journal.loadBulkFile(e));
+        document.getElementById("btn-copy-share-link")?.addEventListener("click", ()=>{
+            const inp = document.getElementById("share-link-input");
+            if(!inp.value) { showNotification("Нет ссылки", "warning"); return; }
+            navigator.clipboard.writeText(inp.value).then(()=>showNotification(I18n.t("codeCopied"), "success")).catch(()=>{
+                inp.select(); document.execCommand("copy"); showNotification(I18n.t("codeCopied"), "success");
+            });
+        });
+        // hash handling
+        window.addEventListener("hashchange", ()=>Journal.handleHash());
+        setTimeout(()=>Journal.handleHash(), 500);
+    },
+    handleHash(){
+        const hash = location.hash || "";
+        const m = hash.match(/result=([^&]+)/);
+        if(m){
+            const code = decodeURIComponent(m[1]);
+            const added = Storage.importAssignmentResultCode(code);
+            if(added){
+                showNotification(I18n.t("resultImportedOk"), "success");
+                Journal.render();
+                Teacher.renderAssignments();
+                // clear hash
+                history.replaceState(null,"", location.pathname + location.search);
+            }
+        }
+    },
+    getFiltered(){
+        let records = Storage.getHistory().slice();
+        const search = (document.getElementById("journal-search")?.value||"").toLowerCase().trim();
+        const classId = document.getElementById("journal-filter-class")?.value||"";
+        const level = document.getElementById("journal-filter-level")?.value||"";
+        const status = document.getElementById("journal-filter-status")?.value||"";
+        if(search){
+            records = records.filter(r=> (r.name||"").toLowerCase().includes(search) || String(r.levelLabel||r.level).toLowerCase().includes(search));
+        }
+        if(level){
+            records = records.filter(r=> String(r.level)===String(level) || String(r.levelLabel)===String(level));
+        }
+        if(status){
+            if(status==="victory") records = records.filter(r=> r.victory);
+            else if(status==="failed") records = records.filter(r=> !r.victory);
+        }
+        if(classId){
+            const cls = Storage.getClasses().find(c=>c.id===classId);
+            if(cls){
+                const names = new Set(cls.students.map(s=> Storage.normalizeName(s.name)));
+                const ids = new Set(cls.students.map(s=> s.playerId).filter(Boolean));
+                records = records.filter(r=> (r.playerId && ids.has(r.playerId)) || names.has(Storage.normalizeName(r.name)));
+            }
+        }
+        // sort by date descending
+        records.sort((a,b)=> String(b.date||"").localeCompare(String(a.date||"")));
+        return records;
+    },
+    render(){
+        const records = Journal.getFiltered();
+        const tbody = document.getElementById("journal-tbody");
+        const count = document.getElementById("journal-count");
+        const overview = document.getElementById("journal-overview");
+        if(!tbody) return;
+        // overview
+        const all = Storage.getHistory();
+        const avgAcc = all.length ? Math.round(all.reduce((s,r)=>s+(r.accuracy||0),0)/all.length) : 0;
+        const victories = all.filter(r=>r.victory).length;
+        const uniqueStudents = new Set(all.map(r=> r.playerId || Storage.normalizeName(r.name))).size;
+        if(overview){
+            overview.innerHTML = `
+                <div class="journal-card"><b>${all.length}</b><span data-i18n="totalEntries">Всего записей</span></div>
+                <div class="journal-card"><b>${victories}</b><span data-i18n="victories">Побед</span></div>
+                <div class="journal-card"><b>${avgAcc}%</b><span data-i18n="avgAccuracy">Средняя точность</span></div>
+                <div class="journal-card"><b>${uniqueStudents}</b><span data-i18n="studentsCount">Учеников</span></div>
+            `;
+        }
+        if(count) count.textContent = records.length+" / "+all.length;
+        if(records.length===0){
+            tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; padding:20px; color:var(--text-dim)">${I18n.t("noRecords")}</td></tr>`;
+            return;
+        }
+        tbody.innerHTML = records.map(r=>{
+            const checked = Journal.selected.has(r.id) ? "checked" : "";
+            const statusBadge = r.victory ? `<span class="mini-badge ok">${I18n.t("completedStatus")}</span>` : `<span class="mini-badge pending">${I18n.t("failedStatus")}</span>`;
+            const stars = "⭐".repeat(r.stars||0) + (r.stars? "" : "—");
+            return `<tr>
+                <td><input type="checkbox" data-jid="${r.id}" ${checked}> ${escapeHtml(r.name||I18n.t("anonymous"))} <small style="color:var(--text-dim)">${escapeHtml(r.playerId||"")}</small></td>
+                <td>${escapeHtml(String(r.levelLabel||r.level))}</td>
+                <td>${r.score||0}</td>
+                <td>${r.accuracy||0}%</td>
+                <td>${stars}</td>
+                <td>${formatRecordDate(r.date)}</td>
+                <td>${statusBadge}</td>
+                <td><button class="btn-icon-only danger" data-jdel="${r.id}">×</button></td>
+            </tr>`;
+        }).join("");
+        tbody.querySelectorAll("input[data-jid]").forEach(cb=>{
+            cb.addEventListener("change", (e)=>{
+                const id = e.target.dataset.jid;
+                if(e.target.checked) Journal.selected.add(id); else Journal.selected.delete(id);
+            });
+        });
+        tbody.querySelectorAll("[data-jdel]").forEach(btn=>{
+            btn.addEventListener("click", ()=>{
+                const id = btn.dataset.jdel;
+                if(confirm(I18n.t("deleteConfirm")||"Удалить?")){
+                    let hist = Storage.getHistory().filter(r=>r.id!==id);
+                    Storage.save(Storage.KEYS.HISTORY, hist);
+                    let recs = Storage.getRecords().filter(r=>r.id!==id);
+                    Storage.save(Storage.KEYS.RECORDS, recs);
+                    Journal.selected.delete(id);
+                    Journal.render();
+                }
+            });
+        });
+        // update QR for last record
+        if(records.length){
+            const last = records[0];
+            const code = Storage.createResultShareCode(last);
+            const linkInput = document.getElementById("share-link-input");
+            if(linkInput){
+                linkInput.value = location.origin + location.pathname + "#result=" + encodeURIComponent(code);
+            }
+            // generate QR simple via canvas (draw text as fallback if no QR lib)
+            const qrCanvas = document.getElementById("qr-canvas");
+            if(qrCanvas){
+                try{
+                    // Use simple QR via external API fallback: draw code text
+                    const ctx = qrCanvas.getContext("2d");
+                    ctx.fillStyle="#fff"; ctx.fillRect(0,0,140,140);
+                    ctx.fillStyle="#0a1a38"; ctx.font="7px monospace";
+                    // simple placeholder: encode as pattern
+                    const codeStr = code.slice(0,60);
+                    // draw simple QR-like pattern using hash of code
+                    let hash=0; for(let i=0;i<code.length;i++) hash=(hash*31+code.charCodeAt(i))>>>0;
+                    for(let y=0;y<7;y++) for(let x=0;x<7;x++){
+                        const v = (hash >> ((x+y*7)%32)) &1;
+                        if(v){ ctx.fillStyle="#0a1a38"; ctx.fillRect(10+x*15,10+y*15,12,12); } else { ctx.strokeStyle="#cbd6e8"; ctx.strokeRect(10+x*15,10+y*15,12,12); }
+                    }
+                    ctx.fillStyle="#0a1a38"; ctx.font="6px monospace"; ctx.fillText(codeStr, 5, 130);
+                }catch(e){}
+            }
+        }
+    },
+    exportCSV(){
+        const records = Journal.getFiltered();
+        const header = ["Имя","ID","Уровень","Очки","Точность","Звёзды","Победа","Дата","Язык"].join(";");
+        const rows = records.map(r=>[
+            `"${(r.name||"").replace(/"/g,'""')}"`,
+            `"${(r.playerId||"").replace(/"/g,'""')}"`,
+            `"${String(r.levelLabel||r.level).replace(/"/g,'""')}"`,
+            r.score||0, r.accuracy||0, r.stars||0, r.victory?"1":"0", r.date||"", r.language||""
+        ].join(";"));
+        const csv = [header, ...rows].join("\n");
+        const blob = new Blob(["\uFEFF"+csv], {type:"text/csv;charset=utf-8"});
+        const url = URL.createObjectURL(blob);
+        const a=document.createElement("a"); a.href=url; a.download="journal.csv"; a.click(); setTimeout(()=>URL.revokeObjectURL(url),2000);
+        showNotification(I18n.t("assignmentsExported")||"Экспорт выполнен", "success");
+    },
+    exportJSON(){
+        const records = Journal.getFiltered();
+        const blob = new Blob([JSON.stringify({app:"physics-quest-9-grade", exportedAt:new Date().toISOString(), records}, null, 2)], {type:"application/json"});
+        const url=URL.createObjectURL(blob); const a=document.createElement("a"); a.href=url; a.download="journal.json"; a.click(); setTimeout(()=>URL.revokeObjectURL(url),2000);
+        showNotification(I18n.t("assignmentsExported")||"Экспорт выполнен", "success");
+    },
+    copyTable(){
+        const records = Journal.getFiltered();
+        const text = records.map(r=> `${r.name}\t${r.levelLabel||r.level}\t${r.score}\t${r.accuracy}%\t${r.stars||0}\t${r.victory?I18n.t("completedStatus"):I18n.t("failedStatus")}\t${formatRecordDate(r.date)}`).join("\n");
+        navigator.clipboard.writeText(text).then(()=>showNotification(I18n.t("codeCopied"), "success")).catch(()=>{
+            const ta=document.createElement("textarea"); ta.value=text; document.body.appendChild(ta); ta.select(); document.execCommand("copy"); ta.remove(); showNotification(I18n.t("codeCopied"), "success");
+        });
+    },
+    bulkDelete(){
+        if(Journal.selected.size===0){ showNotification("Выберите записи", "warning"); return; }
+        if(!confirm("Удалить "+Journal.selected.size+" записей?")) return;
+        let hist = Storage.getHistory().filter(r=>!Journal.selected.has(r.id));
+        let recs = Storage.getRecords().filter(r=>!Journal.selected.has(r.id));
+        Storage.save(Storage.KEYS.HISTORY, hist);
+        Storage.save(Storage.KEYS.RECORDS, recs);
+        Journal.selected.clear();
+        Journal.render();
+        showNotification("Удалено", "success");
+    },
+    importJSONFile(e){
+        const file = e.target.files && e.target.files[0];
+        e.target.value="";
+        if(!file) return;
+        const reader=new FileReader();
+        reader.onload=()=>{
+            try{
+                const data=JSON.parse(reader.result);
+                const incoming = Array.isArray(data) ? data : data.records || data.assignments || [];
+                if(!Array.isArray(incoming)) throw new Error("Invalid");
+                let hist = Storage.getHistory();
+                let recs = Storage.getRecords();
+                let added=0;
+                incoming.forEach(r=>{
+                    if(r.level && r.score!==undefined){
+                        const entry = Storage.normalizePlaythrough(r);
+                        if(!hist.some(h=>h.id===entry.id)){
+                            hist.push(entry); recs.push(entry); added++;
+                        }
+                    }
+                });
+                Storage.save(Storage.KEYS.HISTORY, hist);
+                Storage.save(Storage.KEYS.RECORDS, recs);
+                Journal.render();
+                showNotification("Импортировано "+added, "success");
+            }catch(err){ showNotification("Ошибка файла", "error"); }
+        };
+        reader.readAsText(file);
+    },
+    bulkImport(){
+        const ta = document.getElementById("bulk-codes-input");
+        const status = document.getElementById("bulk-import-status");
+        if(!ta || !ta.value.trim()){ showNotification("Вставьте коды", "warning"); return; }
+        const lines = ta.value.split(/[\n;,]+/).map(s=>s.trim()).filter(Boolean);
+        let ok=0, fail=0;
+        lines.forEach(code=>{
+            const res = Storage.importAssignmentResultCode(code);
+            if(res) ok++; else fail++;
+        });
+        if(status){
+            status.textContent = `Добавлено: ${ok}, ошибок: ${fail}`;
+            status.className = ok? "copy-result-status ok" : "copy-result-status err";
+        }
+        if(ok) { Journal.render(); Teacher.renderAssignments(); showNotification(I18n.t("resultImportedOk")+" ("+ok+")", "success"); }
+        if(fail) showNotification("Ошибок: "+fail, "warning");
+        ta.value="";
+    },
+    loadBulkFile(e){
+        const file = e.target.files && e.target.files[0];
+        e.target.value="";
+        if(!file) return;
+        const reader=new FileReader();
+        reader.onload=()=>{
+            const ta=document.getElementById("bulk-codes-input");
+            if(ta) ta.value = reader.result;
+        };
+        reader.readAsText(file);
+    }
+};
+
+/* ===== MECHANICS ENGINE ===== */
+
+/* ===== LAB MINI-GAMES: механика = тема ===== */
+const LabGames = {
+    configs: {
+        // 9 класс лабы 45-48 - виртуальный эксперимент со слайдерами
+        45: { type:"slider", title:"🔬 Лаб 45: Желоб — ускорение", desc:"Шарик катится по наклонному желобу. Формула: a = 2·s / t². Эксперимент показал a≈1.4 м/с². Подбери s (путь) и t (время) чтобы попасть в цель.", sliders:[{id:"s", label:"Путь s, м", min:0.4, max:1.6, step:0.1, val:0.8}, {id:"t", label:"Время t, с", min:0.7, max:2.0, step:0.1, val:1.0}], formula:(v)=>2*v.s/(v.t*v.t), target:1.4, tol:0.15, unit:"м/с²", formulaStr:"a = 2·s / t²", hint:"Увеличь s или уменьши t чтобы увеличить a" },
+        46: { type:"slider", title:"🔬 Лаб 46: Полет со стола", desc:"Шарик слетает со стола: дальность s, высота h. Начальная скорость v₀ = s·√(g/2h), g=9.8. Dobейся v₀≈2.2 м/с как в опыте.", sliders:[{id:"s", label:"Дальность s, м", min:0.3, max:1.0, step:0.05, val:0.5}, {id:"h", label:"Высота h, м", min:0.4, max:1.1, step:0.05, val:0.7}], formula:(v)=>v.s*Math.sqrt(9.8/(2*v.h)), target:2.2, tol:0.2, unit:"м/с", formulaStr:"v₀ = s·√(g/2h)", hint:"Больше s и меньше h — больше скорость" },
+        47: { type:"slider", title:"🔬 Лаб 47: Маятник — измерь g", desc:"Математический маятник: период T=2π·√(L/g). Ты меняешь длину L, измеряешь T. Подбери L чтобы T≈1.4 с (тогда g≈9.8).", sliders:[{id:"L", label:"Длина L, м", min:0.3, max:1.2, step:0.05, val:0.5}], formula:(v)=>2*Math.PI*Math.sqrt(v.L/9.8), target:1.42, tol:0.1, unit:"с", formulaStr:"T = 2π·√(L/g)", hint:"T растет как √L — длиннее маятник = больше период" },
+        48: { type:"slider", title:"🔬 Лаб 48: Волны на воде", desc:"Скорость волны v = λ·ν (длина волны × частота). Подбери λ и ν чтобы v≈0.45 м/с как в кювете.", sliders:[{id:"lam", label:"Длина λ, м", min:0.04, max:0.12, step:0.01, val:0.06}, {id:"nu", label:"Частота ν, Гц", min:2, max:8, step:0.5, val:4}], formula:(v)=>v.lam*v.nu, target:0.45, tol:0.06, unit:"м/с", formulaStr:"v = λ·ν", hint:"v = длина × частота" },
+
+    },
+    activeLevel: null,
+    activeGame: null,
+    shownThisLevel: false,
+    // вызвать при старте уровня
+    tryShow(levelId, game){
+        if(this.shownThisLevel && this.activeLevel===levelId) return;
+        const cfg = this.configs[levelId];
+        if(!cfg) return;
+        // не показываем если уже прошел эту лабу с успехом в этом запуске? показываем 1 раз
+        this.activeLevel = levelId;
+        this.shownThisLevel = true;
+        this.show(cfg, game);
+    },
+    reset(){ this.shownThisLevel=false; this.activeLevel=null; },
+    show(cfg, game){
+        this.activeGame = game;
+        if(game) game.paused = true;
+        const overlay = document.getElementById("lab-overlay");
+        const title = document.getElementById("lab-title");
+        const desc = document.getElementById("lab-desc");
+        const content = document.getElementById("lab-content");
+        const formulaEl = document.getElementById("lab-formula");
+        const resultEl = document.getElementById("lab-result");
+        const circuitEl = document.getElementById("lab-circuit");
+        const hintEl = document.getElementById("lab-hint-text");
+        title.textContent = cfg.title;
+        desc.textContent = cfg.desc;
+        hintEl.textContent = cfg.hint || "";
+        formulaEl.style.display = cfg.formulaStr ? "" : "none";
+        if(cfg.formulaStr) formulaEl.textContent = cfg.formulaStr + "  → цель: " + cfg.target + " " + (cfg.unit||"");
+        resultEl.style.display = "none";
+        circuitEl.style.display = "none";
+        content.innerHTML = "";
+        if(cfg.type==="slider"){
+            content.innerHTML = cfg.sliders.map(s=>`
+                <div class="lab-slider-row">
+                    <label>${s.label}</label>
+                    <input type="range" id="lab-${s.id}" min="${s.min}" max="${s.max}" step="${s.step}" value="${s.val}">
+                    <span class="lab-value" id="lab-v-${s.id}">${s.val}</span>
+                </div>
+            `).join("");
+            // bind
+            const update = ()=>{
+                const vals={};
+                cfg.sliders.forEach(s=>{
+                    const inp=document.getElementById("lab-"+s.id);
+                    const out=document.getElementById("lab-v-"+s.id);
+                    const v=parseFloat(inp.value);
+                    vals[s.id]=v;
+                    out.textContent=v;
+                });
+                const res=cfg.formula(vals);
+                resultEl.style.display="";
+                resultEl.textContent=`Результат: ${res.toFixed(2)} ${cfg.unit||""} (цель ${cfg.target} ±${cfg.tol})`;
+                const ok=Math.abs(res-cfg.target)<=cfg.tol;
+                resultEl.className="lab-result "+(ok?"ok":"bad");
+                resultEl._ok=ok;
+                resultEl._val=res;
+            };
+            cfg.sliders.forEach(s=>{
+                document.getElementById("lab-"+s.id).addEventListener("input", update);
+            });
+            update();
+        } else if(cfg.type==="circuit"){
+            const items=[
+                {i:"🔋", name:"Батарея"},
+                {i:"🔑", name:"Ключ"},
+                {i:"🧱", name:"Резистор"},
+                {i:"💡", name:"Лампа"}
+            ];
+            circuitEl.style.display="grid";
+            circuitEl.innerHTML = items.map((it,idx)=>`<div class="circuit-cell" data-idx="${idx}" title="${it.name}">${it.i}<br><small>${it.name}</small></div>`).join("");
+            resultEl.style.display="";
+            resultEl.textContent="Включи все 4 элемента";
+            resultEl.className="lab-result bad";
+            resultEl._ok=false;
+            circuitEl.querySelectorAll(".circuit-cell").forEach(cell=>{
+                cell.addEventListener("click", ()=>{
+                    cell.classList.toggle("on");
+                    const onCount=circuitEl.querySelectorAll(".circuit-cell.on").length;
+                    if(onCount===4){
+                        circuitEl.querySelectorAll(".circuit-cell").forEach(c=>c.classList.add("done"));
+                        resultEl.textContent="Цепь собрана! Ток пошёл ✅";
+                        resultEl.className="lab-result ok";
+                        resultEl._ok=true;
+                    } else {
+                        resultEl.textContent=`Включено ${onCount}/4`;
+                        resultEl.className="lab-result bad";
+                        resultEl._ok=false;
+                    }
+                });
+            });
+        }
+        overlay.classList.add("active");
+        // TTS hint
+        if(typeof KvantVoice!=="undefined" && cfg.desc) setTimeout(()=>KvantVoice.speak(cfg.desc.slice(0,200)), 300);
+    },
+    hide(success){
+        const overlay=document.getElementById("lab-overlay");
+        overlay.classList.remove("active");
+        if(this.activeGame){
+            this.activeGame.paused=false;
+            this.activeGame.lastTime=performance.now();
+            if(success){
+                this.activeGame.score+=120;
+                this.activeGame.shield=Math.min(this.activeGame.levelConfig.shieldCapacity, this.activeGame.shield+20);
+                if(typeof showNotification!=="undefined") showNotification("Лаб. бонус +120 очков и +20 щита!", "success");
+                // RPG bonus
+                if(typeof RPG!=="undefined"){ RPG.addCoins(15); RPG.updateHUD(); }
+                this.activeGame.updateHUD();
+            }
+            this.activeGame.canvas.focus();
+        }
+        this.activeGame=null;
+    }
+};
+
+
+
+/* ===== Сюжетные крутые фишки 9 класса ===== */
+const KvantArchive = {
+    logs: [
+        { id:1, stars:3, ico:"📡", title:"Лог 01: Первый контакт", text:"Квант записал: 'Я ждал 50 лет. Сканеры шептали, что угроза вернется. Когда ты нажал 'Начать игру' — мои реакторы впервые за полвека вышли на 100%. Спасибо.'", meta:"Открывается за 3★ на ур.1" },
+        { id:2, stars:12, ico:"🛰️", title:"Лог 12: О звездах", text:"'Ты знаешь, почему я люблю астрономию? Звезды не врут. Люди придумали созвездия, чтобы не заблудиться. Ты уже не заблудишься — твоя карта работает.'", meta:"12★ всего" },
+        { id:3, stars:24, ico:"⚛️", title:"Лог 24: О делении", text:"'Я видел, как делили ядро в 1942. Страшно. Но ты сегодня делишь только задачи на шаги. И это правильно. Сила — не в взрыве, а в контроле.'", meta:"24★ всего" },
+        { id:4, stars:36, ico:"💾", title:"Лог 36: О тебе", text:"'Я храню твое имя в самом защищенном кластере. Не за очки. За то, как ты не сдался на боссе §19. Это было... по-человечески.'", meta:"36★ всего" },
+        { id:5, stars:48, ico:"🌍", title:"СЕКРЕТНЫЙ ЛОГ: Земля", text:"'Слушай... на самом деле я мог справиться сам. Но мне нужен был не пилот. Мне нужен был тот, кто потом расскажет другим. Ты — мой передатчик. Лети. Расскажи.'", meta:"48★ — все лабы на 3★" }
+    ],
+    render(){
+        const el=document.getElementById("kvant-archive");
+        if(!el) return;
+        const totalStars = (()=>{
+            try{
+                const p=Storage.getProgress();
+                const hist=Storage.getHistory();
+                // посчитать звезды по всем уровням (упрощенно: кол-во пройденных * avg stars)
+                let s=0;
+                hist.forEach(r=>{ if(r.victory) s+=(r.stars||1); });
+                return s;
+            }catch(e){ return 0; }
+        })();
+        el.innerHTML = this.logs.map(l=>{
+            const unlocked = totalStars >= l.stars;
+            return `<div class="kvant-log ${unlocked?'':'locked'}">
+                <div class="log-ico">${unlocked?l.ico:'🔒'}</div>
+                <div style="flex:1">
+                    <b>${l.title} ${unlocked?'':'— закрой '+l.stars+'★'}</b>
+                    <p>${unlocked?l.text:'??? Заработай звезды, чтобы расшифровать сигнал.'}</p>
+                    <div class="log-meta">${l.meta} • ${unlocked?'расшифровано ✅':'зашифровано'}</div>
+                </div>
+            </div>`;
+        }).join("") + `<div style="text-align:center; font-size:12px; color:var(--text-dim); margin-top:6px">Всего звезд: <b>${totalStars}</b> / 144 • Открой все 5 логов!</div>`;
+    }
+};
+
+const BossIntro = {
+    bossQuotes: {
+        8: "КВАНТ: «Курсант, это Гравитрон! Он искривляет пространство — даже свет не убежит. Смотри на колодцы, не лети в лоб!»",
+        13: "КВАНТ: «Это — Параллакс. Он прячется за звездами. Измерь его смещение, иначе не найдешь!»",
+        20: "КВАНТ: «Встречай Баллистику — королеву спутников. Она знает первую космическую лучше тебя. Докажи обратное!»",
+        24: "КВАНТ: «Ядро Энергии проснулось! Оно питается твоими ошибками. Бей точно — и оно уснет.»",
+        32: "КВАНТ: «Резонатор! Он ловит твою частоту. Нажми ИМПУЛЬС в такт, иначе разнесет щит.»",
+        37: "КВАНТ: «Атомный Призрак — он из квантов. Фотоэффект остановит его. Помни про h·ν!»",
+        42: "КВАНТ: «Это Ядро древнего реактора. Финальный босс. Если проиграешь — Земля получит дозу. Ты готов?»",
+        48: "КВАНТ: «Последний эксперимент — сама вода! Волны в кювете шепчут: v=λ·ν. Услышишь?»"
+    },
+    show(levelId, levelConfig, onGo){
+        const quotes=this.bossQuotes[levelId] || `КВАНТ: «Босс уровня ${levelId}. Готов? Это твой экзамен.»`;
+        const epData = typeof EPISODES!=="undefined" ? EPISODES.find(e=>e.levels.includes(levelId)) : null;
+        document.getElementById("boss-intro-ep").textContent = epData ? epData.title : "БОСС УРОВЕНЬ "+levelId;
+        document.getElementById("boss-intro-title").textContent = levelConfig.boss ? `👾 БОСС #${levelId}: ${levelConfig.desc||"Угроза"}` : `⭐ ФИНАЛ ЭПИЗОДА`;
+        document.getElementById("boss-intro-quote").textContent = quotes;
+        const overlay=document.getElementById("boss-intro");
+        overlay.classList.add("active");
+        const goBtn=document.getElementById("boss-intro-go");
+        let done=false;
+        const finish=()=>{
+            if(done) return;
+            done=true;
+            overlay.classList.remove("active");
+            document.removeEventListener("keydown", onKey);
+            onGo();
+        };
+        const onKey=(e)=>{ if(e.code==="Space"||e.code==="Enter") finish(); };
+        goBtn.onclick=finish;
+        document.addEventListener("keydown", onKey);
+        // авто через 6 сек
+        setTimeout(()=>{ if(!done) { goBtn.textContent="🚀 ВПЕРЕД!"; goBtn.classList.add("pulse"); } }, 2500);
+    }
+};
+
+// 3 концовки на экране победы
+const Endings = {
+    getEnding(result, totalStars){
+        const acc=result.accuracy||0;
+        const s=totalStars||0;
+        if(acc>=90 && s>=80) return { key:"perfect", title:"🌟 ЗЕМЛЯ СПАСЕНА ИДЕАЛЬНО!", desc:"Квант плачет (насколько может ИИ): 'Ты не просто пилот — ты легенда. Щит держит 100 лет. Я ухожу в сон... но оставлю тебе ключ от мостика.'", badge:"good", reward:"+ секретный скин 'Квант' " };
+        if(result.victory && acc>=60) return { key:"good", title:"🌍 ЗЕМЛЯ СПАСЕНА!", desc:"'Мы сделали это! Реактор заглушен. Экипаж с Земли уже летит. А тебе — отпуск. И мой личный лог #5.'", badge:"good", reward:"+ 50 💎" };
+        return { key:"neutral", title:"⚠️ ЗЕМЛЯ ПОВРЕЖДЕНА, НО ЖИВА", desc:"'Щит выдержал, но города получили урон. Это — не поражение. Это — твой первый урок. Вернись и закрой на 3 звезды.'", badge:"neutral", reward:"" };
+    }
+};
+
+
+/* ===== Дневник экспедиции — комикс между эпизодами ===== */
+const Diary = {
+    entries: [
+        { ep:0, title:"Пролог: Сигнал", date:"12 марта 2087, 03:14", panels:[
+            { art:"🛰️💤", who:"КВАНТ", text:"Я спал 50 лет. Реакторы — 0%. Экипаж — на Земле. Приказ: ждать." },
+            { art:"📡⚡", who:"СИГНАЛ", text:"Внезапно — всплеск. Метеорный рой Персеиды-Х + магнитная буря. Я проснулся." },
+            { art:"👤🚀", who:"ТЫ", text:"Курсант, твой шаттл уже на подходе. Надень комбинезон. Физика — твой щит." }
+        ], bubble:"Квант включил TTS и впервые за полвека сказал 'Привет'." },
+        { ep:1, title:"Эп.1: Допуск", date:"13 марта, лаборатория", panels:[
+            { art:"⚠️🧤", who:"ИНСТРУКТАЖ", text:"Незаземлённый прибор? Реактив не там? Квант помнит каждую аварию 2030-х." },
+            { art:"✅📋", who:"ТЫ", text:"Сдал допуск на 100%. Квант: 'Неплохо. Люди думают ТБ — скучно. Это — опыт выживших.'" },
+            { art:"🚪🌌", who:"ШЛЮЗ", text:"Сертификат получен. Шлюз открыт. Впереди — настоящий космос." }
+        ], bubble:"С этого момента Квант перестает называть тебя 'курсант' и говорит 'пилот'." },
+        { ep:2, title:"Эп.2: Кинематика", date:"14-20 марта, орбита-тренажёр", panels:[
+            { art:"☄️📐", who:"ПРОМАХ", text:"Первый перехват — мимо на 200м. Глазомер в космосе = смерть." },
+            { art:"📈🧮", who:"ТРЕНИРОВКИ", text:"7 дней графиков, a, v, s. Каждый расчёт точнее. Точка встречи сошлась." },
+            { art:"🎯💥", who:"ПОПАДАНИЕ", text:"Модуль НАВИГАЦИЯ загорелся. Квант: 'Теперь полетим по-настоящему.'" }
+        ], bubble:"Ты выучил: путь ≠ перемещение. Квант записал это в лог #2." },
+        { ep:3, title:"Эп.3: Звезды", date:"21 марта, край системы", panels:[
+            { art:"🌌😵", who:"СЛЕПОТА", text:"Датчики захлебнулись шумом. Экраны в помехах. Корабль ослеп." },
+            { art:"✨🧭", who:"КВАНТ-ШТУРМАН", text:"'Звёзды никогда не врут. Вот Полярная. Вот сфера. Измерь параллакс.'" },
+            { art:"🗺️📍", who:"КАРТА", text:"Координаты сошлись. Источник угрозы — точка на экране. Впереди поле обломков." }
+        ], bubble:"Астронавигация восстановлена. Ты нашел Темірқазық." },
+        { ep:4, title:"Эп.4: Гравитация", date:"22 марта, поле астероидов", panels:[
+            { art:"🪨🪨🪨", who:"ПОЛЕ", text:"Тысяча камней размером с дом. Лететь в лоб — самоубийство." },
+            { art:"🍎⚖️", who:"НЬЮТОН", text:"'Лети не силой, а законами. Каждый камень — твой союзник, если считать притяжение.'" },
+            { art:"↗️🚀", who:"РОГАТКА", text:"Грави-манёвр! Камни разогнали тебя без топлива. Модуль МАНЁВР активен." }
+        ], bubble:"Босс 20 повержен — ты освоил 1-ю космическую." },
+        { ep:5, title:"Эп.5: Энергия", date:"23 марта, 02:11 — блэкаут", panels:[
+            { art:"🌑🔴", who:"ТЬМА", text:"Энергоядро село. Резерв 2 часа. Паника жрёт энергию быстрее приборов." },
+            { art:"♻️🔋", who:"СБОР", text:"Маховики, балласт, тепло радиаторов — каждый джоуль в цепь. Закон сохранения в деле." },
+            { art:"💡⚡", who:"СВЕТ", text:"Щелчок рубильника — станция загудела. Энергоядро янтарное. Связь... пропала." }
+        ], bubble:"Босс 24 — энергоядро — ожил твоими руками." },
+        { ep:6, title:"Эп.6: Сигнал", date:"23 марта, антенна", panels:[
+            { art:"📡❌", who:"ТИШИНА", text:"Земля молчит 3 часа. Антенна сбита манёвром. Маятник качается вразнобой." },
+            { art:"🎛️📻", who:"РЕЗОНАНС", text:"Период, частота, резонанс — поймал ту самую волну. Стрелка дрогнула." },
+            { art:"👋🌍", who:"ЗЕМЛЯ", text:"'Орбита-9, слышим вас!' Ты рассмеялся впервые за дни. Связь восстановлена." }
+        ], bubble:"Босс-резонатор 32 пал — ты вернул голос Земле." },
+        { ep:7, title:"Эп.7: Атом", date:"24 марта, радиационный пояс", panels:[
+            { art:"☢️👻", who:"НЕВИДИМКА", text:"Поток частиц невидим. Обшивка держит минуты. Обычная броня бесполезна." },
+            { art:"🔬✨", who:"КВАНТЫ", text:"Фотоэффект, h·ν, Планк — настроил поле на частоту частиц. Они отскакивают как горох!" },
+            { art:"🛡️🔵", who:"ЩИТ", text:"Радиационный щит синий. Квант: 'Ты переиграл радиацию в её игру.'" }
+        ], bubble:"Босс-атом 37 — щит держит. Дальше — древний реактор." },
+        { ep:8, title:"Эп.8: Ядро", date:"24 марта, древний реактор", panels:[
+            { art:"🏚️☢️", who:"РЕАКТОР", text:"Тёмная громада, внутри свет. Цепная реакция разгоняется. Один заход." },
+            { art:"⚛️💥", who:"ДЕЛЕНИЕ", text:"Протоны, нейтроны, энергия связи — понял, как остановить распад." },
+            { art:"🤝🔒", who:"ФИНАЛ", text:"Реактор уснул. Квант тихо: 'Ты остановил взрыв, который летел к Земле.'" }
+        ], bubble:"Финальный босс 42 — сердце ядра — обезврежено." },
+        { ep:9, title:"Эпилог: Картина мира", date:"25 марта, вид на Землю", panels:[
+            { art:"🌍💙", who:"ДОМ", text:"Смотришь на Землю глазами физика — от частиц до Галактик." },
+            { art:"📼💾", who:"АРХИВ", text:"Все логи Кванта открыты. Его последняя фраза: 'Расскажи другим.'" },
+            { art:"🎖️🚀", who:"ЛЕГЕНДА", text:"Ты — не курсант. Ты — Легенда Орбиты-9. Щит держит. Миссия выполнена." }
+        ], bubble:"3 концовки ждут: спаси идеально (90%+80★) — получи скин Кванта!" }
+    ],
+    current: 0,
+    isUnlocked(entry){
+        // разблокировка по прогрессу эпизодов
+        try{
+            const prog=Storage.getProgress();
+            const done=prog.completedLevels||{};
+            // лог 0 открыт сразу, остальные — когда предыдущий эпизод пройден
+            if(entry.ep===0) return true;
+            const idx = EPISODES.findIndex(e=>e.id==="ep"+entry.ep) // ep1-> index1 etc
+            // проще: требуем что хотя бы 1 уровень из предыдущего эпизода пройден
+            // для эпилога требуем все основные 43 уровня
+            if(entry.ep>=9) return Object.keys(done).length>=43;
+            const prevEp = EPISODES[entry.ep-1]; // ep1 предыдущий ep0 и т.д.
+            if(!prevEp) return true;
+            return prevEp.levels.some(l=>done[l]);
+        }catch(e){ return entry.ep===0; }
+    },
+    open(page){
+        if(typeof page==="number") this.current=page;
+        const entry=this.entries[this.current];
+        if(!entry) return;
+        document.getElementById("diary-title").textContent="📖 "+entry.title;
+        document.getElementById("diary-subtitle").textContent=entry.date;
+        const comic=document.getElementById("diary-comic");
+        const unlocked=this.isUnlocked(entry);
+        if(!unlocked){
+            comic.innerHTML=`<div class="diary-locked">🔒 Запись зашифрована<br><small>Пройди предыдущий эпизод, чтобы открыть. Прогресс: ${EPISODES[entry.ep-1]?.title||""}</small></div>`;
+        } else {
+            comic.innerHTML=entry.panels.map(p=>`
+                <div class="comic-panel">
+                    <div class="comic-art">${p.art}</div>
+                    <div class="comic-caption"><small>${p.who}</small>${p.text}</div>
+                </div>
+            `).join("");
+        }
+        const bubble=document.getElementById("diary-bubble");
+        if(unlocked && entry.bubble){
+            bubble.style.display="flex";
+            bubble.innerHTML=`<span>🤖</span><span><b>Квант шепчет:</b> ${entry.text||entry.bubble}</span>`;
+            // озвучка дневника
+            if(typeof KvantVoice!=="undefined" && entry.panels[0]) {
+                const txt = entry.panels.map(p=>p.text).join(" ");
+                // не авто-спамим, только по кнопке
+            }
+        } else bubble.style.display="none";
+        document.getElementById("diary-page").textContent=(this.current+1)+" / "+this.entries.length;
+        document.getElementById("diary-meta").textContent= unlocked ? `Страница ${this.current+1} • ${entry.panels.length} кадров` : "🔒 Закрыто";
+        document.getElementById("diary-modal").classList.add("active");
+        // вибрация на открытии новой записи
+        if(navigator.vibrate && unlocked) navigator.vibrate(30);
+    },
+    next(){ this.current=(this.current+1)%this.entries.length; this.open(); },
+    prev(){ this.current=(this.current-1+this.entries.length)%this.entries.length; this.open(); },
+    // авто-показать между эпизодами при победе
+    tryAutoShow(levelId){
+        try{
+            const ep = episodeForLevel(levelId);
+            if(!ep) return;
+            // если это последний уровень эпизода и эпизод только что закрыт
+            const isLast = levelId===Math.max(...ep.levels);
+            if(!isLast) return;
+            const prog=Storage.getProgress();
+            const allDone = ep.levels.every(l=>prog.completedLevels[l]);
+            if(!allDone) return;
+            // не показывать повторно если уже видел этот дневник
+            const seen = JSON.parse(localStorage.getItem("diarySeen")||"[]");
+            const diaryIdx = this.entries.findIndex(e=>e.ep===EPISODES.indexOf(ep)+1); // следующий дневник
+            // если победил ep1 (уровни 2-8) → показать diary ep2
+            const nextEpIdx = EPISODES.indexOf(ep)+1;
+            const diaryEntry = this.entries.find(e=>e.ep===nextEpIdx);
+            if(!diaryEntry) return;
+            if(seen.includes(diaryEntry.ep)) return;
+            seen.push(diaryEntry.ep);
+            localStorage.setItem("diarySeen", JSON.stringify(seen));
+            setTimeout(()=>{ this.current=this.entries.indexOf(diaryEntry); this.open(); }, 900);
+        }catch(e){}
+    }
+};
+
+const Mechanics = {
+    // called on level start
+    setup(levelConfig, game){
+        game.gravityWells = [];
+        game.pulseReady = true;
+        game.pulseCd = 0;
+        game.bossHP = 0;
+        game.bossMax = 0;
+        // HUD mechanic badge
+        const badge = document.getElementById("hud-mechanic");
+        if(badge){
+            const mech = levelConfig.mechanic || "classic";
+            const names = {
+                classic: I18n.t("mechanicClassic"),
+                gravity: I18n.t("mechanicGravity"),
+                resonance: I18n.t("mechanicResonance"),
+                orbital: I18n.t("mechanicOrbital"),
+                energy: I18n.t("mechanicEnergy"),
+                radiation: I18n.t("mechanicRadiation"),
+                fusion: I18n.t("mechanicFusion"),
+                lab: I18n.t("mechanicLab")
+            };
+            badge.textContent = (levelConfig.boss? "👾 "+I18n.t("mechanicBoss")+" • " : "• ") + (names[mech]||mech);
+            badge.className = "mechanic-badge "+mech;
+            badge.style.display = "inline-flex";
+            if(levelConfig.boss) badge.style.background="rgba(229,57,53,0.15)";
+        }
+        const pulseBtn = document.getElementById("pulse-btn");
+        if(pulseBtn) pulseBtn.style.display = (levelConfig.mechanic==="resonance") ? "flex" : "none";
+        const labHint = document.getElementById("hud-lab-hint");
+        if(labHint) labHint.style.display = (levelConfig.mechanic==="lab"||levelConfig.mechanic==="fusion"||levelConfig.mechanic==="radiation") ? "inline-flex" : "none";
+        const labBtn = document.getElementById("btn-lab");
+        if(labBtn) labBtn.style.display = (levelConfig.mechanic==="lab" || LabGames.configs[levelConfig.id]) ? "" : "none";
+        // setup specific
+        if(levelConfig.mechanic==="gravity"){
+            // create 2 wells
+            game.gravityWells = [
+                {x: game.width*0.28, y: game.height*0.32, strength: 90000, radius: 90, color:"#d81b60"},
+                {x: game.width*0.72, y: game.height*0.38, strength: 110000, radius: 110, color:"#7c4dff"}
+            ];
+        } else if(levelConfig.mechanic==="orbital"){
+            game.gravityWells = [
+                {x: game.width/2, y: game.height*0.35, strength: 150000, radius: 130, color:"#ffb300", central:true, pulse:0}
+            ];
+        } else if(levelConfig.mechanic==="resonance"){
+            game.pulseReady = true;
+            game.pulseCd = 0;
+            game.pulseActive = 0;
+        }
+        // boss
+        if(levelConfig.boss){
+            game.bossHP = 3 + Math.floor(levelConfig.id/10);
+            game.bossMax = game.bossHP;
+            const bar = document.getElementById("boss-bar");
+            if(bar) bar.classList.add("active");
+            const fill = document.getElementById("boss-fill");
+            if(fill) fill.style.width="100%";
+        } else {
+            const bar = document.getElementById("boss-bar");
+            if(bar) bar.classList.remove("active");
+        }
+    },
+    update(game, dt){
+        const mech = game.levelConfig?.mechanic;
+        if(mech==="gravity" || mech==="orbital"){
+            // attract asteroids
+            game.asteroids.forEach(a=>{
+                game.gravityWells.forEach(w=>{
+                    const dx = w.x - a.x, dy = w.y - a.y;
+                    const dist2 = dx*dx + dy*dy;
+                    const dist = Math.sqrt(dist2)||1;
+                    if(dist < w.radius*2.5){
+                        const force = w.strength / (dist2+4000) * dt;
+                        a.vx += (dx/dist)*force;
+                        a.vy += (dy/dist)*force;
+                    }
+                });
+            });
+        }
+        if(mech==="resonance"){
+            if(game.pulseCd>0){
+                game.pulseCd = Math.max(0, game.pulseCd - dt*1000);
+                const btn = document.getElementById("pulse-btn");
+                if(btn){
+                    if(game.pulseCd>0){
+                        btn.classList.add("cooldown");
+                        btn.innerHTML = Math.ceil(game.pulseCd/1000)+"s";
+                    } else {
+                        btn.classList.remove("cooldown");
+                        btn.innerHTML = "⚡<br>ИМПУЛЬС";
+                    }
+                }
+            }
+            if(game.pulseActive>0){
+                game.pulseActive -= dt*1000;
+                if(game.pulseActive<=0){
+                    game.player.shieldActive = false;
+                }
+            }
+        }
+        if(mech==="energy"){
+            // energy orbs pulsate faster, and matching type gives bonus
+        }
+    },
+    onPulse(game){
+        if(!game.running || game.isTaskActive) return;
+        if(game.levelConfig.mechanic!=="resonance") return;
+        if(game.pulseCd>0) { showNotification(I18n.t("pulseCooldown"), "warning"); return; }
+        game.player.shieldActive = true;
+        game.player.shieldTarget = 120;
+        game.pulseActive = 450;
+        const cooldownBase = 1400 - RPG.getSkillLevel("speed")*100;
+        game.pulseCd = Math.max(600, cooldownBase);
+        game.spawnShieldWave();
+        const btn = document.getElementById("pulse-btn");
+        if(btn){
+            btn.classList.add("pulsing");
+            setTimeout(()=>btn.classList.remove("pulsing"), 500);
+        }
+        // destroy nearby asteroids
+        game.asteroids.slice().forEach(a=>{
+            const d = Math.hypot(a.x - game.player.x, a.y - game.player.y);
+            if(d < 130){
+                // destroy
+                const idx = game.asteroids.indexOf(a);
+                if(idx>=0){
+                    game.asteroids.splice(idx,1);
+                    game.score+=40;
+                    game.asteroidsDeflected++;
+                    for(let j=0;j<10;j++){
+                        const ang=Math.random()*Math.PI*2; const sp=1+Math.random()*4;
+                        game.particles.push({x:a.x, y:a.y, vx:Math.cos(ang)*sp, vy:Math.sin(ang)*sp, life:500, maxLife:500, color:a.color});
+                    }
+                    game.updateHUD();
+                }
+            }
+        });
+    },
+    onBossHit(game){
+        if(!game.levelConfig?.boss) return false;
+        game.bossHP--;
+        const fill = document.getElementById("boss-fill");
+        if(fill) fill.style.width = (game.bossHP/game.bossMax*100)+"%";
+        if(game.bossHP<=0){
+            // boss defeated -> need one more correct answer to win
+            game.score+=200;
+            showNotification("БОСС повержен! +200", "success");
+            // reduce remaining tasks
+            game.levelTasksTotal = Math.min(game.levelTasksTotal, game.tasksSolved+2);
+            const bar = document.getElementById("boss-bar");
+            if(bar) bar.classList.remove("active");
+            return true;
+        } else {
+            showNotification("Босс: "+game.bossHP+"/"+game.bossMax, "warning");
+        }
+        return false;
+    }
+};
+
+/* ===== QUICK ASSIGN ===== */
+const QuickAssign = {
+    init(){
+        document.getElementById("btn-quick-select-all")?.addEventListener("click", ()=>{
+            document.querySelectorAll("#quick-students-matrix input[type=checkbox]").forEach(cb=>cb.checked=true);
+        });
+        document.getElementById("btn-quick-clear")?.addEventListener("click", ()=>{
+            document.querySelectorAll("#quick-students-matrix input[type=checkbox]").forEach(cb=>cb.checked=false);
+        });
+        document.getElementById("btn-quick-assign")?.addEventListener("click", ()=>QuickAssign.doAssign());
+        document.getElementById("btn-assign-next")?.addEventListener("click", ()=>QuickAssign.assignNext());
+        document.getElementById("btn-assign-all-remaining")?.addEventListener("click", ()=>QuickAssign.assignAllRemaining());
+    },
+    render(){
+        const studentsMat = document.getElementById("quick-students-matrix");
+        const levelsMat = document.getElementById("quick-levels-matrix");
+        if(!studentsMat || !levelsMat) return;
+        const classes = Storage.getClasses();
+        if(classes.length===0){
+            studentsMat.innerHTML = `<div style="color:var(--text-dim); padding:8px">Нет классов — создайте класс выше</div>`;
+        } else {
+            studentsMat.innerHTML = classes.map(cls=>{
+                return `<div style="font-weight:800; color:var(--primary-dark); margin-top:8px">👥 ${escapeHtml(cls.name)}</div>` +
+                cls.students.map(s=>{
+                    const label = s.name || s.playerId;
+                    const id = s.playerId ? `pid:${s.playerId}` : `name:${s.name}`;
+                    return `<div class="assign-matrix-row"><input type="checkbox" value="${escapeHtml(id)}" data-name="${escapeHtml(s.name)}" data-pid="${escapeHtml(s.playerId)}"><label>${escapeHtml(label)} ${s.playerId?'<small style="color:var(--text-dim)">'+escapeHtml(s.playerId)+'</small>':''}</label></div>`;
+                }).join("");
+            }).join("");
+        }
+        // levels grouped by episode
+        let levelsHtml = "";
+        EPISODES.forEach(ep=>{
+            levelsHtml += `<div style="font-weight:800; color:${ep.color}; margin-top:8px; border-left:3px solid ${ep.color}; padding-left:6px">${escapeHtml(epText(ep,"title"))}</div>`;
+            ep.levels.forEach(lid=>{
+                const cfg = LEVELS_CONFIG.find(l=>l.id===lid);
+                if(!cfg) return;
+                levelsHtml += `<div class="assign-matrix-row"><input type="checkbox" value="${lid}"><label>#${lid} — ${escapeHtml(I18n.t(getLevelNameKey(lid)))} <span class="assign-pill">${cfg.mechanic||"classic"}${cfg.boss?" 👾":""}</span></label></div>`;
+            });
+        });
+        // custom lessons
+        const custom = Storage.getCustomLessons();
+        if(custom.length){
+            levelsHtml += `<div style="font-weight:800; color:var(--warning); margin-top:8px">👩‍🏫 Уроки учителя</div>`;
+            custom.forEach(l=>{
+                levelsHtml += `<div class="assign-matrix-row"><input type="checkbox" value="custom:${l.id}"><label>📝 ${escapeHtml(I18n.getLocalized(l,"name"))}</label></div>`;
+            });
+        }
+        levelsMat.innerHTML = levelsHtml;
+    },
+    getSelectedStudents(){
+        return Array.from(document.querySelectorAll("#quick-students-matrix input:checked")).map(cb=>({
+            name: cb.dataset.name,
+            playerId: cb.dataset.pid,
+            key: cb.value
+        }));
+    },
+    getSelectedLevels(){
+        return Array.from(document.querySelectorAll("#quick-levels-matrix input:checked")).map(cb=> cb.value);
+    },
+    doAssign(){
+        const students = QuickAssign.getSelectedStudents();
+        const levels = QuickAssign.getSelectedLevels();
+        const note = document.getElementById("quick-assign-note")?.value||"";
+        if(!students.length){ showNotification("Выберите учеников", "warning"); return; }
+        if(!levels.length){ showNotification("Выберите уровни", "warning"); return; }
+        let count=0;
+        levels.forEach(lvlRaw=>{
+            const levelId = lvlRaw.indexOf("custom:")===0 ? lvlRaw : parseInt(lvlRaw,10);
+            students.forEach(s=>{
+                Storage.addAssignment({studentName: s.name, playerId: s.playerId, levelId, note});
+                count++;
+            });
+        });
+        Teacher.renderAssignments();
+        Journal.render();
+        showNotification("Назначено: "+count, "success");
+        document.getElementById("quick-assign-note").value="";
+    },
+    assignNext(){
+        const students = QuickAssign.getSelectedStudents();
+        if(!students.length){ showNotification("Выберите учеников", "warning"); return; }
+        const progress = Storage.getProgress();
+        // For each student, we need to find their next unfinished level based on global progress? But progress is per device, not per student.
+        // Instead, use history of that student: find first level not completed by that student (from history)
+        // Simplified: assign globally next unlocked level
+        const nextLevel = progress.unlockedLevel || 1;
+        const note = document.getElementById("quick-assign-note")?.value||"";
+        let count=0;
+        students.forEach(s=>{
+            // check if already assigned
+            const exists = Storage.getAssignments().some(a=> (a.playerId? a.playerId===s.playerId : Storage.normalizeName(a.studentName)===Storage.normalizeName(s.name)) && String(a.levelId)===String(nextLevel));
+            if(!exists){
+                Storage.addAssignment({studentName: s.name, playerId: s.playerId, levelId: nextLevel, note});
+                count++;
+            }
+        });
+        Teacher.renderAssignments();
+        showNotification("Назначен следующий уровень #"+nextLevel+" — "+count, "success");
+    },
+    assignAllRemaining(){
+        const students = QuickAssign.getSelectedStudents();
+        if(!students.length){ showNotification("Выберите учеников", "warning"); return; }
+        const allLevels = LEVELS_CONFIG.map(l=>l.id);
+        const note = document.getElementById("quick-assign-note")?.value||"";
+        let count=0;
+        students.forEach(s=>{
+            const hist = Storage.getHistory().filter(r=> (r.playerId && r.playerId===s.playerId) || Storage.normalizeName(r.name)===Storage.normalizeName(s.name));
+            const completed = new Set(hist.filter(r=>r.victory).map(r=>String(r.level)));
+            allLevels.forEach(lvl=>{
+                if(!completed.has(String(lvl))){
+                    const exists = Storage.getAssignments().some(a=> (a.playerId? a.playerId===s.playerId : Storage.normalizeName(a.studentName)===Storage.normalizeName(s.name)) && String(a.levelId)===String(lvl));
+                    if(!exists){
+                        Storage.addAssignment({studentName: s.name, playerId: s.playerId, levelId: lvl, note});
+                        count++;
+                    }
+                }
+            });
+        });
+        Teacher.renderAssignments();
+        showNotification("Назначено всех непройденных: "+count, "success");
+    }
+};
+
+
+</script></body>
 </html>
 pt></body>
 </html>
