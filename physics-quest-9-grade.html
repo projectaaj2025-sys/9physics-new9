@@ -308,6 +308,75 @@ html, body {
 .level-section-title .ico {
     margin-right: 8px;
 }
+/* ===== Фильтр сложности (как в 8 классе) ===== */
+.difficulty-filter {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+    margin: 14px 0 10px;
+    padding: 10px 14px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    box-shadow: var(--shadow);
+}
+.difficulty-filter-label {
+    font-weight: 800;
+    font-size: 13px;
+    color: var(--text-dim);
+    margin-right: 4px;
+}
+.diff-btn {
+    padding: 6px 14px;
+    border-radius: 8px;
+    border: 1.5px solid var(--border);
+    background: var(--bg-card);
+    color: var(--text);
+    cursor: pointer;
+    font-weight: 800;
+    font-size: 13px;
+    font-family: inherit;
+    transition: all .2s;
+}
+.diff-btn:hover { transform: translateY(-1px); border-color: var(--primary); }
+.diff-btn.active { background: var(--gradient-primary); color: #fff; border-color: var(--primary); box-shadow: var(--glow); }
+.section-theme-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 11px;
+    font-weight: 800;
+    padding: 3px 8px;
+    border-radius: 6px;
+    margin-left: 6px;
+    border: 1px solid var(--border);
+    background: var(--bg-card);
+}
+.theme-bonus { border-color: #ffb300; color: #ff6f00; }
+.theme-mechanics { border-color: #00b8d4; color: #00838f; }
+.theme-astronomy { border-color: #7c4dff; color: #4527a0; }
+.theme-dynamics { border-color: #00c853; color: #2e7d32; }
+.theme-energy { border-color: #ff8f00; color: #ef6c00; }
+.theme-oscillations { border-color: #00acc1; color: #006064; }
+.theme-em { border-color: #d81b60; color: #880e4f; }
+.theme-atomic { border-color: #ff3d00; color: #bf360c; }
+.theme-lab { border-color: #e040fb; color: #6a1b9a; }
+.difficulty-badge-task {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 12px;
+    font-weight: 800;
+    padding: 4px 10px;
+    border-radius: 20px;
+    margin-left: 8px;
+    border: 1.5px solid transparent;
+}
+.diff-1 { background: rgba(0,200,83,0.12); color: #2e7d32; border-color: rgba(0,200,83,0.3); }
+.diff-2 { background: rgba(255,179,0,0.14); color: #ef6c00; border-color: rgba(255,179,0,0.35); }
+.diff-3 { background: rgba(255,61,0,0.12); color: #bf360c; border-color: rgba(255,61,0,0.3); }
+
 .level-card {
     background: var(--gradient-card);
     border: 2px solid var(--border);
@@ -2261,7 +2330,7 @@ html, body {
         <div class="modal-content task-content">
             <div class="task-header">
                 <h3 id="task-title" data-i18n="task">Задание</h3>
-                <div class="task-type-badge" id="task-type-badge"></div>
+                <span class="task-type-badge" id="task-type-badge"></span> <span class="difficulty-badge-task" id="task-difficulty-badge" style="display:none"></span></div>
             </div>
             <div class="task-body" id="task-body"></div>
             <div class="task-feedback" id="task-feedback"></div>
@@ -30660,7 +30729,7 @@ const LEVELS_CONFIG = [
         "cityHealth": 100,
         "shieldCapacity": 69,
         "tasksToWin": 15,
-        "tasksTotal": 15,
+        "tasksTotal": 18,
         "energySpawnRate": 3600,
         "mechanic": "resonance",
         "boss": false,
@@ -30678,7 +30747,7 @@ const LEVELS_CONFIG = [
         "cityHealth": 100,
         "shieldCapacity": 69,
         "tasksToWin": 15,
-        "tasksTotal": 15,
+        "tasksTotal": 17,
         "energySpawnRate": 3600,
         "mechanic": "resonance",
         "boss": true,
@@ -30911,7 +30980,7 @@ const LEVELS_CONFIG = [
         "asteroidSpeed": 1.88,
         "cityHealth": 100,
         "shieldCapacity": 78,
-        "tasksToWin": 15,
+        "tasksToWin": 8,
         "tasksTotal": 15,
         "energySpawnRate": 3400,
         "mechanic": "lab",
@@ -30929,7 +30998,7 @@ const LEVELS_CONFIG = [
         "asteroidSpeed": 1.9,
         "cityHealth": 100,
         "shieldCapacity": 78,
-        "tasksToWin": 15,
+        "tasksToWin": 8,
         "tasksTotal": 15,
         "energySpawnRate": 3400,
         "mechanic": "lab",
@@ -30947,7 +31016,7 @@ const LEVELS_CONFIG = [
         "asteroidSpeed": 1.93,
         "cityHealth": 100,
         "shieldCapacity": 79,
-        "tasksToWin": 15,
+        "tasksToWin": 8,
         "tasksTotal": 15,
         "energySpawnRate": 3400,
         "mechanic": "lab",
@@ -30965,7 +31034,7 @@ const LEVELS_CONFIG = [
         "asteroidSpeed": 1.95,
         "cityHealth": 100,
         "shieldCapacity": 80,
-        "tasksToWin": 15,
+        "tasksToWin": 8,
         "tasksTotal": 15,
         "energySpawnRate": 3400,
         "mechanic": "lab",
@@ -32611,7 +32680,25 @@ const LOCALES = {
         howToPlayObj4: "На каждое задание даётся 5 попыток и 3 подсказки; после 5 неверных ответов показывается правильный",
         howToPlayObj5: "Каждые 3 астероида появляется новый вопрос по физике — примерно раз в 15 секунд",
         howToPlayObj6: "Щит отражает астероиды и расходует энергию: она медленно восстанавливается сама, а также от энергетических сфер и верных ответов",
-    },
+    
+        difficultyFilter: "Сложность:",
+        difficultyAll: "Все",
+        difficultyEasy: "Лёгкий",
+        difficultyMedium: "Средний",
+        difficultyHard: "Сложный",
+        difficultyBadge: "Сложность",
+        selectedDifficultyInfo: "Выбрана сложность: {0}",
+        labMiniNote: "Мини-уровень — достаточно 8 правильных ответов",
+        themeBonus: "Бонус",
+        themeMechanics: "Механика",
+        themeAstronomy: "Астрономия",
+        themeDynamics: "Динамика",
+        themeEnergy: "Энергия",
+        themeOscillations: "Колебания и волны",
+        themeEM: "Электромагнетизм",
+        themeAtomic: "Атомная физика",
+        themeLab: "Лаборатория",
+},
 
     en: {
 
@@ -33214,7 +33301,25 @@ const LOCALES = {
         howToPlayObj4: "Each task gives you 5 attempts and 3 hints; after 5 wrong answers the correct one is revealed",
         howToPlayObj5: "Every 3 asteroids a new physics question appears — about once every 15 seconds",
         howToPlayObj6: "The shield deflects asteroids and spends energy: it slowly regenerates on its own and is restored by energy orbs and correct answers",
-    },
+    
+        difficultyFilter: "Difficulty:",
+        difficultyAll: "All",
+        difficultyEasy: "Easy",
+        difficultyMedium: "Medium",
+        difficultyHard: "Hard",
+        difficultyBadge: "Difficulty",
+        selectedDifficultyInfo: "Selected difficulty: {0}",
+        labMiniNote: "Mini-level — 8 correct answers to win",
+        themeBonus: "Bonus",
+        themeMechanics: "Mechanics",
+        themeAstronomy: "Astronomy",
+        themeDynamics: "Dynamics",
+        themeEnergy: "Energy",
+        themeOscillations: "Oscillations & Waves",
+        themeEM: "Electromagnetism",
+        themeAtomic: "Atomic",
+        themeLab: "Laboratory",
+},
 
     kk: {
 
@@ -33806,7 +33911,25 @@ const LOCALES = {
         howToPlayObj4: "Әр тапсырмаға 5 әрекет және 3 кеңес беріледі; 5 қате жауаптан кейін дұрыс жауап көрсетіледі",
         howToPlayObj5: "Әр 3 астероид сайын жаңа физика сұрағы шығады — шамамен әр 15 секундта",
         howToPlayObj6: "Қалқан астероидтарды қайтарады және энергия жұмсайды: ол баяу қалпына келеді, сондай-ақ энергия сфералары мен дұрыс жауаптардан толығады",
-    },
+    
+        difficultyFilter: "Күрделілік:",
+        difficultyAll: "Барлығы",
+        difficultyEasy: "Жеңіл",
+        difficultyMedium: "Орташа",
+        difficultyHard: "Күрделі",
+        difficultyBadge: "Күрделілік",
+        selectedDifficultyInfo: "Таңдалған күрделілік: {0}",
+        labMiniNote: "Мини-деңгей — 8 дұрыс жауап жеткілікті",
+        themeBonus: "Бонус",
+        themeMechanics: "Механика",
+        themeAstronomy: "Астрономия",
+        themeDynamics: "Динамика",
+        themeEnergy: "Энергия",
+        themeOscillations: "Тербелістер мен толқындар",
+        themeEM: "Электромагнетизм",
+        themeAtomic: "Атом физикасы",
+        themeLab: "Зертхана",
+},
 };
 
 
@@ -35570,12 +35693,17 @@ const Teacher = {
     // excludeIds — уже решённые задания (не повторяем).
     // deprioritizeIds — проваленные задания (5 попыток истрачено): выдаём, только если свежих не осталось.
     // Пользовательские задания учителя привязаны к уроку: topic = "lesson:<id уровня>".
-    getTaskForLevel(levelConfig, excludeIds = [], deprioritizeIds = []) {
+    getTaskForLevel(levelConfig, excludeIds = [], deprioritizeIds = [], difficulty = 0) {
         const all = this.getAllTasks();
         const cfgId = String(levelConfig.id);
         const lessonKey = cfgId.indexOf("custom:") === 0 ? cfgId : "lesson:" + cfgId;
         const matchesLevel = (t) => t.topic === lessonKey || (levelConfig.topics || []).includes(t.topic);
         let candidates = all.filter(t => matchesLevel(t) && !excludeIds.includes(t.id));
+        const diff = difficulty || 0;
+        if(diff !== 0){
+            const filtered = candidates.filter(t => (t.difficulty || 1) == diff);
+            if(filtered.length > 0) candidates = filtered;
+        }
         const fresh = candidates.filter(t => !deprioritizeIds.includes(t.id));
         if (fresh.length > 0) candidates = fresh;
         if (candidates.length === 0) {
@@ -35820,6 +35948,41 @@ function rocketSVG(st) {
     return `<svg class="rocket-preview" width="64" height="90" viewBox="0 0 64 90" xmlns="http://www.w3.org/2000/svg">${defs}${body}</svg>`;
 }
 
+
+/* ===== SECTION THEMES — разные фоны и астероиды для разделов ===== */
+const SECTION_THEMES = {
+    bonus:      { bg: ["#1a0f00","#0a1235"], stars: 140, starColor: "#ffd54f", hues: [30,45], dome: "#ffb300", labelKey: "themeBonus" },
+    mechanics:   { bg: ["#0a1235","#001a33"], stars: 180, starColor: "#80deea", hues: [195,210], dome: "#00acc1", labelKey: "themeMechanics" },
+    astronomy:   { bg: ["#0d0a2e","#1a0a35"], stars: 320, starColor: "#b39ddb", hues: [260,285], dome: "#7c4dff", labelKey: "themeAstronomy" },
+    dynamics:    { bg: ["#051a0f","#0a2e1a"], stars: 160, starColor: "#a5d6a7", hues: [120,140], dome: "#00c853", labelKey: "themeDynamics" },
+    energy:      { bg: ["#1a1200","#2e1f00"], stars: 130, starColor: "#ffcc80", hues: [25,45], dome: "#ff8f00", labelKey: "themeEnergy" },
+    oscillations:{ bg: ["#0a1e2e","#0d2b36"], stars: 210, starColor: "#80cbc4", hues: [175,195], dome: "#00acc1", labelKey: "themeOscillations" },
+    em:          { bg: ["#1a0a1e","#2e0a2e"], stars: 260, starColor: "#f48fb1", hues: [280,320], dome: "#d81b60", labelKey: "themeEM" },
+    atomic:      { bg: ["#1a0a0a","#2e0a0a"], stars: 190, starColor: "#ef9a9a", hues: [0,20], dome: "#ff3d00", labelKey: "themeAtomic" },
+    lab:         { bg: ["#1a0a1a","#1e0a2e"], stars: 110, starColor: "#ce93d8", hues: [300,330], dome: "#e040fb", labelKey: "themeLab" }
+};
+
+function getThemeForLevel(levelId){
+    if(typeof levelId==="string" && levelId.indexOf("custom:")===0) return SECTION_THEMES.mechanics;
+    const cfg = (typeof LEVELS_CONFIG!=="undefined") ? LEVELS_CONFIG.find(l=>l.id===levelId) : null;
+    if(!cfg) return SECTION_THEMES.mechanics;
+    const ch = cfg.chapter || "";
+    if(ch==="bonus") return SECTION_THEMES.bonus;
+    if(ch==="lab") return SECTION_THEMES.lab;
+    if(/^p\d+$/.test(ch)){
+        const n=parseInt(ch.slice(1),10);
+        if(n>=1 && n<=7) return SECTION_THEMES.mechanics;
+        if(n>=8 && n<=13) return SECTION_THEMES.astronomy;
+        if(n>=14 && n<=20) return SECTION_THEMES.dynamics;
+        if(n>=21 && n<=24) return SECTION_THEMES.energy;
+        if(n>=25 && n<=32) return SECTION_THEMES.oscillations;
+        if(n>=33 && n<=37) return SECTION_THEMES.em;
+        if(n>=38 && n<=43) return SECTION_THEMES.atomic;
+    }
+    return SECTION_THEMES.mechanics;
+}
+
+
 const Game = {
     canvas: null,
     ctx: null,
@@ -35835,6 +35998,7 @@ const Game = {
     pauseStartedAt: 0, // момент начала текущей паузы
     currentLevel: 1,
     levelConfig: null,
+    selectedDifficulty: 0,
     score: 0,
     shield: 0,
     cityHealth: 100,
@@ -35971,22 +36135,30 @@ const Game = {
     },
 
     generateStars() {
+        const theme = (typeof getThemeForLevel!=="undefined" && this.currentLevel) ? getThemeForLevel(this.currentLevel) : null;
+        const count = theme ? theme.stars : 200;
+        const color = theme ? theme.starColor : "#ffffff";
         this.stars = [];
-        for (let i = 0; i < 200; i++) {
+        for (let i = 0; i < count; i++) {
             this.stars.push({
                 x: Math.random() * 2000,
                 y: Math.random() * 2000,
                 size: Math.random() * 1.5 + 0.5,
-                twinkle: Math.random() * Math.PI * 2
+                twinkle: Math.random() * Math.PI * 2,
+                color: color
             });
         }
+        this.currentTheme = theme;
     },
+    getCurrentTheme() { return (typeof getThemeForLevel!=="undefined" && this.currentLevel) ? getThemeForLevel(this.currentLevel) : null; },
 
     // ============ ЗАПУСК УРОВНЯ ============
     startLevel(levelId) {
         this.dragTarget = null;
         this.currentLevel = levelId;
         this.levelConfig = getLevelConfig(levelId);
+        this.currentTheme = (typeof getThemeForLevel!=="undefined") ? getThemeForLevel(levelId) : null;
+        this.generateStars();
         this.score = 0;
         this.shield = 30;  // стартовый щит чтобы можно было сразу уничтожать
         this.cityHealth = this.levelConfig.cityHealth;
@@ -36401,20 +36573,35 @@ const Game = {
     // ============ СПАВН ОБЪЕКТОВ ============
     spawnAsteroid() {
         if (!this.running || this.isTaskActive) return;
-        if (this.asteroids.length >= MAX_ASTEROIDS_ON_SCREEN) return; // лимит астероидов на экране
+        if (this.asteroids.length >= MAX_ASTEROIDS_ON_SCREEN) return;
         const x = Math.random() * (this.width - 40) + 20;
-        // Скорость растёт по ходу уровня: в начале медленнее (0.7x), к 3-й минуте быстрее базовой (1.35x)
         const prog = Math.min(1, this.timeElapsed / 180000);
         const speedMul = 0.7 + 0.65 * prog;
         const speed = this.levelConfig.asteroidSpeed * speedMul * (0.95 + Math.random() * 0.1);
+        const theme = this.getCurrentTheme();
+        let hue = 20 + Math.random()*20;
+        let shape = "classic";
+        if(theme){
+            const [h1,h2]=theme.hues;
+            hue = h1 + Math.random()*(h2-h1);
+            if(theme===SECTION_THEMES.astronomy) shape = "orbital";
+            else if(theme===SECTION_THEMES.dynamics) shape = "sharp";
+            else if(theme===SECTION_THEMES.energy) shape = "energy";
+            else if(theme===SECTION_THEMES.oscillations) shape = "wave";
+            else if(theme===SECTION_THEMES.em) shape = "radiation";
+            else if(theme===SECTION_THEMES.atomic) shape = "atomic";
+            else if(theme===SECTION_THEMES.lab) shape = "lab";
+        }
         this.asteroids.push({
             x, y: -40,
             vx: (Math.random() - 0.5) * 1.1,
             vy: speed,
-            radius: 20 + Math.random() * 16, // крупные астероиды: 20-36 px
+            radius: 20 + Math.random() * 16,
             rotation: 0,
             rotationSpeed: (Math.random() - 0.5) * 0.05,
-            color: `hsl(${20 + Math.random() * 20}, 70%, 50%)`,
+            color: `hsl(${hue}, 70%, 52%)`,
+            shape: shape,
+            hue: hue,
             hp: 1,
             onGround: false,
             landTimer: 0
@@ -36440,7 +36627,7 @@ const Game = {
     triggerTask() {
         if (this.isTaskActive) return;
         // Исключаем решённые; проваленные — во вторую очередь (см. getTaskForLevel)
-        const task = Teacher.getTaskForLevel(this.levelConfig, this.completedTaskIds, this.failedTaskIds);
+        const task = Teacher.getTaskForLevel(this.levelConfig, this.completedTaskIds, this.failedTaskIds, this.selectedDifficulty);
         if (!task) return;
         this.showTask(task);
     },
@@ -36454,6 +36641,14 @@ const Game = {
 
         const modal = document.getElementById("task-modal");
         if(document.getElementById("task-title")) document.getElementById("task-title").textContent= I18n.t("task") + " #" + (this.completedTaskIds.length + 1);
+        const diffBadge = document.getElementById("task-difficulty-badge");
+        if(diffBadge){
+            const d = task.difficulty || 1;
+            const diffKeys = {1: "difficultyEasy", 2: "difficultyMedium", 3: "difficultyHard"};
+            diffBadge.textContent = "★".repeat(d) + " " + I18n.t(diffKeys[d] || "difficultyEasy");
+            diffBadge.className = "difficulty-badge-task diff-" + d;
+            diffBadge.style.display = "inline-flex";
+        }
         if(document.getElementById("task-type-badge")) document.getElementById("task-type-badge").textContent= I18n.t(i18nTypeKey(task.type));
 
         // Рендер тела задания
@@ -37374,13 +37569,28 @@ const Game = {
             );
         }
 
-        // Фон — звёзды
-        ctx.fillStyle = "#050818";
-        ctx.fillRect(-50, -50, this.width + 100, this.height + 100);
+        // Фон — тематический градиент + звёзды
+        const bgTheme = this.getCurrentTheme();
+        if(bgTheme){
+            const grad = ctx.createRadialGradient(this.width/2, this.height/2, 0, this.width/2, this.height/2, Math.max(this.width, this.height));
+            grad.addColorStop(0, bgTheme.bg[0]);
+            grad.addColorStop(1, bgTheme.bg[1]);
+            ctx.fillStyle = grad;
+            ctx.fillRect(-50, -50, this.width + 100, this.height + 100);
+        } else {
+            ctx.fillStyle = "#050818";
+            ctx.fillRect(-50, -50, this.width + 100, this.height + 100);
+        }
         const time = Date.now() / 1000;
         this.stars.forEach(s => {
             const alpha = 0.4 + Math.sin(time * 2 + s.twinkle) * 0.3;
-            ctx.fillStyle = `rgba(255, 255, 255, ${alpha})`;
+            const sc = s.color || "255,255,255";
+            if(sc.startsWith("#")){
+                const r=parseInt(sc.slice(1,3),16), g=parseInt(sc.slice(3,5),16), b=parseInt(sc.slice(5,7),16);
+                ctx.fillStyle = `rgba(${r},${g},${b},${alpha})`;
+            } else {
+                ctx.fillStyle = `rgba(255, 255, 255, ${alpha})`;
+            }
             ctx.beginPath();
             ctx.arc(s.x % this.width, s.y % this.height, s.size, 0, Math.PI * 2);
             ctx.fill();
@@ -37389,14 +37599,13 @@ const Game = {
         // Город (внизу)
         this.drawCity(ctx);
 
-        // Астероиды
+        // Астероиды — тематические
         this.asteroids.forEach(a => {
             ctx.save();
             ctx.translate(a.x, a.y);
             ctx.rotate(a.rotation);
-            // Тень
             ctx.shadowColor = a.color;
-            ctx.shadowBlur = 20;
+            ctx.shadowBlur = (a.shape==="orbital"||a.shape==="energy") ? 24 : (a.shape==="sharp" ? 12 : 20);
             // Тело
             ctx.fillStyle = a.color;
             ctx.beginPath();
@@ -37489,7 +37698,9 @@ const Game = {
         const cityRadius = Math.min(this.width * 0.35, 280);
         const cityCenterY = groundY - 50;
         const hpPct = this.cityHealth / this.cityMaxHealth;
-        const domeColor = hpPct > 0.6 ? "#00d9ff" : hpPct > 0.3 ? "#ffaa00" : "#ff3366";
+        const curTheme = this.getCurrentTheme ? this.getCurrentTheme() : null;
+        const themeDome = curTheme ? curTheme.dome : "#00d9ff";
+        const domeColor = hpPct > 0.6 ? themeDome : hpPct > 0.3 ? "#ffaa00" : "#ff3366";
 
         // Свечение под куполом
         const glowGrad = ctx.createRadialGradient(baseX, cityCenterY, 0, baseX, cityCenterY, cityRadius);
@@ -37984,6 +38195,7 @@ const I18n = {
         document.documentElement.lang = lang;
         document.documentElement.setAttribute("data-lang", lang);
         this.apply();
+        if(document.getElementById("levels-grid") && document.getElementById("levels-grid").innerHTML.length > 0){ try{ showLevelSelect(); }catch(e){} }
     },
 
     t(key, ...args) {
@@ -38327,6 +38539,36 @@ function refreshAfterLangChange() {
 // ============ ВЫБОР УРОВНЯ ============
 function showLevelSelect() {
     const grid = document.getElementById("levels-grid");
+    (function renderDifficultyFilter(){
+        let bar = document.getElementById("difficulty-filter");
+        if(!bar){
+            const levelScreen = document.getElementById("level-screen");
+            const gridEl = document.getElementById("levels-grid");
+            bar = document.createElement("div");
+            bar.id = "difficulty-filter";
+            bar.className = "difficulty-filter";
+            if(levelScreen && gridEl) levelScreen.insertBefore(bar, gridEl);
+        }
+        const L = I18n.currentLang || "ru";
+        const diff = (typeof Game!=="undefined" && Game.selectedDifficulty) ? Game.selectedDifficulty : 0;
+        bar.innerHTML = `<span class="difficulty-filter-label">${I18n.t("difficultyFilter")}</span>`
+            + [0,1,2,3].map(d => {
+                const keys = {0:"difficultyAll",1:"difficultyEasy",2:"difficultyMedium",3:"difficultyHard"};
+                const label = I18n.t(keys[d]);
+                const stars = d===0 ? "" : "★".repeat(d);
+                return `<button type="button" class="diff-btn ${d===diff?"active":""}" data-diff="${d}">${stars} ${label}</button>`;
+              }).join("");
+        bar.querySelectorAll(".diff-btn").forEach(btn=>{
+            btn.addEventListener("click", ()=>{
+                const v = parseInt(btn.dataset.diff,10);
+                if(typeof Game!=="undefined") Game.selectedDifficulty = v;
+                bar.querySelectorAll(".diff-btn").forEach(b=>b.classList.toggle("active", parseInt(b.dataset.diff,10)===v));
+                const keys = {0:"difficultyAll",1:"difficultyEasy",2:"difficultyMedium",3:"difficultyHard"};
+                showNotification(I18n.t("selectedDifficultyInfo", I18n.t(keys[v])), "info");
+                showLevelSelect();
+            });
+        });
+    })();
     const progress = Storage.getProgress();
 
     // Строка пилота (РПГ)
@@ -38384,7 +38626,8 @@ function showLevelSelect() {
                 <div class="level-number">${level.id}</div>
                 <div class="level-title">${I18n.t(getLevelNameKey(level.id))}</div>
                 <div class="level-desc">${escapeHtml(levelDescText(level))}</div>
-                <div style="margin:6px 0"><span class="mechanic-badge ${level.mechanic||"classic"}">${(level.mechanic==="gravity"?I18n.t("mechanicGravity"):level.mechanic==="resonance"?I18n.t("mechanicResonance"):level.mechanic==="orbital"?I18n.t("mechanicOrbital"):level.mechanic==="energy"?I18n.t("mechanicEnergy"):level.mechanic==="radiation"?I18n.t("mechanicRadiation"):level.mechanic==="fusion"?I18n.t("mechanicFusion"):level.mechanic==="lab"?I18n.t("mechanicLab"):I18n.t("mechanicClassic"))} ${level.boss?"👾 "+I18n.t("mechanicBoss"):""}</span></div>
+                <div style="margin:6px 0"><span class="mechanic-badge ${level.mechanic||"classic"}">${(level.mechanic==="gravity"?I18n.t("mechanicGravity"):level.mechanic==="resonance"?I18n.t("mechanicResonance"):level.mechanic==="orbital"?I18n.t("mechanicOrbital"):level.mechanic==="energy"?I18n.t("mechanicEnergy"):level.mechanic==="radiation"?I18n.t("mechanicRadiation"):level.mechanic==="fusion"?I18n.t("mechanicFusion"):level.mechanic==="lab"?I18n.t("mechanicLab"):I18n.t("mechanicClassic"))} ${level.boss?"👾 "+I18n.t("mechanicBoss"):""}</span>${(function(){const th=(typeof getThemeForLevel!=="undefined")?getThemeForLevel(level.id):null; if(!th) return ""; const cls="theme-"+th.labelKey.replace("theme","").toLowerCase(); return `<span class="section-theme-badge ${cls}">${I18n.t(th.labelKey)}</span>`;})()}</div>
+                ${(level.tasksToWin < level.tasksTotal) ? `<div style="font-size:11px; color:var(--text-dim); margin-top:4px">⏱ ${I18n.t("labMiniNote")} (${level.tasksToWin}/${level.tasksTotal})</div>` : ""}
                 <div class="level-stars">${"⭐".repeat(stars)}${"☆".repeat(3 - stars)}</div>
             </div>
         `;
