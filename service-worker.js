@@ -1,5 +1,5 @@
 /* Орбита-9 Service Worker — офлайн-кэш и push-уведомления */
-const CACHE_NAME = 'orbita9-v9';
+const CACHE_NAME = 'orbita9-v11';
 const CORE_ASSETS = [
   './',
   './index.html',
