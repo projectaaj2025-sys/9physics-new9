@@ -1808,12 +1808,31 @@ html, body {
 .assignment-result-share p { margin: 0 0 .6rem; font-size: .85rem; opacity: .85; }
 .result-code-row { display: flex; gap: .5rem; flex-wrap: wrap; align-items: center; }
 #assignment-result-code { flex: 1 1 200px; min-width: 0; background: #061226; color: #ffe08a; border: 1px solid #3a5a9b; border-radius: 10px; padding: .55rem .7rem; font-family: monospace; font-size: .78rem; }
-.assignment-result-import { max-width: 100%; margin: 0 0 18px; padding: 14px 16px; background: #eef7ff; border: 1.5px dashed #e6a000; border-radius: 12px; color: #0a1530; }
-.assignment-result-import strong { color: #0a3d62; font-size: 15px; }
-.assignment-result-import p, .assignment-result-import .profile-sub { color: #33465e !important; opacity: 1 !important; font-size: 13.5px; line-height: 1.45; }
+/* Светлая карточка импорта кода результата (учитель → «Назначения»).
+   !important — чтобы тёмные темы/старые правила не делали текст нечитаемым. */
+.assignment-result-import,
+#tab-assignments .assignment-result-import {
+    max-width: 100%; margin: 0 0 18px; padding: 14px 16px;
+    background: #eef7ff !important;
+    border: 1.5px dashed #e6a000 !important;
+    border-radius: 12px; color: #0a1530 !important;
+    box-shadow: 0 2px 10px rgba(15,35,70,.06);
+}
+.assignment-result-import strong { color: #0a3d62 !important; font-size: 15px; display: block; }
+.assignment-result-import p,
+.assignment-result-import .profile-sub { color: #33465e !important; opacity: 1 !important; font-size: 13.5px; line-height: 1.45; }
+.assignment-result-import label,
+.assignment-result-import span { color: #33465e; }
 .assigned-import-row { display: flex; gap: .5rem; flex-wrap: wrap; margin-top: .4rem; }
-#assignment-result-code-input { flex: 1 1 220px; min-width: 0; background: #ffffff; border: 1.5px solid #8fb3d9; color: #0a1530; border-radius: 10px; padding: .55rem .7rem; font-family: monospace; font-size: .8rem; }
-#assignment-result-code-input::placeholder { color: #5b7391; opacity: 1; }
+#assignment-result-code-input,
+#tab-assignments #assignment-result-code-input {
+    flex: 1 1 220px; min-width: 0;
+    background: #ffffff !important; border: 1.5px solid #8fb3d9 !important;
+    color: #0a1530 !important; border-radius: 10px; padding: .6rem .75rem;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: .82rem;
+    box-shadow: none;
+}
+#assignment-result-code-input::placeholder { color: #5b7391 !important; opacity: 1 !important; }
 #assignment-result-code-input:focus { outline: 2px solid #00838f; outline-offset: 1px; border-color: #00838f; }
 .copy-result-status { min-height: 1.1em; margin-top: .45rem; font-size: .82rem; }
 .copy-result-status.ok { color: #1b7f3b; font-weight: 700; }
@@ -2234,10 +2253,24 @@ html, body {
 .voice-switch input:checked + .voice-switch-track .voice-switch-thumb { transform:translateX(20px); }
 .voice-switch input:focus-visible + .voice-switch-track { outline:3px solid rgba(0,184,212,.45); outline-offset:2px; }
 .voice-off-note { display:none; font-size:12.5px; color:var(--text-dim); line-height:1.45; }
+.voice-unavailable-note { display:none; font-size:12.5px; color:#8a5a00; background:#fff6e0; border:1px solid #ffd58a; border-radius:8px; padding:6px 10px; line-height:1.4; }
 body.voice-off .voice-btn { display:none !important; }
-body.voice-off #story-voice-bar { display:none !important; }
 body.voice-off .voice-settings-extra { display:none !important; }
 body.voice-off .voice-off-note { display:inline !important; }
+body.voice-unavailable .voice-btn { display:none !important; }
+body.voice-unavailable .voice-unavailable-note { display:inline-block !important; }
+body.voice-off .voice-unavailable-note { display:none !important; }
+body.voice-off .voice-settings-extra { display:none !important; }
+#diary-voice-row { display:flex; flex-wrap:wrap; gap:8px; align-items:center; justify-content:center; }
+.comic-story {
+    background:#fffdf6; border:2px solid #e0c9a6; border-radius:14px;
+    padding:14px 16px; margin:12px 0 6px; color:#3e2723;
+    font-size:13.5px; line-height:1.62; max-height:260px; overflow-y:auto;
+    box-shadow: inset 0 1px 0 #fff;
+}
+.comic-story p { margin:0 0 10px; }
+.comic-story p:last-child { margin-bottom:0; }
+.comic-story b { color:#8d4b00; }
 .kvant-wave { display:inline-flex; gap:3px; align-items:end; height:18px; }
 .kvant-bar { width:3px; background:var(--primary); border-radius:3px; animation: kvantPulse .6s infinite alternate; }
 .kvant-bar:nth-child(2){ animation-delay:.15s; height:12px; }
@@ -2670,14 +2703,9 @@ body.voice-off .voice-off-note { display:inline !important; }
                     </div>
                     <div class="voice-settings-extra" style="display:flex; flex-direction:column; gap:10px">
                         <div class="kvant-voice-row">
-                            <label style="font-size:13px; font-weight:700" data-i18n="kvantAuto">Автоозвучка:</label>
-                            <select id="kvant-auto" class="kvant-select">
-                                <option value="off" data-i18n="kvantAutoOff">Выкл</option>
-                                <option value="theory" data-i18n="kvantAutoTheory">Теория перед уровнем</option>
-                                <option value="all" data-i18n="kvantAutoAll">Теория + сюжет</option>
-                            </select>
                             <button type="button" class="kvant-btn voice-btn" id="kvant-test-btn">🎤 <span data-i18n="kvantTest">Проверка голоса</span></button>
                             <button type="button" class="kvant-btn voice-btn voice-stop" id="kvant-stop-btn">⏹ <span data-i18n="kvantStop">Стоп</span></button>
+                            <span class="voice-unavailable-note" data-i18n="kvantVoiceUnavailable">Для этого языка в системе нет голоса — озвучка недоступна.</span>
                         </div>
                         <div class="kvant-voice-row">
                             <label style="font-size:13px" data-i18n="voice">Голос:</label>
@@ -3274,7 +3302,6 @@ body.voice-off .voice-off-note { display:inline !important; }
     <div id="story-modal" class="modal">
         <div class="modal-content">
             <h2 data-i18n="storyTitle">История миссии «Орбита-9»</h2>
-            <div class="kvant-voice-row" id="story-voice-bar" style="justify-content:center; margin:0 0 10px"><button type="button" class="btn btn-secondary voice-btn" id="kvant-play-story" data-i18n="kvantPlayStory">🔊 Озвучить сюжет</button><button type="button" class="btn btn-secondary voice-btn voice-stop" id="kvant-stop-story" style="display:none" data-i18n="stop">⏹ Стоп</button></div>
             <div class="story-body" id="story-body"></div>
             <button class="btn btn-back" id="btn-story-close">
                 <span data-i18n="close">Закрыть</span>
@@ -3304,7 +3331,6 @@ body.voice-off .voice-off-note { display:inline !important; }
                 <button type="button" class="theory-tab" data-tab="conspekt" data-i18n="theoryTabConspekt">📘 Конспект</button>
             </div>
             <div class="theory-content" id="theory-content"></div>
-            <div class="kvant-voice-row" style="margin:8px 0 0; justify-content:flex-start"><button type="button" class="btn btn-secondary voice-btn" id="kvant-play-theory" data-i18n="kvantListenTheory">🎧 Прослушать теорию</button><button type="button" class="btn btn-secondary voice-btn voice-stop" id="kvant-stop-theory" style="display:none" data-i18n="stop">⏹ Стоп</button></div>
             <div class="theory-actions">
                 <button class="btn btn-back" id="btn-theory-back">
                     <span data-i18n="back">← Назад</span>
@@ -3359,8 +3385,13 @@ body.voice-off .voice-off-note { display:inline !important; }
     <div id="diary-modal" class="modal">
         <div class="modal-content diary-modal-content">
             <h2 class="diary-title" id="diary-title">📖 Дневник экспедиции</h2>
-            <p class="diary-subtitle" id="diary-subtitle">Комикс-отчёт между эпизодами — открой все 9 записей!</p>
+            <p class="diary-subtitle" id="diary-subtitle">Комикс-отчёт между эпизодами — открой все 10 записей!</p>
             <div id="diary-comic" class="comic-strip"></div>
+            <div id="diary-story" class="comic-story"></div>
+            <div class="kvant-voice-row" id="diary-voice-row" style="justify-content:center; margin:10px 0 4px">
+                <button type="button" class="btn btn-secondary voice-btn" id="diary-voice-play">🔊 <span data-i18n="diaryVoicePlay">Озвучить главу</span></button>
+                <button type="button" class="btn btn-secondary voice-btn voice-stop" id="diary-voice-stop" style="display:none" data-i18n="stop">⏹ Стоп</button>
+            </div>
             <div id="diary-bubble" class="kvant-voice-bubble" style="display:none"></div>
             <p id="diary-meta" class="diary-entry-meta"></p>
             <div class="diary-nav">
@@ -14074,7 +14105,7 @@ const TASKS_DATABASE_EXT = [
    "kk": [
     "біртекті",
     "тең үдемелі",
-    "тең үдемелі",
+    "бірқалыпты баяулайтын",
     "тербелмелі"
    ],
    "en": [
@@ -29085,7 +29116,7 @@ const TASKS_DATABASE_EXT = [
    "kk": [
     "тәртіпті",
     "тең үдемелі",
-    "тең үдемелі",
+    "бірқалыпты баяулайтын",
     "шеңбер бойынша"
    ],
    "en": [
@@ -37254,6 +37285,2022 @@ const TASKS_DATABASE_EXT = [
    "en": "Recall waves near the shore.",
    "kk": "Жағаға жақын толқындарды еске түсір."
   }
+ },
+ {
+  "type": "multiple-choice",
+  "difficulty": 2,
+  "question": {
+   "ru": "В квартире задымился электрический чайник. Что делать в первую очередь?",
+   "en": "An electric kettle starts smoking in the flat. What should you do first?",
+   "kk": "Пәтерде электр шәйнегі түтіндей бастады. Ең алдымен не істеу керек?"
+  },
+  "options": {
+   "ru": [
+    "Залить чайник водой",
+    "Открыть окно и ждать",
+    "Накрыть чайник полотенцем и включить ещё раз",
+    "Выдернуть вилку из розетки (обесточить прибор)"
+   ],
+   "en": [
+    "Pour water over the kettle",
+    "Open a window and wait",
+    "Cover the kettle with a towel and switch it on again",
+    "Unplug the kettle from the socket (cut the power)"
+   ],
+   "kk": [
+    "Шәйнекке су құю",
+    "Терезені ашып күту",
+    "Шәйнекті сүлгімен жауып, қайта қосу",
+    "Шәйнектің ашасын розеткадан суырып алу (қуатты өшіру)"
+   ]
+  },
+  "correctAnswer": 3,
+  "explanation": {
+   "ru": "Сначала обесточивают прибор — вода и электричество вместе смертельно опасны.",
+   "en": "First cut the power — water plus electricity is deadly.",
+   "kk": "Алдымен құрылғыны қуаттан ажыратады — су мен электр бірге өмірге қауіпті."
+  },
+  "hint": {
+   "ru": "Действие должно убрать опасность, а не бороться с дымом.",
+   "en": "The first step removes the danger, not the smoke.",
+   "kk": "Бірінші қадам түтінді емес, қауіпті жояды."
+  },
+  "id": "safety-h1",
+  "topic": "safety"
+ },
+ {
+  "type": "multiple-choice",
+  "difficulty": 2,
+  "question": {
+   "ru": "Вы едете в автобусе и сидите на месте. Относительно какого тела вы покоитесь?",
+   "en": "You are sitting still in a moving bus. Relative to which body are you at rest?",
+   "kk": "Автобуста отырып келесіз. Қай денеге қатысты тыныштықтасыз?"
+  },
+  "options": {
+   "ru": [
+    "Сиденья автобуса",
+    "Солнца",
+    "Дороги",
+    "Дома за окном"
+   ],
+   "en": [
+    "The bus seat",
+    "The Sun",
+    "The road",
+    "The houses outside"
+   ],
+   "kk": [
+    "Автобус орны",
+    "Күн",
+    "Жол",
+    "Терезе сыртындағы үйлер"
+   ]
+  },
+  "correctAnswer": 0,
+  "explanation": {
+   "ru": "Покой и движение относительны: относительно сиденья ваше положение не меняется.",
+   "en": "Rest and motion are relative: your position does not change relative to the seat.",
+   "kk": "Тыныштық пен қозғалыс салыстырмалы: орынға қатысты орның өзгермейді."
+  },
+  "hint": {
+   "ru": "Ищите тело, которое движется вместе с вами.",
+   "en": "Look for a body that moves together with you.",
+   "kk": "Сізбен бірге қозғалатын денені іздеңіз."
+  },
+  "id": "p1-h1",
+  "topic": "p1"
+ },
+ {
+  "type": "multiple-choice",
+  "difficulty": 2,
+  "question": {
+   "ru": "Вы прошли 300 м на север, затем 400 м на восток. Чему равен модуль перемещения?",
+   "en": "You walk 300 m north, then 400 m east. What is the magnitude of your displacement?",
+   "kk": "300 м солтүстікке, содан кейін 400 м шығысқа жүрдіңіз. Орын ауыстыру модулі қандай?"
+  },
+  "options": {
+   "ru": [
+    "700 м",
+    "350 м",
+    "100 м",
+    "500 м"
+   ],
+   "en": [
+    "700 m",
+    "350 m",
+    "100 m",
+    "500 m"
+   ],
+   "kk": [
+    "700 м",
+    "350 м",
+    "100 м",
+    "500 м"
+   ]
+  },
+  "correctAnswer": 3,
+  "explanation": {
+   "ru": "Перемещение — гипотенуза: √(300² + 400²) = 500 м.",
+   "en": "Displacement is the hypotenuse: √(300² + 400²) = 500 m.",
+   "kk": "Орын ауыстыру — гипотенуза: √(300² + 400²) = 500 м."
+  },
+  "hint": {
+   "ru": "Сложите два перпендикулярных вектора по теореме Пифагора.",
+   "en": "Add two perpendicular vectors using Pythagoras' theorem.",
+   "kk": "Екі перпендикуляр векторды Пифагор теоремасы бойынша қосыңыз."
+  },
+  "id": "p2-h1",
+  "topic": "p2"
+ },
+ {
+  "type": "multiple-choice",
+  "difficulty": 2,
+  "question": {
+   "ru": "Автомобиль за 5 с увеличил скорость с 10 до 20 м/с. Чему равно ускорение?",
+   "en": "A car accelerates from 10 to 20 m/s in 5 s. What is its acceleration?",
+   "kk": "Көлік 5 с ішінде жылдамдығын 10-нан 20 м/с-қа арттырды. Үдеуі қандай?"
+  },
+  "options": {
+   "ru": [
+    "2 м/с²",
+    "10 м/с²",
+    "4 м/с²",
+    "0,5 м/с²"
+   ],
+   "en": [
+    "2 m/s²",
+    "10 m/s²",
+    "4 m/s²",
+    "0.5 m/s²"
+   ],
+   "kk": [
+    "2 м/с²",
+    "10 м/с²",
+    "4 м/с²",
+    "0,5 м/с²"
+   ]
+  },
+  "correctAnswer": 0,
+  "explanation": {
+   "ru": "a = (v − v₀)/t = (20 − 10)/5 = 2 м/с².",
+   "en": "a = (v − v₀)/t = (20 − 10)/5 = 2 m/s².",
+   "kk": "a = (v − v₀)/t = (20 − 10)/5 = 2 м/с²."
+  },
+  "hint": {
+   "ru": "Разделите изменение скорости на время.",
+   "en": "Divide the change in speed by the time.",
+   "kk": "Жылдамдықтың өзгерісін уақытқа бөліңіз."
+  },
+  "id": "p3-h1",
+  "topic": "p3"
+ },
+ {
+  "type": "multiple-choice",
+  "difficulty": 2,
+  "question": {
+   "ru": "Велосипедист 10 минут едет со скоростью 3 м/с. Какой путь он проедет?",
+   "en": "A cyclist rides for 10 minutes at 3 m/s. What distance does he cover?",
+   "kk": "Велосипедші 10 минут 3 м/с жылдамдықпен жүреді. Қандай жол жүреді?"
+  },
+  "options": {
+   "ru": [
+    "300 м",
+    "1800 м",
+    "180 м",
+    "30 м"
+   ],
+   "en": [
+    "300 m",
+    "1800 m",
+    "180 m",
+    "30 m"
+   ],
+   "kk": [
+    "300 м",
+    "1800 м",
+    "180 м",
+    "30 м"
+   ]
+  },
+  "correctAnswer": 1,
+  "explanation": {
+   "ru": "10 мин = 600 с; s = v·t = 3 · 600 = 1800 м.",
+   "en": "10 min = 600 s; s = v·t = 3 × 600 = 1800 m.",
+   "kk": "10 мин = 600 с; s = v·t = 3 · 600 = 1800 м."
+  },
+  "hint": {
+   "ru": "Переведите минуты в секунды.",
+   "en": "Convert minutes to seconds.",
+   "kk": "Минутты секундқа айналдырыңыз."
+  },
+  "id": "p4-h1",
+  "topic": "p4"
+ },
+ {
+  "type": "multiple-choice",
+  "difficulty": 2,
+  "question": {
+   "ru": "Капля падает с крыши 2 с. С какой высоты она падает? (g = 10 м/с²)",
+   "en": "A drop falls from a roof for 2 s. From what height does it fall? (g = 10 m/s²)",
+   "kk": "Тамшы шатырдан 2 с құлайды. Қандай биіктіктен түседі? (g = 10 м/с²)"
+  },
+  "options": {
+   "ru": [
+    "20 м",
+    "5 м",
+    "40 м",
+    "10 м"
+   ],
+   "en": [
+    "20 m",
+    "5 m",
+    "40 m",
+    "10 m"
+   ],
+   "kk": [
+    "20 м",
+    "5 м",
+    "40 м",
+    "10 м"
+   ]
+  },
+  "correctAnswer": 0,
+  "explanation": {
+   "ru": "h = g·t²/2 = 10 · 4 / 2 = 20 м.",
+   "en": "h = g·t²/2 = 10 × 4 / 2 = 20 m.",
+   "kk": "h = g·t²/2 = 10 · 4 / 2 = 20 м."
+  },
+  "hint": {
+   "ru": "Используйте формулу пути при свободном падении.",
+   "en": "Use the free-fall distance formula.",
+   "kk": "Еркін түсу жолының формуласын қолданыңыз."
+  },
+  "id": "p5-h1",
+  "topic": "p5"
+ },
+ {
+  "type": "multiple-choice",
+  "difficulty": 2,
+  "question": {
+   "ru": "Барабан стиральной машины делает 1200 оборотов в минуту. Какова частота вращения?",
+   "en": "A washing machine drum makes 1200 revolutions per minute. What is its frequency?",
+   "kk": "Кір жуғыш машинаның барабаны минутына 1200 айналым жасайды. Айналу жиілігі қандай?"
+  },
+  "options": {
+   "ru": [
+    "12 Гц",
+    "60 Гц",
+    "1200 Гц",
+    "20 Гц"
+   ],
+   "en": [
+    "12 Hz",
+    "60 Hz",
+    "1200 Hz",
+    "20 Hz"
+   ],
+   "kk": [
+    "12 Гц",
+    "60 Гц",
+    "1200 Гц",
+    "20 Гц"
+   ]
+  },
+  "correctAnswer": 3,
+  "explanation": {
+   "ru": "1200 об/мин = 1200/60 = 20 об/с = 20 Гц.",
+   "en": "1200 rpm = 1200/60 = 20 rev/s = 20 Hz.",
+   "kk": "1200 айн/мин = 1200/60 = 20 айн/с = 20 Гц."
+  },
+  "hint": {
+   "ru": "В минуте 60 секунд.",
+   "en": "There are 60 seconds in a minute.",
+   "kk": "Бір минутта 60 секунд бар."
+  },
+  "id": "p6-h1",
+  "topic": "p6"
+ },
+ {
+  "type": "multiple-choice",
+  "difficulty": 2,
+  "question": {
+   "ru": "Автомобиль поворачивает по дуге радиусом 50 м со скоростью 10 м/с. Чему равно центростремительное ускорение?",
+   "en": "A car turns on a 50 m radius at 10 m/s. What is the centripetal acceleration?",
+   "kk": "Көлік радиусы 50 м доғамен 10 м/с жылдамдықпен бұрылады. Центрге тартқыш үдеу қандай?"
+  },
+  "options": {
+   "ru": [
+    "2 м/с²",
+    "5 м/с²",
+    "0,2 м/с²",
+    "20 м/с²"
+   ],
+   "en": [
+    "2 m/s²",
+    "5 m/s²",
+    "0.2 m/s²",
+    "20 m/s²"
+   ],
+   "kk": [
+    "2 м/с²",
+    "5 м/с²",
+    "0,2 м/с²",
+    "20 м/с²"
+   ]
+  },
+  "correctAnswer": 0,
+  "explanation": {
+   "ru": "a = v²/R = 100/50 = 2 м/с².",
+   "en": "a = v²/R = 100/50 = 2 m/s².",
+   "kk": "a = v²/R = 100/50 = 2 м/с²."
+  },
+  "hint": {
+   "ru": "Скорость возведите в квадрат и разделите на радиус.",
+   "en": "Square the speed and divide by the radius.",
+   "kk": "Жылдамдықты квадраттап, радиусқа бөліңіз."
+  },
+  "id": "p7-h1",
+  "topic": "p7"
+ },
+ {
+  "type": "multiple-choice",
+  "difficulty": 2,
+  "question": {
+   "ru": "Какая единица удобна для расстояний между звёздами?",
+   "en": "Which unit is convenient for distances between stars?",
+   "kk": "Жұлдыздар арасындағы қашықтық үшін қандай бірлік ыңғайлы?"
+  },
+  "options": {
+   "ru": [
+    "Метр",
+    "Световой год",
+    "Килограмм",
+    "Час"
+   ],
+   "en": [
+    "Metre",
+    "Light year",
+    "Kilogram",
+    "Hour"
+   ],
+   "kk": [
+    "Метр",
+    "Жарық жылы",
+    "Килограмм",
+    "Сағат"
+   ]
+  },
+  "correctAnswer": 1,
+  "explanation": {
+   "ru": "Межзвёздные расстояния измеряют в световых годах и парсеках.",
+   "en": "Interstellar distances are measured in light years and parsecs.",
+   "kk": "Жұлдызаралық қашықтық жарық жылымен және парсекпен өлшенеді."
+  },
+  "hint": {
+   "ru": "Это путь, который свет проходит за год.",
+   "en": "It is the distance light travels in a year.",
+   "kk": "Бұл — жарықтың бір жылда жүретін жолы."
+  },
+  "id": "p8-h1",
+  "topic": "p8"
+ },
+ {
+  "type": "multiple-choice",
+  "difficulty": 2,
+  "question": {
+   "ru": "Высота Полярной звезды над горизонтом равна…",
+   "en": "The altitude of Polaris above the horizon equals…",
+   "kk": "Темірқазықтың горизонттан биіктігі неге тең?"
+  },
+  "options": {
+   "ru": [
+    "Географической широте места",
+    "Всегда 90°",
+    "Всегда 0°",
+    "Географической долготе"
+   ],
+   "en": [
+    "The geographic latitude of the place",
+    "Always 90°",
+    "Always 0°",
+    "The geographic longitude"
+   ],
+   "kk": [
+    "Орынның географиялық ендігіне",
+    "Әрқашан 90°",
+    "Әрқашан 0°",
+    "Географиялық бойлыққа"
+   ]
+  },
+  "correctAnswer": 0,
+  "explanation": {
+   "ru": "Полярная звезда почти на оси мира, поэтому её высота равна широте.",
+   "en": "Polaris lies almost on the celestial axis, so its altitude equals the latitude.",
+   "kk": "Темірқазық әлем осіне жуық, сондықтан биіктігі ендікке тең."
+  },
+  "hint": {
+   "ru": "Свойство Полярной звезды знают путешественники.",
+   "en": "Travellers use this property of Polaris.",
+   "kk": "Бұл қасиетті саяхатшылар біледі."
+  },
+  "id": "p9-h1",
+  "topic": "p9"
+ },
+ {
+  "type": "multiple-choice",
+  "difficulty": 2,
+  "question": {
+   "ru": "В Казахстане (UTC+5) 12:00. Который час в Москве (UTC+3)?",
+   "en": "It is 12:00 in Kazakhstan (UTC+5). What time is it in Moscow (UTC+3)?",
+   "kk": "Қазақстанда (UTC+5) сағат 12:00. Мәскеуде (UTC+3) сағат неше?"
+  },
+  "options": {
+   "ru": [
+    "10:00",
+    "08:00",
+    "12:00",
+    "14:00"
+   ],
+   "en": [
+    "10:00",
+    "08:00",
+    "12:00",
+    "14:00"
+   ],
+   "kk": [
+    "10:00",
+    "08:00",
+    "12:00",
+    "14:00"
+   ]
+  },
+  "correctAnswer": 0,
+  "explanation": {
+   "ru": "Разница поясов 2 часа: 12:00 − 2 ч = 10:00.",
+   "en": "The zones differ by 2 hours: 12:00 − 2 h = 10:00.",
+   "kk": "Белдеу айырмасы 2 сағат: 12:00 − 2 сағ = 10:00."
+  },
+  "hint": {
+   "ru": "Москва западнее, значит времени меньше.",
+   "en": "Moscow is to the west, so the time is earlier.",
+   "kk": "Мәскеу батыста, сондықтан уақыт кем."
+  },
+  "id": "p10-h1",
+  "topic": "p10"
+ },
+ {
+  "type": "multiple-choice",
+  "difficulty": 2,
+  "question": {
+   "ru": "Чем дальше планета от Солнца, тем её период обращения…",
+   "en": "The farther a planet is from the Sun, the … its orbital period.",
+   "kk": "Планета Күннен неғұрлым алыс болса, айналу периоды …"
+  },
+  "options": {
+   "ru": [
+    "Меньше",
+    "Больше",
+    "Не зависит от расстояния",
+    "Такой же"
+   ],
+   "en": [
+    "Shorter",
+    "Longer",
+    "Does not depend on distance",
+    "The same"
+   ],
+   "kk": [
+    "Қысқарақ",
+    "Ұзағырақ",
+    "Қашықтыққа тәуелсіз",
+    "Сол қалпында"
+   ]
+  },
+  "correctAnswer": 1,
+  "explanation": {
+   "ru": "По третьему закону Кеплера T² пропорционален a³.",
+   "en": "By Kepler's third law, T² is proportional to a³.",
+   "kk": "Кеплердің үшінші заңы бойынша T² ~ a³."
+  },
+  "hint": {
+   "ru": "Вспомните третий закон Кеплера.",
+   "en": "Recall Kepler's third law.",
+   "kk": "Кеплердің үшінші заңын еске түсіріңіз."
+  },
+  "id": "p11-h1",
+  "topic": "p11"
+ },
+ {
+  "type": "multiple-choice",
+  "difficulty": 2,
+  "question": {
+   "ru": "Каким методом измеряют расстояния до ближайших звёзд?",
+   "en": "Which method is used to measure distances to nearby stars?",
+   "kk": "Жақын жұлдыздарға дейінгі қашықтықты қандай әдіспен өлшейді?"
+  },
+  "options": {
+   "ru": [
+    "Эхолокация",
+    "Взвешивание",
+    "Годичный параллакс",
+    "Термометрия"
+   ],
+   "en": [
+    "Echo sounding",
+    "Weighing",
+    "Annual parallax",
+    "Thermometry"
+   ],
+   "kk": [
+    "Эхолокация",
+    "Өлшеу (салмақтау)",
+    "Жылдық параллакс",
+    "Термометрия"
+   ]
+  },
+  "correctAnswer": 2,
+  "explanation": {
+   "ru": "Смещение звезды на фоне далёких объектов за год даёт параллакс, а по нему — расстояние.",
+   "en": "A star's yearly shift against distant objects gives the parallax, and from it the distance.",
+   "kk": "Жұлдыздың бір жылдағы ығысуы параллакс береді, одан қашықтық табылады."
+  },
+  "hint": {
+   "ru": "Звёзды наблюдают с двух концов земной орбиты.",
+   "en": "Stars are observed from two ends of Earth's orbit.",
+   "kk": "Жұлдыздар Жер орбитасының екі шетінен бақыланады."
+  },
+  "id": "p12-h1",
+  "topic": "p12"
+ },
+ {
+  "type": "multiple-choice",
+  "difficulty": 2,
+  "question": {
+   "ru": "При резком торможении автобуса пассажир наклоняется…",
+   "en": "When a bus brakes sharply, a standing passenger leans…",
+   "kk": "Автобус кенет тежелгенде жолаушы …"
+  },
+  "options": {
+   "ru": [
+    "Назад — по инерции",
+    "В сторону",
+    "Не двигается",
+    "Вперёд — по инерции"
+   ],
+   "en": [
+    "Backward — due to inertia",
+    "Sideways",
+    "Does not move",
+    "Forward — due to inertia"
+   ],
+   "kk": [
+    "Артқа — инерция бойынша",
+    "Шетке",
+    "Қозғалмайды",
+    "Алға — инерция бойынша"
+   ]
+  },
+  "correctAnswer": 3,
+  "explanation": {
+   "ru": "Тело сохраняет скорость, а автобус тормозит — пассажир отклоняется вперёд.",
+   "en": "The body keeps its speed while the bus slows down, so the passenger leans forward.",
+   "kk": "Дене жылдамдығын сақтайды, автобус тежейді — жолаушы алға ауытқиды."
+  },
+  "hint": {
+   "ru": "Тело стремится сохранить свою скорость.",
+   "en": "A body tends to keep its velocity.",
+   "kk": "Дене өз жылдамдығын сақтауға тырысады."
+  },
+  "id": "p13-h1",
+  "topic": "p13"
+ },
+ {
+  "type": "multiple-choice",
+  "difficulty": 2,
+  "question": {
+   "ru": "На столе стоит гиря массой 2 кг. Чему равна сила тяжести? (g = 10 м/с²)",
+   "en": "A 2 kg weight stands on a table. What is the force of gravity? (g = 10 m/s²)",
+   "kk": "Үстелде массасы 2 кг кіртас тұр. Ауырлық күші қандай? (g = 10 м/с²)"
+  },
+  "options": {
+   "ru": [
+    "20 Н",
+    "200 Н",
+    "0,2 Н",
+    "2 Н"
+   ],
+   "en": [
+    "20 N",
+    "200 N",
+    "0.2 N",
+    "2 N"
+   ],
+   "kk": [
+    "20 Н",
+    "200 Н",
+    "0,2 Н",
+    "2 Н"
+   ]
+  },
+  "correctAnswer": 0,
+  "explanation": {
+   "ru": "F = m·g = 2 · 10 = 20 Н.",
+   "en": "F = m·g = 2 × 10 = 20 N.",
+   "kk": "F = m·g = 2 · 10 = 20 Н."
+  },
+  "hint": {
+   "ru": "Умножьте массу на ускорение свободного падения.",
+   "en": "Multiply mass by g.",
+   "kk": "Массаны еркін түсу үдеуіне көбейтіңіз."
+  },
+  "id": "p14-h1",
+  "topic": "p14"
+ },
+ {
+  "type": "multiple-choice",
+  "difficulty": 2,
+  "question": {
+   "ru": "Тележку массой 4 кг толкают с силой 8 Н. Какое ускорение она получит?",
+   "en": "A 4 kg trolley is pushed with 8 N. What acceleration does it get?",
+   "kk": "Массасы 4 кг арбаны 8 Н күшпен итереді. Қандай үдеу алады?"
+  },
+  "options": {
+   "ru": [
+    "4 м/с²",
+    "2 м/с²",
+    "32 м/с²",
+    "0,5 м/с²"
+   ],
+   "en": [
+    "4 m/s²",
+    "2 m/s²",
+    "32 m/s²",
+    "0.5 m/s²"
+   ],
+   "kk": [
+    "4 м/с²",
+    "2 м/с²",
+    "32 м/с²",
+    "0,5 м/с²"
+   ]
+  },
+  "correctAnswer": 1,
+  "explanation": {
+   "ru": "a = F/m = 8/4 = 2 м/с².",
+   "en": "a = F/m = 8/4 = 2 m/s².",
+   "kk": "a = F/m = 8/4 = 2 м/с²."
+  },
+  "hint": {
+   "ru": "Второй закон Ньютона: a = F/m.",
+   "en": "Newton's second law: a = F/m.",
+   "kk": "Ньютонның екінші заңы: a = F/m."
+  },
+  "id": "p15-h1",
+  "topic": "p15"
+ },
+ {
+  "type": "multiple-choice",
+  "difficulty": 2,
+  "question": {
+   "ru": "Мальчик массой 40 кг стоит на полу. Чему равен его вес? (g = 10 м/с²)",
+   "en": "A 40 kg boy stands on the floor. What is his weight? (g = 10 m/s²)",
+   "kk": "Массасы 40 кг бала еденде тұр. Оның салмағы қандай? (g = 10 м/с²)"
+  },
+  "options": {
+   "ru": [
+    "400 Н",
+    "40 Н",
+    "4 Н",
+    "4000 Н"
+   ],
+   "en": [
+    "400 N",
+    "40 N",
+    "4 N",
+    "4000 N"
+   ],
+   "kk": [
+    "400 Н",
+    "40 Н",
+    "4 Н",
+    "4000 Н"
+   ]
+  },
+  "correctAnswer": 0,
+  "explanation": {
+   "ru": "Вес в покое равен силе тяжести: P = m·g = 400 Н.",
+   "en": "At rest, weight equals gravity: P = m·g = 400 N.",
+   "kk": "Тыныштықта салмақ ауырлық күшіне тең: P = m·g = 400 Н."
+  },
+  "hint": {
+   "ru": "Вес — сила, с которой тело давит на опору.",
+   "en": "Weight is the force a body exerts on its support.",
+   "kk": "Салмақ — дененің тірекке түсіретін күші."
+  },
+  "id": "p16-h1",
+  "topic": "p16"
+ },
+ {
+  "type": "multiple-choice",
+  "difficulty": 2,
+  "question": {
+   "ru": "Если расстояние между двумя телами увеличить в 2 раза, сила их притяжения…",
+   "en": "If the distance between two bodies doubles, their gravitational force…",
+   "kk": "Екі дене арасындағы қашықтық 2 есе артса, тартылыс күші …"
+  },
+  "options": {
+   "ru": [
+    "Уменьшится в 2 раза",
+    "Не изменится",
+    "Увеличится в 2 раза",
+    "Уменьшится в 4 раза"
+   ],
+   "en": [
+    "Decreases 2 times",
+    "Stays the same",
+    "Increases 2 times",
+    "Decreases 4 times"
+   ],
+   "kk": [
+    "2 есе кемиді",
+    "Өзгермейді",
+    "2 есе артады",
+    "4 есе кемиді"
+   ]
+  },
+  "correctAnswer": 3,
+  "explanation": {
+   "ru": "Сила обратно пропорциональна квадрату расстояния: 2² = 4.",
+   "en": "The force is inversely proportional to distance squared: 2² = 4.",
+   "kk": "Күш қашықтық квадратына кері пропорционал: 2² = 4."
+  },
+  "hint": {
+   "ru": "Закон обратных квадратов.",
+   "en": "The inverse-square law.",
+   "kk": "Кері квадраттар заңы."
+  },
+  "id": "p17-h1",
+  "topic": "p17"
+ },
+ {
+  "type": "multiple-choice",
+  "difficulty": 2,
+  "question": {
+   "ru": "В лифте, который свободно падает (a = g), вес пассажира…",
+   "en": "In a freely falling lift (a = g), the passenger's weight…",
+   "kk": "Еркін құлап бара жатқан лифтте (a = g) жолаушының салмағы …"
+  },
+  "options": {
+   "ru": [
+    "Равен нулю",
+    "Не меняется",
+    "Растёт в 10 раз",
+    "Увеличивается в 2 раза"
+   ],
+   "en": [
+    "Is zero",
+    "Does not change",
+    "Grows 10 times",
+    "Doubles"
+   ],
+   "kk": [
+    "Нөлге тең",
+    "Өзгермейді",
+    "10 есе артады",
+    "2 есе артады"
+   ]
+  },
+  "correctAnswer": 0,
+  "explanation": {
+   "ru": "Это состояние невесомости: P = m(g − a) = 0.",
+   "en": "This is weightlessness: P = m(g − a) = 0.",
+   "kk": "Бұл салмақсыздық: P = m(g − a) = 0."
+  },
+  "hint": {
+   "ru": "Опора «убегает» от тела с ускорением g.",
+   "en": "The support falls away with acceleration g.",
+   "kk": "Тірек денеден g үдеуімен «қашады»."
+  },
+  "id": "p18-h1",
+  "topic": "p18"
+ },
+ {
+  "type": "multiple-choice",
+  "difficulty": 2,
+  "question": {
+   "ru": "Мяч бросили горизонтально с балкона. По какой траектории он движется?",
+   "en": "A ball is thrown horizontally from a balcony. What is its trajectory?",
+   "kk": "Допты балконнан көлденең лақтырды. Ол қандай траекториямен қозғалады?"
+  },
+  "options": {
+   "ru": [
+    "По прямой вниз",
+    "По параболе",
+    "По прямой горизонтально",
+    "По окружности"
+   ],
+   "en": [
+    "Straight down",
+    "A parabola",
+    "Straight horizontally",
+    "A circle"
+   ],
+   "kk": [
+    "Тік төмен",
+    "Парабола бойынша",
+    "Көлденең түзу",
+    "Шеңбер бойынша"
+   ]
+  },
+  "correctAnswer": 1,
+  "explanation": {
+   "ru": "По горизонтали скорость постоянна, по вертикали действует g — получается парабола.",
+   "en": "Horizontal speed is constant, vertical motion is accelerated by g — the result is a parabola.",
+   "kk": "Көлденең жылдамдық тұрақты, тік бағытта g әсер етеді — парабола шығады."
+  },
+  "hint": {
+   "ru": "Сложите равномерное и равноускоренное движения.",
+   "en": "Combine uniform and uniformly accelerated motion.",
+   "kk": "Бірқалыпты және бірқалыпты үдемелі қозғалысты қосыңыз."
+  },
+  "id": "p19-h1",
+  "topic": "p19"
+ },
+ {
+  "type": "multiple-choice",
+  "difficulty": 2,
+  "question": {
+   "ru": "Футбольный мяч массой 0,4 кг летит со скоростью 10 м/с. Чему равен его импульс?",
+   "en": "A 0.4 kg football flies at 10 m/s. What is its momentum?",
+   "kk": "Массасы 0,4 кг футбол добы 10 м/с жылдамдықпен ұшады. Импульсі қандай?"
+  },
+  "options": {
+   "ru": [
+    "0,04 кг·м/с",
+    "4 кг·м/с",
+    "10 кг·м/с",
+    "40 кг·м/с"
+   ],
+   "en": [
+    "0.04 kg·m/s",
+    "4 kg·m/s",
+    "10 kg·m/s",
+    "40 kg·m/s"
+   ],
+   "kk": [
+    "0,04 кг·м/с",
+    "4 кг·м/с",
+    "10 кг·м/с",
+    "40 кг·м/с"
+   ]
+  },
+  "correctAnswer": 1,
+  "explanation": {
+   "ru": "p = m·v = 0,4 · 10 = 4 кг·м/с.",
+   "en": "p = m·v = 0.4 × 10 = 4 kg·m/s.",
+   "kk": "p = m·v = 0,4 · 10 = 4 кг·м/с."
+  },
+  "hint": {
+   "ru": "Импульс — произведение массы на скорость.",
+   "en": "Momentum is mass times velocity.",
+   "kk": "Импульс — масса мен жылдамдықтың көбейтіндісі."
+  },
+  "id": "p20-h1",
+  "topic": "p20"
+ },
+ {
+  "type": "multiple-choice",
+  "difficulty": 2,
+  "question": {
+   "ru": "Почему ракета разгоняется в вакууме, где не от чего оттолкнуться?",
+   "en": "Why can a rocket accelerate in vacuum, where there is nothing to push against?",
+   "kk": "Ракета неге вакуумда үдейді, ол нені теуіп кетеді?"
+  },
+  "options": {
+   "ru": [
+    "Газы выбрасываются назад, и по третьему закону Ньютона ракета получает импульс вперёд",
+    "Ей помогает магнитное поле Земли",
+    "Ракета отталкивается от планет",
+    "Воздух толкает ракету"
+   ],
+   "en": [
+    "Gases are ejected backwards, and by Newton's third law the rocket gains forward momentum",
+    "Earth's magnetic field pulls it",
+    "The rocket pushes off the planets",
+    "Air pushes the rocket"
+   ],
+   "kk": [
+    "Газдар артқа шығады, Ньютонның үшінші заңы бойынша ракета алға импульс алады",
+    "Оған Жердің магнит өрісі көмектеседі",
+    "Ракета планеталардан тебіледі",
+    "Ауа ракетаны итереді"
+   ]
+  },
+  "correctAnswer": 0,
+  "explanation": {
+   "ru": "Реактивное движение не требует внешней опоры.",
+   "en": "Jet propulsion needs no external support.",
+   "kk": "Реактивті қозғалысқа сыртқы тірек қажет емес."
+  },
+  "hint": {
+   "ru": "Действие и противодействие: масса газов летит назад.",
+   "en": "Action and reaction: the gas mass flies backwards.",
+   "kk": "Әсер және қарсы әсер: газ массасы артқа ұшады."
+  },
+  "id": "p21-h1",
+  "topic": "p21"
+ },
+ {
+  "type": "multiple-choice",
+  "difficulty": 2,
+  "question": {
+   "ru": "Вы поднимаете сумку массой 5 кг на высоту 1 м. Какую работу вы совершаете? (g = 10 м/с²)",
+   "en": "You lift a 5 kg bag to a height of 1 m. What work do you do? (g = 10 m/s²)",
+   "kk": "Массасы 5 кг сөмкені 1 м биіктікке көтересіз. Қандай жұмыс жасайсыз? (g = 10 м/с²)"
+  },
+  "options": {
+   "ru": [
+    "5 Дж",
+    "500 Дж",
+    "0,5 Дж",
+    "50 Дж"
+   ],
+   "en": [
+    "5 J",
+    "500 J",
+    "0.5 J",
+    "50 J"
+   ],
+   "kk": [
+    "5 Дж",
+    "500 Дж",
+    "0,5 Дж",
+    "50 Дж"
+   ]
+  },
+  "correctAnswer": 3,
+  "explanation": {
+   "ru": "A = m·g·h = 5 · 10 · 1 = 50 Дж.",
+   "en": "A = m·g·h = 5 × 10 × 1 = 50 J.",
+   "kk": "A = m·g·h = 5 · 10 · 1 = 50 Дж."
+  },
+  "hint": {
+   "ru": "Работа против силы тяжести: mgh.",
+   "en": "Work against gravity: mgh.",
+   "kk": "Ауырлық күшіне қарсы жұмыс: mgh."
+  },
+  "id": "p22-h1",
+  "topic": "p22"
+ },
+ {
+  "type": "multiple-choice",
+  "difficulty": 2,
+  "question": {
+   "ru": "Мяч падает с высоты 5 м. Какую скорость он будет иметь у земли? (g = 10 м/с²)",
+   "en": "A ball falls from 5 m. What speed will it have at the ground? (g = 10 m/s²)",
+   "kk": "Доп 5 м биіктіктен құлайды. Жерге қандай жылдамдықпен жетеді? (g = 10 м/с²)"
+  },
+  "options": {
+   "ru": [
+    "5 м/с",
+    "25 м/с",
+    "10 м/с",
+    "50 м/с"
+   ],
+   "en": [
+    "5 m/s",
+    "25 m/s",
+    "10 m/s",
+    "50 m/s"
+   ],
+   "kk": [
+    "5 м/с",
+    "25 м/с",
+    "10 м/с",
+    "50 м/с"
+   ]
+  },
+  "correctAnswer": 2,
+  "explanation": {
+   "ru": "mgh = mv²/2, v = √(2gh) = √100 = 10 м/с.",
+   "en": "mgh = mv²/2, v = √(2gh) = √100 = 10 m/s.",
+   "kk": "mgh = mv²/2, v = √(2gh) = √100 = 10 м/с."
+  },
+  "hint": {
+   "ru": "Потенциальная энергия переходит в кинетическую.",
+   "en": "Potential energy turns into kinetic energy.",
+   "kk": "Потенциалдық энергия кинетикалыққа айналады."
+  },
+  "id": "p23-h1",
+  "topic": "p23"
+ },
+ {
+  "type": "multiple-choice",
+  "difficulty": 2,
+  "question": {
+   "ru": "Маятник настенных часов делает 60 колебаний за 2 минуты. Чему равен период?",
+   "en": "A wall-clock pendulum makes 60 oscillations in 2 minutes. What is the period?",
+   "kk": "Қабырға сағатының маятнигі 2 минутта 60 тербеліс жасайды. Периоды қандай?"
+  },
+  "options": {
+   "ru": [
+    "60 с",
+    "2 с",
+    "120 с",
+    "0,5 с"
+   ],
+   "en": [
+    "60 s",
+    "2 s",
+    "120 s",
+    "0.5 s"
+   ],
+   "kk": [
+    "60 с",
+    "2 с",
+    "120 с",
+    "0,5 с"
+   ]
+  },
+  "correctAnswer": 1,
+  "explanation": {
+   "ru": "T = t/N = 120 с / 60 = 2 с.",
+   "en": "T = t/N = 120 s / 60 = 2 s.",
+   "kk": "T = t/N = 120 с / 60 = 2 с."
+  },
+  "hint": {
+   "ru": "Разделите время на число колебаний.",
+   "en": "Divide the time by the number of oscillations.",
+   "kk": "Уақытты тербеліс санына бөліңіз."
+  },
+  "id": "p24-h1",
+  "topic": "p24"
+ },
+ {
+  "type": "multiple-choice",
+  "difficulty": 2,
+  "question": {
+   "ru": "Амплитуда качелей 0,5 м, период 2 с. Какова частота колебаний?",
+   "en": "A swing has amplitude 0.5 m and period 2 s. What is its frequency?",
+   "kk": "Әткеншектің амплитудасы 0,5 м, периоды 2 с. Тербеліс жиілігі қандай?"
+  },
+  "options": {
+   "ru": [
+    "1 Гц",
+    "4 Гц",
+    "0,5 Гц",
+    "2 Гц"
+   ],
+   "en": [
+    "1 Hz",
+    "4 Hz",
+    "0.5 Hz",
+    "2 Hz"
+   ],
+   "kk": [
+    "1 Гц",
+    "4 Гц",
+    "0,5 Гц",
+    "2 Гц"
+   ]
+  },
+  "correctAnswer": 2,
+  "explanation": {
+   "ru": "ν = 1/T = 1/2 = 0,5 Гц.",
+   "en": "ν = 1/T = 1/2 = 0.5 Hz.",
+   "kk": "ν = 1/T = 1/2 = 0,5 Гц."
+  },
+  "hint": {
+   "ru": "Частота обратна периоду.",
+   "en": "Frequency is the reciprocal of period.",
+   "kk": "Жиілік периодқа кері шама."
+  },
+  "id": "p25-h1",
+  "topic": "p25"
+ },
+ {
+  "type": "multiple-choice",
+  "difficulty": 2,
+  "question": {
+   "ru": "Чтобы период математического маятника увеличился в 2 раза, его длину нужно…",
+   "en": "To double the period of a simple pendulum, its length must be…",
+   "kk": "Математикалық маятниктің периоды 2 есе арту үшін ұзындығын …"
+  },
+  "options": {
+   "ru": [
+    "Увеличить в 2 раза",
+    "Уменьшить в 2 раза",
+    "Уменьшить в 4 раза",
+    "Увеличить в 4 раза"
+   ],
+   "en": [
+    "Increased 2 times",
+    "Decreased 2 times",
+    "Decreased 4 times",
+    "Increased 4 times"
+   ],
+   "kk": [
+    "2 есе арттыру керек",
+    "2 есе кеміту керек",
+    "4 есе кеміту керек",
+    "4 есе арттыру керек"
+   ]
+  },
+  "correctAnswer": 3,
+  "explanation": {
+   "ru": "T ~ √l, поэтому для T в 2 раза больше нужно l в 4 раза больше.",
+   "en": "T ~ √l, so doubling T requires quadrupling l.",
+   "kk": "T ~ √l, сондықтан T-ны 2 есе арттыру үшін l-ді 4 есе арттырады."
+  },
+  "hint": {
+   "ru": "Период пропорционален корню из длины.",
+   "en": "Period is proportional to the square root of length.",
+   "kk": "Период ұзындықтың квадрат түбіріне пропорционал."
+  },
+  "id": "p26-h1",
+  "topic": "p26"
+ },
+ {
+  "type": "multiple-choice",
+  "difficulty": 2,
+  "question": {
+   "ru": "Почему воинскому строю приказывают идти по мосту не в ногу?",
+   "en": "Why are soldiers ordered to break step when crossing a bridge?",
+   "kk": "Әскери қатарға көпірден бір ырғақпен жүрмеуді неге бұйырады?"
+  },
+  "options": {
+   "ru": [
+    "Чтобы колебания моста не совпали с шагами и не возник резонанс",
+    "Чтобы шаги были тише",
+    "Чтобы мост не пачкался",
+    "Чтобы экономить силы"
+   ],
+   "en": [
+    "So the bridge vibrations do not match the steps and cause resonance",
+    "To make the steps quieter",
+    "To keep the bridge clean",
+    "To save energy"
+   ],
+   "kk": [
+    "Көпір тербелісі қадамдарға сәйкес келіп, резонанс туындамауы үшін",
+    "Қадамдар ақырын болуы үшін",
+    "Көпір ластанбауы үшін",
+    "Күш үнемдеу үшін"
+   ]
+  },
+  "correctAnswer": 0,
+  "explanation": {
+   "ru": "Совпадение частот даёт резонанс — колебания резко возрастают.",
+   "en": "Matching frequencies cause resonance — vibrations grow sharply.",
+   "kk": "Жиіліктер сәйкес келсе резонанс пайда болады — тербеліс күрт артады."
+  },
+  "hint": {
+   "ru": "Опасность в совпадении частот.",
+   "en": "The danger lies in matching frequencies.",
+   "kk": "Қауіп жиіліктердің сәйкес келуінде."
+  },
+  "id": "p27-h1",
+  "topic": "p27"
+ },
+ {
+  "type": "multiple-choice",
+  "difficulty": 2,
+  "question": {
+   "ru": "Частота тока в бытовой сети 50 Гц. Чему равен период?",
+   "en": "The mains frequency is 50 Hz. What is the period?",
+   "kk": "Тұрмыстық желідегі ток жиілігі 50 Гц. Период қандай?"
+  },
+  "options": {
+   "ru": [
+    "0,5 с",
+    "0,2 с",
+    "0,02 с",
+    "50 с"
+   ],
+   "en": [
+    "0.5 s",
+    "0.2 s",
+    "0.02 s",
+    "50 s"
+   ],
+   "kk": [
+    "0,5 с",
+    "0,2 с",
+    "0,02 с",
+    "50 с"
+   ]
+  },
+  "correctAnswer": 2,
+  "explanation": {
+   "ru": "T = 1/ν = 1/50 = 0,02 с.",
+   "en": "T = 1/ν = 1/50 = 0.02 s.",
+   "kk": "T = 1/ν = 1/50 = 0,02 с."
+  },
+  "hint": {
+   "ru": "Период — обратная величина частоты.",
+   "en": "Period is the reciprocal of frequency.",
+   "kk": "Период жиілікке кері шама."
+  },
+  "id": "p28-h1",
+  "topic": "p28"
+ },
+ {
+  "type": "multiple-choice",
+  "difficulty": 2,
+  "question": {
+   "ru": "Радиостанция работает на частоте 100 МГц. Какова длина её волны? (c = 3·10⁸ м/с)",
+   "en": "A radio station broadcasts at 100 MHz. What is its wavelength? (c = 3·10⁸ m/s)",
+   "kk": "Радиостанция 100 МГц жиілікте жұмыс істейді. Толқын ұзындығы қандай? (c = 3·10⁸ м/с)"
+  },
+  "options": {
+   "ru": [
+    "3 м",
+    "300 м",
+    "0,3 м",
+    "30 м"
+   ],
+   "en": [
+    "3 m",
+    "300 m",
+    "0.3 m",
+    "30 m"
+   ],
+   "kk": [
+    "3 м",
+    "300 м",
+    "0,3 м",
+    "30 м"
+   ]
+  },
+  "correctAnswer": 0,
+  "explanation": {
+   "ru": "λ = c/ν = 3·10⁸ / 10⁸ = 3 м.",
+   "en": "λ = c/ν = 3·10⁸ / 10⁸ = 3 m.",
+   "kk": "λ = c/ν = 3·10⁸ / 10⁸ = 3 м."
+  },
+  "hint": {
+   "ru": "100 МГц — это 10⁸ Гц.",
+   "en": "100 MHz means 10⁸ Hz.",
+   "kk": "100 МГц — бұл 10⁸ Гц."
+  },
+  "id": "p29-h1",
+  "topic": "p29"
+ },
+ {
+  "type": "multiple-choice",
+  "difficulty": 2,
+  "question": {
+   "ru": "От чего зависит громкость звука?",
+   "en": "What does the loudness of a sound depend on?",
+   "kk": "Дыбыстың қаттылығы неге байланысты?"
+  },
+  "options": {
+   "ru": [
+    "От амплитуды колебаний",
+    "От длины волны",
+    "От частоты колебаний",
+    "От цвета источника"
+   ],
+   "en": [
+    "The amplitude of oscillations",
+    "The wavelength",
+    "The frequency of oscillations",
+    "The colour of the source"
+   ],
+   "kk": [
+    "Тербеліс амплитудасына",
+    "Толқын ұзындығына",
+    "Тербеліс жиілігіне",
+    "Көздің түсіне"
+   ]
+  },
+  "correctAnswer": 0,
+  "explanation": {
+   "ru": "Больше амплитуда — громче звук; частота определяет высоту тона.",
+   "en": "Greater amplitude means louder sound; frequency sets the pitch.",
+   "kk": "Амплитуда үлкен болса, дыбыс қаттырақ; жиілік биіктікті анықтайды."
+  },
+  "hint": {
+   "ru": "Не путайте громкость с высотой тона.",
+   "en": "Do not confuse loudness with pitch.",
+   "kk": "Қаттылықты дыбыс биіктігімен шатастырмаңыз."
+  },
+  "id": "p30-h1",
+  "topic": "p30"
+ },
+ {
+  "type": "multiple-choice",
+  "difficulty": 2,
+  "question": {
+   "ru": "Почему в микроволновке нельзя греть еду в металлической посуде?",
+   "en": "Why should you not heat food in a metal dish in a microwave?",
+   "kk": "Микротолқынды пеште тағамды металл ыдыста неге жылытуға болмайды?"
+  },
+  "options": {
+   "ru": [
+    "Металл пропускает волны хуже стекла",
+    "Металл меняет частоту волн",
+    "Металл впитывает волны и нагревается сам",
+    "Металл отражает волны, и еда не греется, возможны искры"
+   ],
+   "en": [
+    "Metal passes waves worse than glass",
+    "Metal changes the wave frequency",
+    "Metal absorbs the waves and heats itself",
+    "Metal reflects the waves, so the food does not heat and sparks may appear"
+   ],
+   "kk": [
+    "Металл толқынды шыныдан нашар өткізеді",
+    "Металл толқын жиілігін өзгертеді",
+    "Металл толқынды сіңіріп, өзі қызады",
+    "Металл толқындарды шағылыстырады, тағам жылымайды, ұшқын шығуы мүмкін"
+   ]
+  },
+  "correctAnswer": 3,
+  "explanation": {
+   "ru": "Металл — зеркало для микроволн; энергия не доходит до еды.",
+   "en": "Metal mirrors microwaves, so the energy does not reach the food.",
+   "kk": "Металл микротолқындарды шағылыстырады, энергия тағамға жетпейді."
+  },
+  "hint": {
+   "ru": "Вспомните, как ведёт себя металл по отношению к электромагнитным волнам.",
+   "en": "Recall how metal behaves towards electromagnetic waves.",
+   "kk": "Металлдың электромагниттік толқындарға қатынасын еске түсіріңіз."
+  },
+  "id": "p31-h1",
+  "topic": "p31"
+ },
+ {
+  "type": "multiple-choice",
+  "difficulty": 2,
+  "question": {
+   "ru": "Почему в жаркий день светлая футболка комфортнее тёмной?",
+   "en": "Why is a light-coloured T-shirt more comfortable than a dark one on a hot day?",
+   "kk": "Ыстық күні ақ түсті футболка қара түстіден неге ыңғайлы?"
+  },
+  "options": {
+   "ru": [
+    "Светлая ткань лучше пропускает воздух",
+    "Тёмная ткань всегда мокрая",
+    "Светлая поверхность отражает больше излучения и меньше нагревается",
+    "Светлая ткань толще"
+   ],
+   "en": [
+    "Light fabric lets air through better",
+    "Dark fabric is always wet",
+    "A light surface reflects more radiation and heats less",
+    "Light fabric is thicker"
+   ],
+   "kk": [
+    "Ақ мата ауаны жақсырақ өткізеді",
+    "Қара мата әрқашан дымқыл",
+    "Ақ бет көбірек сәуле шағылыстырып, азырақ қызады",
+    "Ақ мата қалыңырақ"
+   ]
+  },
+  "correctAnswer": 2,
+  "explanation": {
+   "ru": "Светлое тело сильнее отражает и слабее поглощает тепловое излучение.",
+   "en": "A light body reflects more and absorbs less thermal radiation.",
+   "kk": "Ақ дене жылулық сәулені көбірек шағылыстырып, азырақ сіңіреді."
+  },
+  "hint": {
+   "ru": "Поглощение и отражение зависят от цвета поверхности.",
+   "en": "Absorption and reflection depend on surface colour.",
+   "kk": "Сіңіру мен шағылыстыру беттің түсіне байланысты."
+  },
+  "id": "p32-h1",
+  "topic": "p32"
+ },
+ {
+  "type": "multiple-choice",
+  "difficulty": 2,
+  "question": {
+   "ru": "На каком явлении основана работа солнечной батареи?",
+   "en": "Which phenomenon is the basis of a solar cell?",
+   "kk": "Күн батареясының жұмысы қандай құбылысқа негізделген?"
+  },
+  "options": {
+   "ru": [
+    "Резонанс",
+    "Теплопроводность",
+    "Фотоэффект",
+    "Электролиз"
+   ],
+   "en": [
+    "Resonance",
+    "Thermal conduction",
+    "The photoelectric effect",
+    "Electrolysis"
+   ],
+   "kk": [
+    "Резонанс",
+    "Жылу өткізгіштік",
+    "Фотоэффект",
+    "Электролиз"
+   ]
+  },
+  "correctAnswer": 2,
+  "explanation": {
+   "ru": "Свет выбивает электроны — фотоэффект даёт электрический ток.",
+   "en": "Light knocks out electrons — the photoelectric effect produces current.",
+   "kk": "Жарық электрондарды жұлып шығарады — фотоэффект ток береді."
+  },
+  "hint": {
+   "ru": "Свет действует на электроны в полупроводнике.",
+   "en": "Light acts on electrons in a semiconductor.",
+   "kk": "Жарық жартылай өткізгіштегі электрондарға әсер етеді."
+  },
+  "id": "p33-h1",
+  "topic": "p33"
+ },
+ {
+  "type": "multiple-choice",
+  "difficulty": 2,
+  "question": {
+   "ru": "Почему на рентгеновском снимке кости видны, а мягкие ткани — почти нет?",
+   "en": "Why are bones visible on an X-ray while soft tissues are hardly seen?",
+   "kk": "Неге рентген суретінде сүйек көрінеді, жұмсақ тіндер — жоқ?"
+  },
+  "options": {
+   "ru": [
+    "Кости плотнее и сильнее поглощают рентгеновские лучи",
+    "Кости светятся сами",
+    "Мягкие ткани отражают лучи",
+    "Плотность не влияет на снимок"
+   ],
+   "en": [
+    "Bones are denser and absorb X-rays more strongly",
+    "Bones glow themselves",
+    "Soft tissues reflect the rays",
+    "Density does not affect the image"
+   ],
+   "kk": [
+    "Сүйек тығызырақ және рентген сәулелерін көбірек сіңіреді",
+    "Сүйек өзі жарқырайды",
+    "Жұмсақ тіндер сәулені шағылыстырады",
+    "Тығыздық суретке әсер етпейді"
+   ]
+  },
+  "correctAnswer": 0,
+  "explanation": {
+   "ru": "Чем плотнее вещество, тем сильнее оно поглощает рентгеновские лучи.",
+   "en": "The denser the substance, the more X-rays it absorbs.",
+   "kk": "Зат неғұрлым тығыз болса, рентген сәулесін соғұрлым көбірек сіңіреді."
+  },
+  "hint": {
+   "ru": "Разница — в плотности веществ.",
+   "en": "The difference is density.",
+   "kk": "Айырмашылық — тығыздықта."
+  },
+  "id": "p34-h1",
+  "topic": "p34"
+ },
+ {
+  "type": "multiple-choice",
+  "difficulty": 2,
+  "question": {
+   "ru": "Какой материал лучше всего защищает от гамма-излучения?",
+   "en": "Which material best shields against gamma radiation?",
+   "kk": "Гамма-сәуледен қай материал жақсы қорғайды?"
+  },
+  "options": {
+   "ru": [
+    "Лист бумаги",
+    "Стекло толщиной 1 мм",
+    "Слой воздуха",
+    "Свинец или толстый слой бетона"
+   ],
+   "en": [
+    "A sheet of paper",
+    "1 mm glass",
+    "A layer of air",
+    "Lead or a thick layer of concrete"
+   ],
+   "kk": [
+    "Қағаз парағы",
+    "1 мм шыны",
+    "Ауа қабаты",
+    "Қорғасын немесе қалың бетон қабаты"
+   ]
+  },
+  "correctAnswer": 3,
+  "explanation": {
+   "ru": "Гамма-лучи проникают глубоко, их ослабляют тяжёлые толстые материалы.",
+   "en": "Gamma rays penetrate deeply and are attenuated by heavy, thick materials.",
+   "kk": "Гамма-сәулелер терең өтеді, оларды ауыр қалың материалдар әлсіретеді."
+  },
+  "hint": {
+   "ru": "Нужен самый плотный и толстый барьер.",
+   "en": "You need the densest, thickest barrier.",
+   "kk": "Ең тығыз және қалың бөгет керек."
+  },
+  "id": "p35-h1",
+  "topic": "p35"
+ },
+ {
+  "type": "multiple-choice",
+  "difficulty": 2,
+  "question": {
+   "ru": "Как называют определение состава вещества по его спектру?",
+   "en": "What is the determination of a substance's composition from its spectrum called?",
+   "kk": "Заттың құрамын спектрі бойынша анықтауды қалай атайды?"
+  },
+  "options": {
+   "ru": [
+    "Спектральный анализ",
+    "Эхолокация",
+    "Термография",
+    "Рентгеноскопия"
+   ],
+   "en": [
+    "Spectral analysis",
+    "Echo sounding",
+    "Thermography",
+    "Fluoroscopy"
+   ],
+   "kk": [
+    "Спектрлік талдау",
+    "Эхолокация",
+    "Термография",
+    "Рентгеноскопия"
+   ]
+  },
+  "correctAnswer": 0,
+  "explanation": {
+   "ru": "Каждый элемент даёт свой набор линий — по ним узнают состав.",
+   "en": "Each element gives its own set of lines, revealing the composition.",
+   "kk": "Әр элемент өз сызықтарын береді — солар арқылы құрамды анықтайды."
+  },
+  "hint": {
+   "ru": "Название связано со спектром.",
+   "en": "The name is linked to spectra.",
+   "kk": "Атауы спектрге байланысты."
+  },
+  "id": "p36-h1",
+  "topic": "p36"
+ },
+ {
+  "type": "multiple-choice",
+  "difficulty": 2,
+  "question": {
+   "ru": "Чем отличаются изотопы одного и того же элемента?",
+   "en": "How do isotopes of the same element differ?",
+   "kk": "Бір элементтің изотоптары несімен ерекшеленеді?"
+  },
+  "options": {
+   "ru": [
+    "Зарядом ядра",
+    "Числом нейтронов в ядре",
+    "Числом протонов",
+    "Числом электронов на орбитах"
+   ],
+   "en": [
+    "The nuclear charge",
+    "The number of neutrons in the nucleus",
+    "The number of protons",
+    "The number of orbital electrons"
+   ],
+   "kk": [
+    "Ядро зарядымен",
+    "Ядродағы нейтрондар санымен",
+    "Протондар санымен",
+    "Орбитадағы электрондар санымен"
+   ]
+  },
+  "correctAnswer": 1,
+  "explanation": {
+   "ru": "Протоны одинаковы, а нейтронов разное число — это изотопы.",
+   "en": "Protons are the same; the neutron number differs — these are isotopes.",
+   "kk": "Протондар бірдей, нейтрон саны әртүрлі — бұл изотоптар."
+  },
+  "hint": {
+   "ru": "Химические свойства не меняются, масса — да.",
+   "en": "Chemical properties stay, mass changes.",
+   "kk": "Химиялық қасиет өзгермейді, масса өзгереді."
+  },
+  "id": "p37-h1",
+  "topic": "p37"
+ },
+ {
+  "type": "multiple-choice",
+  "difficulty": 2,
+  "question": {
+   "ru": "Период полураспада изотопа 10 суток. Какая доля ядер останется через 20 суток?",
+   "en": "An isotope's half-life is 10 days. What fraction of nuclei remains after 20 days?",
+   "kk": "Изотоптың жартылай ыдырау периоды 10 тәулік. 20 тәуліктен кейін ядролардың қандай бөлігі қалады?"
+  },
+  "options": {
+   "ru": [
+    "Одна четвёртая",
+    "Ни одна",
+    "Одна вторая",
+    "Три четверти"
+   ],
+   "en": [
+    "One quarter",
+    "None",
+    "One half",
+    "Three quarters"
+   ],
+   "kk": [
+    "Төрттен бірі",
+    "Ешқайсысы",
+    "Жартысы",
+    "Төрттен үші"
+   ]
+  },
+  "correctAnswer": 0,
+  "explanation": {
+   "ru": "За 20 суток прошло два периода: (1/2)² = 1/4.",
+   "en": "20 days is two half-lives: (1/2)² = 1/4.",
+   "kk": "20 тәулік — екі период: (1/2)² = 1/4."
+  },
+  "hint": {
+   "ru": "Сколько периодов укладывается в 20 суток?",
+   "en": "How many half-lives fit into 20 days?",
+   "kk": "20 тәулікке неше период сыяды?"
+  },
+  "id": "p38-h1",
+  "topic": "p38"
+ },
+ {
+  "type": "multiple-choice",
+  "difficulty": 2,
+  "question": {
+   "ru": "Для чего в ядерном реакторе служат управляющие стержни?",
+   "en": "What are the control rods in a nuclear reactor for?",
+   "kk": "Ядролық реактордағы басқару стержендері не үшін қажет?"
+  },
+  "options": {
+   "ru": [
+    "Они охлаждают пар",
+    "Они вырабатывают электричество",
+    "Они ускоряют нейтроны",
+    "Они поглощают нейтроны и замедляют цепную реакцию"
+   ],
+   "en": [
+    "They cool the steam",
+    "They generate electricity",
+    "They accelerate neutrons",
+    "They absorb neutrons and slow the chain reaction"
+   ],
+   "kk": [
+    "Олар буыны салқындатады",
+    "Олар электр энергиясын өндіреді",
+    "Олар нейтрондарды үдетеді",
+    "Олар нейтрондарды сіңіріп, тізбекті реакцияны бәсеңдетеді"
+   ]
+  },
+  "correctAnswer": 3,
+  "explanation": {
+   "ru": "Поглощение нейтронов уменьшает коэффициент размножения — реакция управляема.",
+   "en": "Absorbing neutrons lowers the multiplication factor, keeping the reaction controllable.",
+   "kk": "Нейтрондарды сіңіру көбею коэффициентін азайтып, реакцияны басқарылатын етеді."
+  },
+  "hint": {
+   "ru": "Реакцию замедляют, «съедая» нейтроны.",
+   "en": "The reaction is slowed by absorbing neutrons.",
+   "kk": "Реакция нейтрондарды сіңіру арқылы бәсеңдейді."
+  },
+  "id": "p39-h1",
+  "topic": "p39"
+ },
+ {
+  "type": "multiple-choice",
+  "difficulty": 2,
+  "question": {
+   "ru": "При каком условии может идти термоядерный синтез?",
+   "en": "Under what condition can thermonuclear fusion occur?",
+   "kk": "Термоядролық синтез қандай жағдайда жүреді?"
+  },
+  "options": {
+   "ru": [
+    "При очень низком давлении",
+    "В сильном магнитном поле без нагрева",
+    "При комнатной температуре",
+    "При очень высокой температуре"
+   ],
+   "en": [
+    "At very low pressure",
+    "In a strong magnetic field without heating",
+    "At room temperature",
+    "At very high temperature"
+   ],
+   "kk": [
+    "Өте төмен қысымда",
+    "Қыздырусыз күшті магнит өрісінде",
+    "Бөлме температурасында",
+    "Өте жоғары температурада"
+   ]
+  },
+  "correctAnswer": 3,
+  "explanation": {
+   "ru": "Ядра должны сблизиться, преодолев отталкивание, — нужна температура в миллионы градусов.",
+   "en": "Nuclei must overcome repulsion — temperatures of millions of degrees are needed.",
+   "kk": "Ядролар тебілуді жеңіп жақындауы керек — миллиондаған градус қажет."
+  },
+  "hint": {
+   "ru": "Преодолеть электрическое отталкивание ядер.",
+   "en": "Overcome the electric repulsion of nuclei.",
+   "kk": "Ядролардың электрлік тебілуін жеңу керек."
+  },
+  "id": "p40-h1",
+  "topic": "p40"
+ },
+ {
+  "type": "multiple-choice",
+  "difficulty": 2,
+  "question": {
+   "ru": "Что происходит при аннигиляции частицы и античастицы?",
+   "en": "What happens when a particle meets its antiparticle?",
+   "kk": "Бөлшек пен антибөлшек кездескенде не болады?"
+  },
+  "options": {
+   "ru": [
+    "Их масса превращается в энергию излучения",
+    "Они сливаются в более тяжёлое ядро",
+    "Они разлетаются без изменений",
+    "Образуется только нейтрон"
+   ],
+   "en": [
+    "Their mass turns into radiation energy",
+    "They merge into a heavier nucleus",
+    "They fly apart unchanged",
+    "Only a neutron is formed"
+   ],
+   "kk": [
+    "Олардың массасы сәуле энергиясына айналады",
+    "Олар ауыр ядроға бірігеді",
+    "Олар өзгеріссіз ұшып кетеді",
+    "Тек нейтрон пайда болады"
+   ]
+  },
+  "correctAnswer": 0,
+  "explanation": {
+   "ru": "E = mc²: масса полностью переходит в энергию фотонов.",
+   "en": "E = mc²: mass is fully converted into photon energy.",
+   "kk": "E = mc²: масса толығымен фотон энергиясына айналады."
+  },
+  "hint": {
+   "ru": "Вспомните формулу Эйнштейна.",
+   "en": "Recall Einstein’s formula.",
+   "kk": "Эйнштейн формуласын еске түсіріңіз."
+  },
+  "id": "p41-h1",
+  "topic": "p41"
+ },
+ {
+  "type": "multiple-choice",
+  "difficulty": 2,
+  "question": {
+   "ru": "Какой химический элемент самый распространённый во Вселенной?",
+   "en": "Which chemical element is the most abundant in the Universe?",
+   "kk": "Әлемде ең көп таралған химиялық элемент қандай?"
+  },
+  "options": {
+   "ru": [
+    "Углерод",
+    "Водород",
+    "Кислород",
+    "Железо"
+   ],
+   "en": [
+    "Carbon",
+    "Hydrogen",
+    "Oxygen",
+    "Iron"
+   ],
+   "kk": [
+    "Көміртегі",
+    "Сутегі",
+    "Оттегі",
+    "Темір"
+   ]
+  },
+  "correctAnswer": 1,
+  "explanation": {
+   "ru": "На водород приходится около 75% массы обычного вещества.",
+   "en": "Hydrogen makes up about 75% of the mass of ordinary matter.",
+   "kk": "Сутегі қарапайым зат массасының шамамен 75%-ын құрайды."
+  },
+  "hint": {
+   "ru": "Это самый лёгкий элемент.",
+   "en": "It is the lightest element.",
+   "kk": "Бұл ең жеңіл элемент."
+  },
+  "id": "p42-h1",
+  "topic": "p42"
+ },
+ {
+  "type": "multiple-choice",
+  "difficulty": 2,
+  "question": {
+   "ru": "Почему светодиодная лампа выгоднее лампы накаливания при той же яркости?",
+   "en": "Why is an LED lamp more efficient than an incandescent lamp at the same brightness?",
+   "kk": "Неге сол жарықтықта жарықдиодты шам қыздыру шамынан тиімдірек?"
+  },
+  "options": {
+   "ru": [
+    "Она меньше энергии превращает в тепло, больше — в свет",
+    "Она не нагревается вообще",
+    "Она работает только днём",
+    "Она потребляет больше мощности"
+   ],
+   "en": [
+    "It turns less energy into heat and more into light",
+    "It never heats up",
+    "It works only in daytime",
+    "It draws more power"
+   ],
+   "kk": [
+    "Ол энергияның азын жылуға, көбін жарыққа айналдырады",
+    "Ол мүлде қызбайды",
+    "Ол тек күндіз жұмыс істейді",
+    "Ол көбірек қуат тұтынады"
+   ]
+  },
+  "correctAnswer": 0,
+  "explanation": {
+   "ru": "КПД светодиодов выше: та же яркость при меньшей мощности.",
+   "en": "LEDs have higher efficiency: the same brightness for less power.",
+   "kk": "Жарықдиодтардың ПӘК-і жоғары: сол жарықтық аз қуатпен."
+  },
+  "hint": {
+   "ru": "Сравните, какая доля энергии идёт в свет, а какая — в тепло.",
+   "en": "Compare how much energy goes to light and how much to heat.",
+   "kk": "Энергияның қаншасы жарыққа, қаншасы жылуға кететінін салыстырыңыз."
+  },
+  "id": "p43-h1",
+  "topic": "p43"
+ },
+ {
+  "type": "multiple-choice",
+  "difficulty": 2,
+  "question": {
+   "ru": "Шарик скатывается по желобу без начальной скорости и за 2 с проходит 1 м. Чему равно ускорение?",
+   "en": "A ball rolls down a chute from rest and covers 1 m in 2 s. What is its acceleration?",
+   "kk": "Шар науамен бастапқы жылдамдықсыз домалап, 2 с ішінде 1 м жол жүреді. Үдеуі қандай?"
+  },
+  "options": {
+   "ru": [
+    "2 м/с²",
+    "0,25 м/с²",
+    "1 м/с²",
+    "0,5 м/с²"
+   ],
+   "en": [
+    "2 m/s²",
+    "0.25 m/s²",
+    "1 m/s²",
+    "0.5 m/s²"
+   ],
+   "kk": [
+    "2 м/с²",
+    "0,25 м/с²",
+    "1 м/с²",
+    "0,5 м/с²"
+   ]
+  },
+  "correctAnswer": 3,
+  "explanation": {
+   "ru": "s = a·t²/2, a = 2s/t² = 2·1/4 = 0,5 м/с².",
+   "en": "s = a·t²/2, a = 2s/t² = 2×1/4 = 0.5 m/s².",
+   "kk": "s = a·t²/2, a = 2s/t² = 2·1/4 = 0,5 м/с²."
+  },
+  "hint": {
+   "ru": "Выразите ускорение из формулы пути.",
+   "en": "Express acceleration from the distance formula.",
+   "kk": "Үдеуді жол формуласынан өрнектеңіз."
+  },
+  "id": "lab1-h1",
+  "topic": "lab1"
+ },
+ {
+  "type": "multiple-choice",
+  "difficulty": 2,
+  "question": {
+   "ru": "Шарик скатывается со стола высотой 0,8 м и падает на расстоянии 1,2 м. Какова его скорость на краю стола? (g = 10 м/с²)",
+   "en": "A ball rolls off a 0.8 m table and lands 1.2 m away. What is its speed at the table edge? (g = 10 m/s²)",
+   "kk": "Шар биіктігі 0,8 м үстелден домалап, 1,2 м жерге түседі. Үстел шетіндегі жылдамдығы қандай? (g = 10 м/с²)"
+  },
+  "options": {
+   "ru": [
+    "3 м/с",
+    "0,3 м/с",
+    "6 м/с",
+    "1,5 м/с"
+   ],
+   "en": [
+    "3 m/s",
+    "0.3 m/s",
+    "6 m/s",
+    "1.5 m/s"
+   ],
+   "kk": [
+    "3 м/с",
+    "0,3 м/с",
+    "6 м/с",
+    "1,5 м/с"
+   ]
+  },
+  "correctAnswer": 0,
+  "explanation": {
+   "ru": "t = √(2h/g) = 0,4 с; v = L/t = 1,2/0,4 = 3 м/с.",
+   "en": "t = √(2h/g) = 0.4 s; v = L/t = 1.2/0.4 = 3 m/s.",
+   "kk": "t = √(2h/g) = 0,4 с; v = L/t = 1,2/0,4 = 3 м/с."
+  },
+  "hint": {
+   "ru": "Сначала найдите время падения.",
+   "en": "Find the fall time first.",
+   "kk": "Алдымен құлау уақытын табыңыз."
+  },
+  "id": "lab2-h1",
+  "topic": "lab2"
+ },
+ {
+  "type": "multiple-choice",
+  "difficulty": 2,
+  "question": {
+   "ru": "Период маятника 2 с. Какова длина его нити? (g = 10 м/с², π² ≈ 10)",
+   "en": "A pendulum has a period of 2 s. What is the length of its string? (g = 10 m/s², π² ≈ 10)",
+   "kk": "Маятниктің периоды 2 с. Жібінің ұзындығы қандай? (g = 10 м/с², π² ≈ 10)"
+  },
+  "options": {
+   "ru": [
+    "2 м",
+    "1 м",
+    "4 м",
+    "0,5 м"
+   ],
+   "en": [
+    "2 m",
+    "1 m",
+    "4 m",
+    "0.5 m"
+   ],
+   "kk": [
+    "2 м",
+    "1 м",
+    "4 м",
+    "0,5 м"
+   ]
+  },
+  "correctAnswer": 1,
+  "explanation": {
+   "ru": "l = g·T²/(4π²) = 10·4/40 = 1 м.",
+   "en": "l = g·T²/(4π²) = 10×4/40 = 1 m.",
+   "kk": "l = g·T²/(4π²) = 10·4/40 = 1 м."
+  },
+  "hint": {
+   "ru": "Выразите длину из формулы периода.",
+   "en": "Express length from the period formula.",
+   "kk": "Ұзындықты период формуласынан өрнектеңіз."
+  },
+  "id": "lab3-h1",
+  "topic": "lab3"
+ },
+ {
+  "type": "multiple-choice",
+  "difficulty": 2,
+  "question": {
+   "ru": "Расстояние между соседними гребнями волны 0,15 м, частота 4 Гц. Чему равна скорость волны?",
+   "en": "The distance between neighbouring wave crests is 0.15 m, frequency 4 Hz. What is the wave speed?",
+   "kk": "Көршілес толқын қырқаларының арасы 0,15 м, жиілігі 4 Гц. Толқын жылдамдығы қандай?"
+  },
+  "options": {
+   "ru": [
+    "0,04 м/с",
+    "0,15 м/с",
+    "0,6 м/с",
+    "2,4 м/с"
+   ],
+   "en": [
+    "0.04 m/s",
+    "0.15 m/s",
+    "0.6 m/s",
+    "2.4 m/s"
+   ],
+   "kk": [
+    "0,04 м/с",
+    "0,15 м/с",
+    "0,6 м/с",
+    "2,4 м/с"
+   ]
+  },
+  "correctAnswer": 2,
+  "explanation": {
+   "ru": "v = λ·ν = 0,15 · 4 = 0,6 м/с.",
+   "en": "v = λ·ν = 0.15 × 4 = 0.6 m/s.",
+   "kk": "v = λ·ν = 0,15 · 4 = 0,6 м/с."
+  },
+  "hint": {
+   "ru": "Скорость — длина волны, умноженная на частоту.",
+   "en": "Speed is wavelength times frequency.",
+   "kk": "Жылдамдық — толқын ұзындығын жиілікке көбейткендегі мән."
+  },
+  "id": "lab4-h1",
+  "topic": "lab4"
  }
 ];
 const TASKS_DATABASE_CH = [];
@@ -37288,8 +39335,8 @@ const LEVELS_CONFIG = [
         "asteroidSpeed": 0.82,
         "cityHealth": 100,
         "shieldCapacity": 50,
-        "tasksToWin": 15,
-        "tasksTotal": 15,
+        "tasksToWin": 20,
+        "tasksTotal": 20,
         "energySpawnRate": 3600,
         "mechanic": "classic",
         "boss": false,
@@ -37306,8 +39353,8 @@ const LEVELS_CONFIG = [
         "asteroidSpeed": 0.85,
         "cityHealth": 100,
         "shieldCapacity": 51,
-        "tasksToWin": 15,
-        "tasksTotal": 15,
+        "tasksToWin": 20,
+        "tasksTotal": 20,
         "energySpawnRate": 3600,
         "mechanic": "classic",
         "boss": false,
@@ -37324,8 +39371,8 @@ const LEVELS_CONFIG = [
         "asteroidSpeed": 0.87,
         "cityHealth": 100,
         "shieldCapacity": 51,
-        "tasksToWin": 15,
-        "tasksTotal": 15,
+        "tasksToWin": 20,
+        "tasksTotal": 20,
         "energySpawnRate": 3600,
         "mechanic": "classic",
         "boss": false,
@@ -37342,8 +39389,8 @@ const LEVELS_CONFIG = [
         "asteroidSpeed": 0.9,
         "cityHealth": 100,
         "shieldCapacity": 52,
-        "tasksToWin": 15,
-        "tasksTotal": 15,
+        "tasksToWin": 20,
+        "tasksTotal": 20,
         "energySpawnRate": 3600,
         "mechanic": "classic",
         "boss": false,
@@ -37360,8 +39407,8 @@ const LEVELS_CONFIG = [
         "asteroidSpeed": 0.92,
         "cityHealth": 100,
         "shieldCapacity": 53,
-        "tasksToWin": 15,
-        "tasksTotal": 15,
+        "tasksToWin": 20,
+        "tasksTotal": 20,
         "energySpawnRate": 3600,
         "mechanic": "classic",
         "boss": false,
@@ -37378,8 +39425,8 @@ const LEVELS_CONFIG = [
         "asteroidSpeed": 0.95,
         "cityHealth": 100,
         "shieldCapacity": 53,
-        "tasksToWin": 15,
-        "tasksTotal": 15,
+        "tasksToWin": 20,
+        "tasksTotal": 20,
         "energySpawnRate": 3600,
         "mechanic": "classic",
         "boss": false,
@@ -37396,8 +39443,8 @@ const LEVELS_CONFIG = [
         "asteroidSpeed": 0.97,
         "cityHealth": 100,
         "shieldCapacity": 54,
-        "tasksToWin": 15,
-        "tasksTotal": 15,
+        "tasksToWin": 20,
+        "tasksTotal": 20,
         "energySpawnRate": 3600,
         "mechanic": "classic",
         "boss": true,
@@ -37414,8 +39461,8 @@ const LEVELS_CONFIG = [
         "asteroidSpeed": 1,
         "cityHealth": 100,
         "shieldCapacity": 55,
-        "tasksToWin": 15,
-        "tasksTotal": 15,
+        "tasksToWin": 20,
+        "tasksTotal": 20,
         "energySpawnRate": 3600,
         "mechanic": "orbital",
         "boss": false,
@@ -37432,8 +39479,8 @@ const LEVELS_CONFIG = [
         "asteroidSpeed": 1.02,
         "cityHealth": 100,
         "shieldCapacity": 55,
-        "tasksToWin": 15,
-        "tasksTotal": 15,
+        "tasksToWin": 20,
+        "tasksTotal": 20,
         "energySpawnRate": 3600,
         "mechanic": "orbital",
         "boss": false,
@@ -37450,8 +39497,8 @@ const LEVELS_CONFIG = [
         "asteroidSpeed": 1.04,
         "cityHealth": 100,
         "shieldCapacity": 56,
-        "tasksToWin": 15,
-        "tasksTotal": 15,
+        "tasksToWin": 20,
+        "tasksTotal": 20,
         "energySpawnRate": 3600,
         "mechanic": "orbital",
         "boss": false,
@@ -37468,8 +39515,8 @@ const LEVELS_CONFIG = [
         "asteroidSpeed": 1.07,
         "cityHealth": 100,
         "shieldCapacity": 57,
-        "tasksToWin": 15,
-        "tasksTotal": 15,
+        "tasksToWin": 20,
+        "tasksTotal": 20,
         "energySpawnRate": 3600,
         "mechanic": "orbital",
         "boss": false,
@@ -37486,8 +39533,8 @@ const LEVELS_CONFIG = [
         "asteroidSpeed": 1.09,
         "cityHealth": 100,
         "shieldCapacity": 57,
-        "tasksToWin": 15,
-        "tasksTotal": 15,
+        "tasksToWin": 20,
+        "tasksTotal": 20,
         "energySpawnRate": 3600,
         "mechanic": "orbital",
         "boss": true,
@@ -37504,8 +39551,8 @@ const LEVELS_CONFIG = [
         "asteroidSpeed": 1.12,
         "cityHealth": 100,
         "shieldCapacity": 58,
-        "tasksToWin": 15,
-        "tasksTotal": 15,
+        "tasksToWin": 20,
+        "tasksTotal": 20,
         "energySpawnRate": 3600,
         "mechanic": "gravity",
         "boss": false,
@@ -37522,8 +39569,8 @@ const LEVELS_CONFIG = [
         "asteroidSpeed": 1.14,
         "cityHealth": 100,
         "shieldCapacity": 58,
-        "tasksToWin": 15,
-        "tasksTotal": 15,
+        "tasksToWin": 20,
+        "tasksTotal": 20,
         "energySpawnRate": 3600,
         "mechanic": "gravity",
         "boss": false,
@@ -37540,8 +39587,8 @@ const LEVELS_CONFIG = [
         "asteroidSpeed": 1.17,
         "cityHealth": 100,
         "shieldCapacity": 59,
-        "tasksToWin": 15,
-        "tasksTotal": 15,
+        "tasksToWin": 20,
+        "tasksTotal": 20,
         "energySpawnRate": 3600,
         "mechanic": "gravity",
         "boss": false,
@@ -37558,8 +39605,8 @@ const LEVELS_CONFIG = [
         "asteroidSpeed": 1.19,
         "cityHealth": 100,
         "shieldCapacity": 60,
-        "tasksToWin": 15,
-        "tasksTotal": 15,
+        "tasksToWin": 20,
+        "tasksTotal": 20,
         "energySpawnRate": 3600,
         "mechanic": "gravity",
         "boss": false,
@@ -37576,8 +39623,8 @@ const LEVELS_CONFIG = [
         "asteroidSpeed": 1.22,
         "cityHealth": 100,
         "shieldCapacity": 60,
-        "tasksToWin": 15,
-        "tasksTotal": 15,
+        "tasksToWin": 20,
+        "tasksTotal": 20,
         "energySpawnRate": 3600,
         "mechanic": "gravity",
         "boss": false,
@@ -37594,8 +39641,8 @@ const LEVELS_CONFIG = [
         "asteroidSpeed": 1.24,
         "cityHealth": 100,
         "shieldCapacity": 61,
-        "tasksToWin": 15,
-        "tasksTotal": 15,
+        "tasksToWin": 20,
+        "tasksTotal": 20,
         "energySpawnRate": 3600,
         "mechanic": "gravity",
         "boss": false,
@@ -37612,8 +39659,8 @@ const LEVELS_CONFIG = [
         "asteroidSpeed": 1.26,
         "cityHealth": 100,
         "shieldCapacity": 62,
-        "tasksToWin": 15,
-        "tasksTotal": 15,
+        "tasksToWin": 20,
+        "tasksTotal": 20,
         "energySpawnRate": 3600,
         "mechanic": "gravity",
         "boss": true,
@@ -37630,8 +39677,8 @@ const LEVELS_CONFIG = [
         "asteroidSpeed": 1.29,
         "cityHealth": 100,
         "shieldCapacity": 62,
-        "tasksToWin": 15,
-        "tasksTotal": 15,
+        "tasksToWin": 20,
+        "tasksTotal": 20,
         "energySpawnRate": 3600,
         "mechanic": "energy",
         "boss": false,
@@ -37648,8 +39695,8 @@ const LEVELS_CONFIG = [
         "asteroidSpeed": 1.31,
         "cityHealth": 100,
         "shieldCapacity": 63,
-        "tasksToWin": 15,
-        "tasksTotal": 15,
+        "tasksToWin": 20,
+        "tasksTotal": 20,
         "energySpawnRate": 3600,
         "mechanic": "energy",
         "boss": false,
@@ -37666,8 +39713,8 @@ const LEVELS_CONFIG = [
         "asteroidSpeed": 1.34,
         "cityHealth": 100,
         "shieldCapacity": 64,
-        "tasksToWin": 15,
-        "tasksTotal": 15,
+        "tasksToWin": 20,
+        "tasksTotal": 20,
         "energySpawnRate": 3600,
         "mechanic": "energy",
         "boss": false,
@@ -37684,8 +39731,8 @@ const LEVELS_CONFIG = [
         "asteroidSpeed": 1.36,
         "cityHealth": 100,
         "shieldCapacity": 64,
-        "tasksToWin": 15,
-        "tasksTotal": 15,
+        "tasksToWin": 20,
+        "tasksTotal": 20,
         "energySpawnRate": 3600,
         "mechanic": "energy",
         "boss": true,
@@ -37702,8 +39749,8 @@ const LEVELS_CONFIG = [
         "asteroidSpeed": 1.39,
         "cityHealth": 100,
         "shieldCapacity": 65,
-        "tasksToWin": 15,
-        "tasksTotal": 15,
+        "tasksToWin": 20,
+        "tasksTotal": 20,
         "energySpawnRate": 3600,
         "mechanic": "resonance",
         "boss": false,
@@ -37720,8 +39767,8 @@ const LEVELS_CONFIG = [
         "asteroidSpeed": 1.41,
         "cityHealth": 100,
         "shieldCapacity": 65,
-        "tasksToWin": 15,
-        "tasksTotal": 15,
+        "tasksToWin": 20,
+        "tasksTotal": 20,
         "energySpawnRate": 3600,
         "mechanic": "resonance",
         "boss": false,
@@ -37738,8 +39785,8 @@ const LEVELS_CONFIG = [
         "asteroidSpeed": 1.44,
         "cityHealth": 100,
         "shieldCapacity": 66,
-        "tasksToWin": 15,
-        "tasksTotal": 15,
+        "tasksToWin": 20,
+        "tasksTotal": 20,
         "energySpawnRate": 3600,
         "mechanic": "resonance",
         "boss": false,
@@ -37756,8 +39803,8 @@ const LEVELS_CONFIG = [
         "asteroidSpeed": 1.46,
         "cityHealth": 100,
         "shieldCapacity": 67,
-        "tasksToWin": 15,
-        "tasksTotal": 15,
+        "tasksToWin": 20,
+        "tasksTotal": 20,
         "energySpawnRate": 3600,
         "mechanic": "resonance",
         "boss": false,
@@ -37774,8 +39821,8 @@ const LEVELS_CONFIG = [
         "asteroidSpeed": 1.49,
         "cityHealth": 100,
         "shieldCapacity": 67,
-        "tasksToWin": 15,
-        "tasksTotal": 15,
+        "tasksToWin": 20,
+        "tasksTotal": 20,
         "energySpawnRate": 3600,
         "mechanic": "resonance",
         "boss": false,
@@ -37792,8 +39839,8 @@ const LEVELS_CONFIG = [
         "asteroidSpeed": 1.51,
         "cityHealth": 100,
         "shieldCapacity": 68,
-        "tasksToWin": 15,
-        "tasksTotal": 15,
+        "tasksToWin": 20,
+        "tasksTotal": 20,
         "energySpawnRate": 3600,
         "mechanic": "resonance",
         "boss": false,
@@ -37810,8 +39857,8 @@ const LEVELS_CONFIG = [
         "asteroidSpeed": 1.53,
         "cityHealth": 100,
         "shieldCapacity": 69,
-        "tasksToWin": 15,
-        "tasksTotal": 18,
+        "tasksToWin": 20,
+        "tasksTotal": 20,
         "energySpawnRate": 3600,
         "mechanic": "resonance",
         "boss": false,
@@ -37828,8 +39875,8 @@ const LEVELS_CONFIG = [
         "asteroidSpeed": 1.56,
         "cityHealth": 100,
         "shieldCapacity": 69,
-        "tasksToWin": 15,
-        "tasksTotal": 17,
+        "tasksToWin": 20,
+        "tasksTotal": 20,
         "energySpawnRate": 3600,
         "mechanic": "resonance",
         "boss": true,
@@ -37846,8 +39893,8 @@ const LEVELS_CONFIG = [
         "asteroidSpeed": 1.58,
         "cityHealth": 100,
         "shieldCapacity": 70,
-        "tasksToWin": 15,
-        "tasksTotal": 15,
+        "tasksToWin": 20,
+        "tasksTotal": 20,
         "energySpawnRate": 3600,
         "mechanic": "radiation",
         "boss": false,
@@ -37864,8 +39911,8 @@ const LEVELS_CONFIG = [
         "asteroidSpeed": 1.61,
         "cityHealth": 100,
         "shieldCapacity": 71,
-        "tasksToWin": 15,
-        "tasksTotal": 15,
+        "tasksToWin": 20,
+        "tasksTotal": 20,
         "energySpawnRate": 3600,
         "mechanic": "radiation",
         "boss": false,
@@ -37882,8 +39929,8 @@ const LEVELS_CONFIG = [
         "asteroidSpeed": 1.63,
         "cityHealth": 100,
         "shieldCapacity": 71,
-        "tasksToWin": 15,
-        "tasksTotal": 15,
+        "tasksToWin": 20,
+        "tasksTotal": 20,
         "energySpawnRate": 3600,
         "mechanic": "radiation",
         "boss": false,
@@ -37900,8 +39947,8 @@ const LEVELS_CONFIG = [
         "asteroidSpeed": 1.66,
         "cityHealth": 100,
         "shieldCapacity": 72,
-        "tasksToWin": 15,
-        "tasksTotal": 15,
+        "tasksToWin": 20,
+        "tasksTotal": 20,
         "energySpawnRate": 3600,
         "mechanic": "radiation",
         "boss": false,
@@ -37918,8 +39965,8 @@ const LEVELS_CONFIG = [
         "asteroidSpeed": 1.68,
         "cityHealth": 100,
         "shieldCapacity": 72,
-        "tasksToWin": 15,
-        "tasksTotal": 15,
+        "tasksToWin": 20,
+        "tasksTotal": 20,
         "energySpawnRate": 3600,
         "mechanic": "radiation",
         "boss": true,
@@ -37936,8 +39983,8 @@ const LEVELS_CONFIG = [
         "asteroidSpeed": 1.71,
         "cityHealth": 100,
         "shieldCapacity": 73,
-        "tasksToWin": 15,
-        "tasksTotal": 15,
+        "tasksToWin": 20,
+        "tasksTotal": 20,
         "energySpawnRate": 3600,
         "mechanic": "fusion",
         "boss": false,
@@ -37954,8 +40001,8 @@ const LEVELS_CONFIG = [
         "asteroidSpeed": 1.73,
         "cityHealth": 100,
         "shieldCapacity": 74,
-        "tasksToWin": 15,
-        "tasksTotal": 15,
+        "tasksToWin": 20,
+        "tasksTotal": 20,
         "energySpawnRate": 3600,
         "mechanic": "fusion",
         "boss": false,
@@ -37972,8 +40019,8 @@ const LEVELS_CONFIG = [
         "asteroidSpeed": 1.75,
         "cityHealth": 100,
         "shieldCapacity": 74,
-        "tasksToWin": 15,
-        "tasksTotal": 15,
+        "tasksToWin": 20,
+        "tasksTotal": 20,
         "energySpawnRate": 3600,
         "mechanic": "fusion",
         "boss": false,
@@ -37990,8 +40037,8 @@ const LEVELS_CONFIG = [
         "asteroidSpeed": 1.78,
         "cityHealth": 100,
         "shieldCapacity": 75,
-        "tasksToWin": 15,
-        "tasksTotal": 15,
+        "tasksToWin": 20,
+        "tasksTotal": 20,
         "energySpawnRate": 3600,
         "mechanic": "fusion",
         "boss": false,
@@ -38008,8 +40055,8 @@ const LEVELS_CONFIG = [
         "asteroidSpeed": 1.8,
         "cityHealth": 100,
         "shieldCapacity": 76,
-        "tasksToWin": 15,
-        "tasksTotal": 15,
+        "tasksToWin": 20,
+        "tasksTotal": 20,
         "energySpawnRate": 3600,
         "mechanic": "fusion",
         "boss": true,
@@ -38026,8 +40073,8 @@ const LEVELS_CONFIG = [
         "asteroidSpeed": 1.83,
         "cityHealth": 100,
         "shieldCapacity": 76,
-        "tasksToWin": 15,
-        "tasksTotal": 15,
+        "tasksToWin": 20,
+        "tasksTotal": 20,
         "energySpawnRate": 3600,
         "mechanic": "classic",
         "boss": false,
@@ -38044,8 +40091,8 @@ const LEVELS_CONFIG = [
         "asteroidSpeed": 1.85,
         "cityHealth": 100,
         "shieldCapacity": 77,
-        "tasksToWin": 15,
-        "tasksTotal": 15,
+        "tasksToWin": 20,
+        "tasksTotal": 20,
         "energySpawnRate": 3600,
         "mechanic": "classic",
         "boss": true,
@@ -38063,7 +40110,7 @@ const LEVELS_CONFIG = [
         "cityHealth": 100,
         "shieldCapacity": 78,
         "tasksToWin": 8,
-        "tasksTotal": 15,
+        "tasksTotal": 20,
         "energySpawnRate": 3400,
         "mechanic": "lab",
         "boss": false,
@@ -38081,7 +40128,7 @@ const LEVELS_CONFIG = [
         "cityHealth": 100,
         "shieldCapacity": 78,
         "tasksToWin": 8,
-        "tasksTotal": 15,
+        "tasksTotal": 20,
         "energySpawnRate": 3400,
         "mechanic": "lab",
         "boss": false,
@@ -38099,7 +40146,7 @@ const LEVELS_CONFIG = [
         "cityHealth": 100,
         "shieldCapacity": 79,
         "tasksToWin": 8,
-        "tasksTotal": 15,
+        "tasksTotal": 20,
         "energySpawnRate": 3400,
         "mechanic": "lab",
         "boss": false,
@@ -38117,7 +40164,7 @@ const LEVELS_CONFIG = [
         "cityHealth": 100,
         "shieldCapacity": 80,
         "tasksToWin": 8,
-        "tasksTotal": 15,
+        "tasksTotal": 20,
         "energySpawnRate": 3400,
         "mechanic": "lab",
         "boss": true,
@@ -39220,9 +41267,11 @@ const LOCALES = {
         resultImportedOk: "Результат добавлен в журнал!",
         resultImportError: "Не удалось прочитать код. Проверьте, что код полный.",
         kvantVoiceTitle: "🔊 Голос КВАНТа",
-        kvantVoiceNote: "ИИ-наставник озвучит историю, теорию и задания. Работает офлайн (Web Speech API).",
+        kvantVoiceNote: "ИИ-наставник озвучивает главы комикса в «Дневнике экспедиции». Работает офлайн (Web Speech API).",
         kvantEnabled: "Озвучивание",
-        kvantVoiceOffNote: "Озвучивание выключено — кнопки «Озвучить» скрыты.",
+        kvantVoiceOffNote: "Озвучивание выключено — кнопка «Озвучить главу» скрыта.",
+        kvantVoiceUnavailable: "Для этого языка в системе нет голоса — озвучка недоступна. Выберите другой язык или установите голос в настройках устройства.",
+        diaryVoicePlay: "Озвучить главу",
         kvantVoiceOffShort: "Озвучивание выключено",
         kvantVoiceDefault: "голос по умолчанию",
         kvantVoiceUnsupported: "Этот браузер не поддерживает озвучивание. Попробуйте Chrome или Edge.",
@@ -39923,9 +41972,11 @@ const LOCALES = {
         resultImportedOk: "Result added to the journal!",
         resultImportError: "Could not read the code. Make sure it is complete.",
         kvantVoiceTitle: "🔊 QUANT Voice",
-        kvantVoiceNote: "AI mentor will narrate story, theory and tasks. Works offline (Web Speech API).",
+        kvantVoiceNote: "The AI mentor narrates comic chapters in the Expedition Diary. Works offline (Web Speech API).",
         kvantEnabled: "Narration",
-        kvantVoiceOffNote: "Narration is off — all Listen buttons are hidden.",
+        kvantVoiceOffNote: "Narration is off — the Listen button is hidden.",
+        kvantVoiceUnavailable: "There is no voice for this language on your system — narration is unavailable. Switch the language or install a voice in your device settings.",
+        diaryVoicePlay: "Narrate chapter",
         kvantVoiceOffShort: "Narration off",
         kvantVoiceDefault: "default voice",
         kvantVoiceUnsupported: "This browser does not support speech. Try Chrome or Edge.",
@@ -40621,9 +42672,11 @@ const LOCALES = {
         resultImportedOk: "Нәтиже журналға қосылды!",
         resultImportError: "Кодты оқу мүмкін болмады. Кодтың толық екенін тексеріңіз.",
         kvantVoiceTitle: "🔊 КВАНТ дауысы",
-        kvantVoiceNote: "ЖИ тәлімгер сюжетті, теорияны және тапсырмаларды дыбыстайды. Офлайн жұмыс істейді.",
+        kvantVoiceNote: "ЖИ тәлімгер «Экспедиция күнделігіндегі» комикс тарауларын дыбыстайды. Офлайн жұмыс істейді.",
         kvantEnabled: "Дыбыстау",
-        kvantVoiceOffNote: "Дыбыстау өшірулі — «Тыңдау» түймелері жасырылған.",
+        kvantVoiceOffNote: "Дыбыстау өшірулі — «Тарауды дыбыстау» түймесі жасырылған.",
+        kvantVoiceUnavailable: "Бұл тіл үшін жүйеде дауыс жоқ — дыбыстау қолжетімсіз. Басқа тілді таңдаңыз немесе құрылғы баптауларында дауыс орнатыңыз.",
+        diaryVoicePlay: "Тарауды дыбыстау",
         kvantVoiceOffShort: "Дыбыстау өшірулі",
         kvantVoiceDefault: "әдепкі дауыс",
         kvantVoiceUnsupported: "Бұл браузер дыбыстауды қолдамайды. Chrome немесе Edge қолданып көріңіз.",
@@ -41291,6 +43344,7 @@ const KvantVoice = {
                 else voiceSel.value = "";
             }
             this.updateStatus();
+            this.applyEnabledState();
         };
 
         if ('speechSynthesis' in window) {
@@ -41321,26 +43375,15 @@ const KvantVoice = {
         });
         document.getElementById('kvant-stop-btn')?.addEventListener('click', () => this.stop());
 
-        // Кнопки озвучивания текста (правильные id в разметке)
-        const storyPlay = document.getElementById('kvant-play-story');
-        const storyStop = document.getElementById('kvant-stop-story');
-        const theoryPlay = document.getElementById('kvant-play-theory');
-        const theoryStop = document.getElementById('kvant-stop-theory');
-        storyPlay?.addEventListener('click', () => this.speakStory());
-        storyStop?.addEventListener('click', () => this.stop());
-        theoryPlay?.addEventListener('click', () => this.speakTheory());
-        theoryStop?.addEventListener('click', () => this.stop());
-        // Старые id оставляем для совместимости
-        document.getElementById('btn-story-voice')?.addEventListener('click', () => this.speakStory());
-        document.getElementById('btn-story-stop')?.addEventListener('click', () => this.stop());
-        document.getElementById('btn-theory-voice')?.addEventListener('click', () => this.speakTheory());
-        document.getElementById('btn-theory-stop')?.addEventListener('click', () => this.stop());
+        // Озвучка есть ТОЛЬКО у комикса (дневник экспедиции).
+        document.getElementById('diary-voice-play')?.addEventListener('click', () => this.speakDiary());
+        document.getElementById('diary-voice-stop')?.addEventListener('click', () => this.stop());
 
-        this.injectTaskVoiceBtn();
         this.applyEnabledState();
 
-        window.addEventListener('langchange', () => { populate(); this.updateStatus(); });
-        window.addEventListener('i18n:changed', () => { populate(); this.updateStatus(); });
+        const refresh = () => { populate(); this.updateStatus(); this.applyEnabledState(); };
+        window.addEventListener('langchange', refresh);
+        window.addEventListener('i18n:changed', refresh);
         window.addEventListener('pagehide', () => this.stop());
     },
 
@@ -41353,9 +43396,28 @@ const KvantVoice = {
 
     applyEnabledState() {
         document.body.classList.toggle('voice-off', !this.enabled);
+        const lang = (typeof I18n !== 'undefined' && I18n.currentLang) || 'ru';
+        document.body.classList.toggle('voice-unavailable', !this.hasVoice(lang));
         const cb = document.getElementById('kvant-enabled');
         if (cb) cb.checked = this.enabled;
+        // Кнопка озвучки комикса видна только когда есть чем читать.
+        const row = document.getElementById('diary-voice-row');
+        if (row) row.style.display = (this.enabled && this.hasVoice(lang)) ? '' : 'none';
         this.updateStatus();
+    },
+
+    // Есть ли в системе голос для языка (иначе кнопки не показываем вовсе).
+    hasVoice(lang) {
+        if (!('speechSynthesis' in window)) return false;
+        const voices = (this._voices && this._voices.length) ? this._voices : (speechSynthesis.getVoices() || []);
+        if (!voices.length) return true; // список ещё не загрузился — не прячем заранее
+        // Строго: голос именно этого языка. Русским голосом казахский текст не читаем.
+        return voices.some(v => String(v.lang || '').toLowerCase().startsWith(lang));
+    },
+
+    canRead() {
+        const lang = (typeof I18n !== 'undefined' && I18n.currentLang) || 'ru';
+        return this.enabled && this.hasVoice(lang);
     },
 
     save() {
@@ -41372,7 +43434,6 @@ const KvantVoice = {
         const l = String((voice && voice.lang) || '').toLowerCase();
         if (!l) return false;
         if (l.startsWith(lang)) return true;
-        if (lang === 'kk' && l.startsWith('ru')) return true; // для казахского часто нет голоса — читаем русским
         return false;
     },
 
@@ -41791,6 +43852,22 @@ const KvantVoice = {
         if (w) w.style.display = on ? 'inline-flex' : 'none';
     },
 
+    // Читает главу комикса: полный текст оригинала (STORY_LORE) текущей страницы дневника.
+    speakDiary() {
+        const L = (typeof I18n !== 'undefined' && I18n.currentLang) || 'ru';
+        const idx = (typeof Diary !== 'undefined' && typeof Diary.current === 'number') ? Diary.current : 0;
+        let text = '';
+        if (typeof STORY_LORE !== 'undefined' && STORY_LORE[L] && STORY_LORE[L][idx]) {
+            const lore = STORY_LORE[L][idx];
+            text = (lore.title ? lore.title + '. ' : '') + String(lore.text || '').replace(/\n+/g, ' ');
+        }
+        if (!text && typeof Diary !== 'undefined' && Diary.entries[idx]) {
+            const e = Diary.entries[idx];
+            text = e.panels.map(p => Diary._t(p.who) + '. ' + Diary._t(p.text)).join(' ');
+        }
+        if (text) this.speak(text);
+    },
+
     speakStory() {
         const L = I18n.currentLang || 'ru';
         let text = "";
@@ -42028,7 +44105,10 @@ const PWA = {
     init() {
         // register SW
         if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('service-worker.js').then(reg => {
+            // updateViaCache:'none' — браузер не держит старый service-worker.js в HTTP-кэше,
+            // иначе после обновления игры пользователь видит устаревший интерфейс.
+            navigator.serviceWorker.register('service-worker.js', { updateViaCache: 'none' }).then(reg => {
+                reg.update().catch(() => {});
                 console.log('SW registered', reg.scope);
                 // check update: если новая версия активировалась — обновляем страницу
                 // (только вне уровня, чтобы не прерывать игру; controller есть лишь при апдейте, а не при первой установке)
@@ -43636,7 +45716,7 @@ const ROCKET_STYLES = [
     { id: "zheti",      name: { ru: "Большая Медведица", en: "Big Dipper", kk: "Жеті қарақшы" }, shape: "zheti",     body: "#311b92", accent: "#ffd54f", cockpit: "#ffe082", flame: "rgba(255,213,79,0.7)" },
     { id: "orion",      name: { ru: "Орион",       en: "Orion",         kk: "Орион" },       shape: "orion",      body: "#ef6c00", accent: "#ffcc80", cockpit: "#ffe0b2", flame: "rgba(255,171,64,0.7)" },
     // — НЛО: объект, зафиксированный датчиками «Орбиты-9» —
-    { id: "ufo",        name: { ru: "НЛО",         en: "UFO",           kk: "НЛО" },         shape: "ufo",        body: "#9e9e9e", accent: "#76ff03", cockpit: "#c5e1a5", flame: "rgba(118,255,3,0.7)" }
+    { id: "ufo",        name: { ru: "НЛО",         en: "UFO",           kk: "Ұшатын нысан" },         shape: "ufo",        body: "#9e9e9e", accent: "#76ff03", cockpit: "#c5e1a5", flame: "rgba(118,255,3,0.7)" }
 ];
 
 function getRocketStyle(id) {
@@ -46621,7 +48701,6 @@ function openTheory(levelId) {
         renderTheoryContent("textbook");
     }
     document.getElementById("theory-modal")?.classList.add("active");
-    if (typeof KvantVoice !== "undefined") KvantVoice.maybeAutoSpeakTheory();
 }
 
 function setTheoryTab(tab) {
@@ -47130,7 +49209,6 @@ document.getElementById("btn-copy-assignment-result")?.addEventListener("click",
 document.getElementById("btn-story")?.addEventListener("click", () => {
     renderStoryBody();
     document.getElementById("story-modal")?.classList.add("active");
-    if (typeof KvantVoice !== "undefined") KvantVoice.maybeAutoSpeakStory();
 });
     document.getElementById("btn-diary")?.addEventListener("click", ()=> Diary.open(0));
     document.getElementById("btn-open-diary")?.addEventListener("click", ()=> Diary.open(0));
@@ -47939,6 +50017,27 @@ const Diary = {
                 </div>
             `).join("");
         }
+        // Полный текст главы (как в оригинальной истории) — под кадрами комикса.
+        const storyBox=document.getElementById("diary-story");
+        const lore=(typeof STORY_LORE!=="undefined" && STORY_LORE[L]) ? STORY_LORE[L][this.current] : null;
+        if(storyBox){
+            if(unlocked && lore && lore.text){
+                const paras=String(lore.text).split(/\n+/).map(t=>t.trim()).filter(Boolean)
+                    .map(t=>`<p>${escapeHtml(t)}</p>`).join("");
+                storyBox.innerHTML=`<p style="font-weight:800;color:#8d4b00;margin-bottom:8px">📖 ${escapeHtml(lore.title||"")}</p>${paras}`;
+                storyBox.style.display="";
+                storyBox.scrollTop=0;
+            } else {
+                storyBox.innerHTML="";
+                storyBox.style.display="none";
+            }
+        }
+        const voiceRow=document.getElementById("diary-voice-row");
+        if(voiceRow){
+            const can=!!(unlocked && lore && typeof KvantVoice!=="undefined" && KvantVoice.canRead());
+            voiceRow.style.display=can ? "" : "none";
+        }
+
         const bubble=document.getElementById("diary-bubble");
         if(unlocked && entry.bubble){
             bubble.style.display="flex";
