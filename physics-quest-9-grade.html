@@ -2354,6 +2354,8 @@ body.voice-off .voice-settings-extra { display:none !important; }
 
 
 /* ===== Дневник экспедиции — комикс ===== */
+.app-build { margin:6px 0 0; text-align:center; font-size:11.5px; color:var(--text-dim); opacity:.85; letter-spacing:.3px; }
+@media print { .app-build { display:none; } }
 .diary-btn { background: linear-gradient(135deg,#ff6f00,#ffb300) !important; color:#fff !important; border-color:#ff6f00; font-weight:900; display:inline-flex !important; visibility:visible !important; }
 .diary-modal-content { max-width: 780px; background: #fffef7; }
 .diary-title { text-align:center; margin:0 0 4px; color:#4e342e; font-size:20px; }
@@ -2596,6 +2598,8 @@ body.voice-off .voice-settings-extra { display:none !important; }
                     <span data-i18n="profile">Профиль</span>
                 </button>
             </div>
+
+            <p class="app-build" id="app-build">сборка 2026-10-20 · v12</p>
 
             <div class="language-selector">
                 <label data-i18n="language">Язык:</label>
